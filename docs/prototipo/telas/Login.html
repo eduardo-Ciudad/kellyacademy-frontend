@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Entrar</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:Figtree,system-ui,sans-serif;background:#18191A;color:#E4E6EB}
+a{color:#4599FF}a:hover{color:#6AAEFF}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; box-sizing: border-box; background: #18191A; display: flex; padding: 24px">
+
+<div style="width: 600px; flex-shrink: 0; display: flex; flex-direction: column; padding: 16px 56px">
+<div style="display: flex; align-items: center; gap: 10px">
+<div style="width: 34px; height: 34px; border-radius: 10px; background: #0866FF; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9Z"/><path d="M19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8Z"/></svg></div>
+<span style="font-size: 17px; font-weight: 700">StudyMind <span style="font-weight: 500; color: #B0B3B8">Redação</span></span>
+</div>
+
+<form style="margin: auto 0; display: flex; flex-direction: column; gap: 20px; width: 400px">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<h1 style="margin: 0; font-size: 32px; font-weight: 700; letter-spacing: -0.02em">Entre na sua conta</h1>
+<p style="margin: 0; font-size: 16px; color: #B0B3B8; line-height: 1.5">Continue treinando de onde parou.</p>
+</div>
+<div style="display: flex; flex-direction: column; gap: 8px">
+<label for="email" style="font-size: 14px; font-weight: 600; color: #CFD2D7">E-mail</label>
+<input id="email" type="email" value="eduardo@email.com" style="font-family: inherit; font-size: 15px; height: 52px; box-sizing: border-box; padding: 0 16px; border-radius: 12px; background: #242526; border: 1px solid #0866FF; box-shadow: 0 0 0 3px #0866FF33; color: #E4E6EB; outline: none">
+</div>
+<div style="display: flex; flex-direction: column; gap: 8px">
+<div style="display: flex; justify-content: space-between; align-items: baseline"><label for="senha" style="font-size: 14px; font-weight: 600; color: #CFD2D7">Senha</label></div>
+<div style="position: relative">
+<input id="senha" type="password" value="minhasenha123" style="font-family: inherit; font-size: 15px; width: 100%; height: 52px; box-sizing: border-box; padding: 0 52px 0 16px; border-radius: 12px; background: #242526; border: 1px solid #3A3B3C; color: #E4E6EB; outline: none">
+<button type="button" aria-label="Mostrar senha" style="position: absolute; right: 6px; top: 6px; width: 40px; height: 40px; border: 0; border-radius: 10px; background: transparent; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B0B3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg></button>
+</div>
+</div>
+<a href="Historico.dc.html" style="text-decoration: none; text-align: center; font-size: 16px; font-weight: 600; color: #FFFFFF; background: #0866FF; height: 52px; line-height: 52px; border-radius: 999px; margin-top: 4px">Entrar</a>
+<p style="margin: 0; text-align: center; font-size: 15px; color: #B0B3B8">Ainda não tem conta? <a href="Cadastro.dc.html" style="font-weight: 600; text-decoration: none">Criar conta grátis</a></p>
+</form>
+
+<span style="font-size: 13px; color: #8A8D91">StudyMind Redação · treino para a redação do ENEM</span>
+</div>
+
+<div style="flex-grow: 1; background: #242526; border-radius: 28px; padding: 56px; display: flex; flex-direction: column; justify-content: center; gap: 36px">
+<div style="display: flex; flex-direction: column; gap: 14px; max-width: 560px">
+<span style="align-self: flex-start; display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: #6AAEFF; background: #213247; padding: 6px 12px; border-radius: 999px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9Z"/></svg>Correção com IA</span>
+<h2 style="margin: 0; font-size: 40px; line-height: 1.15; font-weight: 700; letter-spacing: -0.025em">Entenda o que falta para a sua nota subir</h2>
+<p style="margin: 0; font-size: 17px; line-height: 1.6; color: #B0B3B8">Correção nas 5 competências do ENEM, com um diagnóstico do que treinar primeiro.</p>
+</div>
+
+<div style="background: #18191A; border-radius: 20px; padding: 24px; display: flex; flex-direction: column; gap: 18px; max-width: 560px">
+<div style="display: flex; align-items: center; gap: 20px">
+<div style="position: relative; width: 92px; height: 92px; flex-shrink: 0">
+<svg width="92" height="92" viewBox="0 0 92 92" aria-hidden="true"><circle cx="46" cy="46" r="38" fill="none" stroke="#3A3B3C" stroke-width="8"/><circle cx="46" cy="46" r="38" fill="none" stroke="#0866FF" stroke-width="8" stroke-linecap="round" stroke-dasharray="152.8 238.8" transform="rotate(-90 46 46)"/></svg>
+<div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700; font-variant-numeric: tabular-nums">640</div>
+</div>
+<div style="flex-grow: 1; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px">
+<div style="display: flex; flex-direction: column; gap: 6px"><span style="font-size: 12px; font-weight: 600; color: #7DB8FF">C1</span><div style="height: 4px; border-radius: 2px; background: #3A3B3C"><div style="width: 80%; height: 4px; border-radius: 2px; background: #7DB8FF"></div></div></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><span style="font-size: 12px; font-weight: 600; color: #B9A2FB">C2</span><div style="height: 4px; border-radius: 2px; background: #3A3B3C"><div style="width: 60%; height: 4px; border-radius: 2px; background: #B9A2FB"></div></div></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><span style="font-size: 12px; font-weight: 600; color: #4FD1B5">C3</span><div style="height: 4px; border-radius: 2px; background: #3A3B3C"><div style="width: 40%; height: 4px; border-radius: 2px; background: #4FD1B5"></div></div></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><span style="font-size: 12px; font-weight: 600; color: #F5B94A">C4</span><div style="height: 4px; border-radius: 2px; background: #3A3B3C"><div style="width: 80%; height: 4px; border-radius: 2px; background: #F5B94A"></div></div></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><span style="font-size: 12px; font-weight: 600; color: #F58DB0">C5</span><div style="height: 4px; border-radius: 2px; background: #3A3B3C"><div style="width: 60%; height: 4px; border-radius: 2px; background: #F58DB0"></div></div></div>
+</div>
+</div>
+<div style="background: #242526; border-radius: 14px; padding: 14px 16px; display: flex; gap: 12px">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6AAEFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0; margin-top: 2px"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9Z"/></svg>
+<p style="margin: 0; font-size: 14px; line-height: 1.6; color: #CFD2D7">Sua maior fragilidade está na argumentação. Aprofundar um argumento com exemplos concretos pode render até 80 pontos.</p>
+</div>
+</div>
+
+<div style="display: flex; gap: 28px; font-size: 14px; color: #B0B3B8">
+<span style="display: flex; align-items: center; gap: 8px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5DD39E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Temas oficiais de 2017 a 2024</span>
+<span style="display: flex; align-items: center; gap: 8px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5DD39E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>3 correções grátis por dia</span>
+</div>
+</div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+renderVals() { return {}; }
+}
+</script>
+</body>
+</html>
