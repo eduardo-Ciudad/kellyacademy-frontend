@@ -15,7 +15,7 @@ import { LimiteDiarioDialog } from '@/components/redacao/LimiteDiarioDialog';
 import { TemaInfo } from '@/components/redacao/TemaInfo';
 import { TemaInfoSheet } from '@/components/redacao/TemaInfoSheet';
 import {
-  marcarLimiteAtingido,
+  correcoesHojeQueryKey,
   useCorrecoesHoje,
 } from '@/hooks/useCorrecoesHoje';
 import { carregarRascunho, useRascunho } from '@/hooks/useRascunho';
@@ -63,7 +63,7 @@ export function Editor() {
   const [limitData, setLimitData] = useState({ limite: 3, retryAfter: 0 });
   const sendingRef = useRef(false);
   const allowNavigationRef = useRef(false);
-  const { atingido } = useCorrecoesHoje();
+  const { atingido, limite } = useCorrecoesHoje();
   const rascunho = useRascunho({ email, temaId, texto, tipo });
   const words = countWords(texto);
   const characters = texto.length;
@@ -97,7 +97,7 @@ export function Editor() {
   }, [mode, rascunho]);
 
   async function submitRedacao() {
-    if (!tema || empty || overLimit || sendingRef.current) return;
+    if (!tema || empty || overLimit || atingido || sendingRef.current) return;
     sendingRef.current = true;
     allowNavigationRef.current = false;
     rascunho.salvarAgora();
@@ -112,6 +112,7 @@ export function Editor() {
       queryClient.setQueryData(['redacoes', response.id], response);
       rascunho.apagar();
       void queryClient.invalidateQueries({ queryKey: redacoesQueryKey });
+      void queryClient.invalidateQueries({ queryKey: correcoesHojeQueryKey });
       allowNavigationRef.current = true;
       sendingRef.current = false;
       void navigate(`/redacoes/${response.id}`, { replace: true });
@@ -124,10 +125,11 @@ export function Editor() {
       }
       if (error.status === 429) {
         const retryAfter = error.retryAfter ?? 0;
-        marcarLimiteAtingido(retryAfter);
+        void queryClient.invalidateQueries({ queryKey: correcoesHojeQueryKey });
         setLimitData({ limite: error.limite ?? 3, retryAfter });
         setLimitOpen(true);
       } else if (error.status === 502) {
+        void queryClient.invalidateQueries({ queryKey: correcoesHojeQueryKey });
         setBanner({ kind: 'danger', message: error.detail, retry: true });
       } else if (error.status === 400) {
         const textoError = firstMessage(error.erros?.texto);
@@ -235,7 +237,7 @@ export function Editor() {
         )}
         <Button
           onClick={() => void submitRedacao()}
-          disabled={Boolean(submitReason)}
+          disabled={Boolean(submitReason) || atingido}
           className="hidden lg:flex"
         >
           <SparkIcon size={16} double={false} />
@@ -268,6 +270,19 @@ export function Editor() {
               Prática é para treinar. Diagnóstica mede seu nível atual.
             </span>
           </div>
+
+          {atingido && (
+            <div
+              role="alert"
+              className="bg-warning-bg text-warning rounded-inner mx-4 flex items-start gap-2.5 px-4 py-3 text-sm lg:mx-0"
+            >
+              <AlertTriangle className="mt-0.5 shrink-0" size={17} />
+              <span>
+                Você usou as {limite} correções de hoje. Seu texto fica
+                salvo e você pode enviar a partir da meia-noite.
+              </span>
+            </div>
+          )}
 
           {banner && (
             <EditorAlert banner={banner} onRetry={() => void submitRedacao()} />
@@ -331,12 +346,6 @@ export function Editor() {
                 Faltam {80 - words} palavras para o mínimo de 80
               </div>
             )}
-            {atingido && (
-              <p className="text-warning text-center text-xs">
-                Você já usou 3 correções hoje. O backend confirmará a
-                disponibilidade ao enviar.
-              </p>
-            )}
             {submitReason && (
               <p role="alert" className="text-danger text-center text-xs">
                 {submitReason}
@@ -344,7 +353,7 @@ export function Editor() {
             )}
             <Button
               onClick={() => void submitRedacao()}
-              disabled={Boolean(submitReason)}
+              disabled={Boolean(submitReason) || atingido}
               className="h-[52px] w-full text-base lg:hidden"
             >
               <SparkIcon size={17} double={false} />

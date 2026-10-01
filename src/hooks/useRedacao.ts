@@ -1,5 +1,6 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useRef } from 'react';
+import { correcoesHojeQueryKey } from '@/hooks/useCorrecoesHoje';
 import { redacoesQueryKey } from '@/hooks/useRedacoes';
 import { api } from '@/lib/api';
 import type { RedacaoResponse } from '@/types/api';
@@ -10,7 +11,9 @@ export function redacaoQueryKey(id: string) {
 
 export function useRedacao(id: string) {
   const queryClient = useQueryClient();
-  const previousStatus = useRef<RedacaoResponse['status']>();
+  const previousStatus = useRef<RedacaoResponse['status'] | undefined>(
+    undefined,
+  );
   const query = useQuery({
     queryKey: redacaoQueryKey(id),
     queryFn: ({ signal }) =>
@@ -33,6 +36,7 @@ export function useRedacao(id: string) {
 
     if (currentStatus && previousWasPending && !currentIsPending) {
       void queryClient.invalidateQueries({ queryKey: redacoesQueryKey });
+      void queryClient.invalidateQueries({ queryKey: correcoesHojeQueryKey });
     }
 
     previousStatus.current = currentStatus;

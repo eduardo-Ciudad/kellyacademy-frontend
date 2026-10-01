@@ -2,6 +2,7 @@ const TOKEN_KEY = 'studymind:accessToken';
 const EXPIRES_AT_KEY = 'studymind:expiraEm';
 const EMAIL_KEY = 'studymind:email';
 const SESSION_END_REASON_KEY = 'studymind:sessionEndReason';
+const LEGACY_DAILY_LIMIT_PREFIX = 'studymind:limiteDiario:';
 
 export const SESSION_CHANGED_EVENT = 'studymind:session-changed';
 
@@ -47,6 +48,9 @@ export function clearStoredSession(reason: SessionEndReason = 'expired') {
   localStorage.removeItem(TOKEN_KEY);
   localStorage.removeItem(EXPIRES_AT_KEY);
   localStorage.removeItem(EMAIL_KEY);
+  Object.keys(localStorage)
+    .filter((key) => key.startsWith(LEGACY_DAILY_LIMIT_PREFIX))
+    .forEach((key) => localStorage.removeItem(key));
   sessionStorage.setItem(SESSION_END_REASON_KEY, reason);
   notifySessionChanged();
 }

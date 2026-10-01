@@ -1,9 +1,16 @@
 import { useCorrecoesHoje } from '@/hooks/useCorrecoesHoje';
+import { Skeleton } from '@/components/ui/Skeleton';
 import { cn } from '@/lib/utils';
 
 export function CorrecoesHojeCard({ mobile = false }: { mobile?: boolean }) {
-  const { usadas, limite } = useCorrecoesHoje();
-  const percentage = `${(usadas / limite) * 100}%`;
+  const { usadas, limite, isLoading, isError } = useCorrecoesHoje();
+
+  if (isError) return null;
+
+  const percentage =
+    usadas !== undefined && limite
+      ? `${Math.min((usadas / limite) * 100, 100)}%`
+      : '0%';
 
   return (
     <div
@@ -14,13 +21,21 @@ export function CorrecoesHojeCard({ mobile = false }: { mobile?: boolean }) {
     >
       <div className="flex items-center justify-between text-[13px]">
         <span className="text-text-2 font-medium">Correções hoje</span>
-        <span className="tabular text-text font-bold">
-          {usadas} de {limite}
-        </span>
+        {isLoading ? (
+          <Skeleton className="h-4 w-14" />
+        ) : (
+          <span className="tabular text-text font-bold">
+            {usadas} de {limite}
+          </span>
+        )}
       </div>
       <div
         className="bg-control rounded-pill h-1.5 overflow-hidden"
-        aria-label={`${usadas} de ${limite} correções usadas hoje`}
+        aria-label={
+          isLoading
+            ? 'Carregando correções usadas hoje'
+            : `${usadas} de ${limite} correções usadas hoje`
+        }
       >
         <div
           className="bg-accent rounded-pill h-full transition-[width]"

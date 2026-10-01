@@ -23,6 +23,13 @@ export type LoginResponse = {
 
 export type Usuario = { id: string; email: string; role: string };
 
+export type CorrecoesHoje = {
+  usadas: number;
+  limite: number;
+  restantes: number;
+  renovaEm: string;
+};
+
 export type Tema = {
   id: string;
   titulo: string;
