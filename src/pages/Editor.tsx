@@ -20,6 +20,7 @@ import {
 } from '@/hooks/useCorrecoesHoje';
 import { carregarRascunho, useRascunho } from '@/hooks/useRascunho';
 import { redacoesQueryKey } from '@/hooks/useRedacoes';
+import { evolucaoQueryKey } from '@/hooks/useEvolucao';
 import { useTemas } from '@/hooks/useTemas';
 import { useUsuario } from '@/hooks/useUsuario';
 import { api, ApiError } from '@/lib/api';
@@ -112,6 +113,7 @@ export function Editor() {
       queryClient.setQueryData(['redacoes', response.id], response);
       rascunho.apagar();
       void queryClient.invalidateQueries({ queryKey: redacoesQueryKey });
+      void queryClient.invalidateQueries({ queryKey: evolucaoQueryKey });
       void queryClient.invalidateQueries({ queryKey: correcoesHojeQueryKey });
       allowNavigationRef.current = true;
       sendingRef.current = false;
@@ -278,8 +280,8 @@ export function Editor() {
             >
               <AlertTriangle className="mt-0.5 shrink-0" size={17} />
               <span>
-                Você usou as {limite} correções de hoje. Seu texto fica
-                salvo e você pode enviar a partir da meia-noite.
+                Você usou as {limite} correções de hoje. Seu texto fica salvo e
+                você pode enviar a partir da meia-noite.
               </span>
             </div>
           )}

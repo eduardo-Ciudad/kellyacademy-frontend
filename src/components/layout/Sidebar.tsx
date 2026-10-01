@@ -16,6 +16,7 @@ import { useUsuario } from '@/hooks/useUsuario';
 const navItems = [
   { to: '/', label: 'Suas redações', icon: FileText },
   { to: '/temas', label: 'Temas', icon: BookOpenText },
+  { to: '/evolucao', label: 'Evolução', icon: BarChart3 },
 ] as const;
 
 export function Sidebar() {
@@ -62,7 +63,6 @@ export function Sidebar() {
           </NavLink>
         ))}
 
-        <SoonItem icon={BarChart3} label="Evolução" />
         <SoonItem icon={Route} label="Plano de estudo" />
       </nav>
 

@@ -79,3 +79,32 @@ export type RedacaoResponse = {
   enviadaEm: string;
   avaliacao: Avaliacao | null;
 };
+
+export type NotasCompetencias = {
+  c1: number;
+  c2: number;
+  c3: number;
+  c4: number;
+  c5: number;
+};
+
+export type MediaRecente = NotasCompetencias & {
+  total: number;
+};
+
+export type PontoEvolucao = {
+  redacaoId: string;
+  enviadaEm: string;
+  temaTitulo: string;
+  anulada: boolean;
+  notaTotal: number | null;
+  notas: NotasCompetencias | null;
+};
+
+export type Evolucao = {
+  totalCorrigidas: number;
+  melhorNota: number | null;
+  mediaRecente: MediaRecente | null;
+  competenciaFoco: 1 | 2 | 3 | 4 | 5 | null;
+  serie: PontoEvolucao[];
+};

@@ -2,6 +2,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useRef } from 'react';
 import { correcoesHojeQueryKey } from '@/hooks/useCorrecoesHoje';
 import { redacoesQueryKey } from '@/hooks/useRedacoes';
+import { evolucaoQueryKey } from '@/hooks/useEvolucao';
 import { api } from '@/lib/api';
 import type { RedacaoResponse } from '@/types/api';
 
@@ -36,6 +37,7 @@ export function useRedacao(id: string) {
 
     if (currentStatus && previousWasPending && !currentIsPending) {
       void queryClient.invalidateQueries({ queryKey: redacoesQueryKey });
+      void queryClient.invalidateQueries({ queryKey: evolucaoQueryKey });
       void queryClient.invalidateQueries({ queryKey: correcoesHojeQueryKey });
     }
 

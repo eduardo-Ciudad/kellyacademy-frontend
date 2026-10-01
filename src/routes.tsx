@@ -1,4 +1,6 @@
+import { lazy, Suspense } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
+import { EvolucaoSkeleton } from '@/components/evolucao/EvolucaoSkeleton';
 import { AppShell } from '@/components/layout/AppShell';
 import { PublicOnlyRoute, RequireAuth } from '@/lib/auth';
 import { CriarConta } from '@/pages/CriarConta';
@@ -8,6 +10,10 @@ import { Historico } from '@/pages/Historico';
 import { NotFound } from '@/pages/NotFound';
 import { Resultado } from '@/pages/Resultado';
 import { Temas } from '@/pages/Temas';
+
+const Evolucao = lazy(() =>
+  import('@/pages/Evolucao').then((module) => ({ default: module.Evolucao })),
+);
 
 export const router = createBrowserRouter([
   {
@@ -30,6 +36,14 @@ export const router = createBrowserRouter([
           {
             path: '/temas',
             element: <Temas />,
+          },
+          {
+            path: '/evolucao',
+            element: (
+              <Suspense fallback={<EvolucaoSkeleton />}>
+                <Evolucao />
+              </Suspense>
+            ),
           },
           {
             path: '/redacoes/:id',

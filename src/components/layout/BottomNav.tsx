@@ -1,7 +1,6 @@
 import { BarChart3, BookOpenText, FileText, Plus } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
-import { toast } from 'sonner';
 
 export function BottomNav() {
   const location = useLocation();
@@ -22,13 +21,7 @@ export function BottomNav() {
       >
         <MobileLink to="/" label="Redações" icon={FileText} end />
         <MobileLink to="/temas" label="Temas" icon={BookOpenText} />
-        <button
-          type="button"
-          onClick={() => toast('Disponível em breve')}
-          className="focus-ring rounded-input text-text-3 flex min-h-11 flex-col items-center justify-center gap-1 text-xs font-medium"
-        >
-          <BarChart3 size={21} aria-hidden="true" /> Evolução
-        </button>
+        <MobileLink to="/evolucao" label="Evolução" icon={BarChart3} />
       </nav>
     </>
   );
