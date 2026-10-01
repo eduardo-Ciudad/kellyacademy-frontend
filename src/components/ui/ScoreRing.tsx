@@ -3,6 +3,8 @@ type ScoreRingProps = {
   maximo?: number;
   tamanho: number;
   espessura: number;
+  mostrarMaximo?: boolean;
+  rotulo?: string;
 };
 
 export function ScoreRing({
@@ -10,6 +12,8 @@ export function ScoreRing({
   maximo = 1000,
   tamanho,
   espessura,
+  mostrarMaximo = false,
+  rotulo,
 }: ScoreRingProps) {
   const raio = (tamanho - espessura) / 2;
   const circunferencia = 2 * Math.PI * raio;
@@ -19,6 +23,9 @@ export function ScoreRing({
     <div
       className="relative shrink-0"
       style={{ width: tamanho, height: tamanho }}
+      role={rotulo ? 'img' : undefined}
+      aria-label={rotulo}
+      aria-hidden={rotulo ? undefined : true}
     >
       <svg
         width={tamanho}
@@ -46,8 +53,18 @@ export function ScoreRing({
           transform={`rotate(-90 ${tamanho / 2} ${tamanho / 2})`}
         />
       </svg>
-      <span className="tabular text-text absolute inset-0 flex items-center justify-center text-2xl font-bold">
-        {valor}
+      <span className="tabular text-text absolute inset-0 flex flex-col items-center justify-center font-bold">
+        <span
+          className="leading-none tracking-[-0.03em]"
+          style={{ fontSize: tamanho >= 140 ? 40 : 24 }}
+        >
+          {valor}
+        </span>
+        {mostrarMaximo && (
+          <span className="text-text-3 mt-1 text-[13px] font-normal">
+            de {maximo}
+          </span>
+        )}
       </span>
     </div>
   );

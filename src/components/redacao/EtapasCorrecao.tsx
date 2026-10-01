@@ -30,7 +30,11 @@ export function EtapasCorrecao({ tema }: { tema: Tema }) {
         </span>
         <div className="min-w-0 leading-[1.25]">
           <span className="text-text-3 block text-xs font-semibold">
-            ENEM {tema.ano}
+            {tema.origem === 'AUTORAL'
+              ? 'Autoral'
+              : tema.ano !== null
+                ? `ENEM ${tema.ano}`
+                : 'ENEM'}
           </span>
           <span className="text-text block truncate text-base font-semibold">
             {tema.titulo}

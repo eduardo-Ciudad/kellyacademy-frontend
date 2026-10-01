@@ -159,7 +159,13 @@ function RedacaoItem({
 }) {
   const evaluated = redacao.status === 'AVALIADA' && redacao.notaTotal !== null;
   const failed = redacao.status === 'ERRO';
-  const year = tema ? `ENEM ${tema.ano}` : null;
+  const year = tema
+    ? tema.origem === 'AUTORAL'
+      ? 'Autoral'
+      : tema.ano !== null
+        ? `ENEM ${tema.ano}`
+        : 'ENEM'
+    : null;
   const content = (
     <>
       <div className="min-w-0 flex-1 lg:flex-initial">

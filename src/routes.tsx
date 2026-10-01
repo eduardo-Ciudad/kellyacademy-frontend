@@ -6,7 +6,7 @@ import { Entrar } from '@/pages/Entrar';
 import { Editor } from '@/pages/Editor';
 import { Historico } from '@/pages/Historico';
 import { NotFound } from '@/pages/NotFound';
-import { StagePlaceholder } from '@/pages/StagePlaceholder';
+import { Resultado } from '@/pages/Resultado';
 import { Temas } from '@/pages/Temas';
 
 export const router = createBrowserRouter([
@@ -33,7 +33,7 @@ export const router = createBrowserRouter([
           },
           {
             path: '/redacoes/:id',
-            element: <StagePlaceholder title="Resultado — etapa 5" />,
+            element: <Resultado />,
           },
         ],
       },

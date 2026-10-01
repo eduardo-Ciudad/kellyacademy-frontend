@@ -16,7 +16,14 @@ export default defineConfig(({ mode }) => {
       proxy: Object.fromEntries(
         ['/auth', '/usuarios', '/temas', '/redacoes'].map((route) => [
           route,
-          { target: apiTarget, changeOrigin: true },
+          {
+            target: apiTarget,
+            changeOrigin: true,
+            bypass: (req) =>
+              req.headers.accept?.includes('text/html')
+                ? '/index.html'
+                : undefined,
+          },
         ]),
       ),
     },

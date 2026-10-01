@@ -28,7 +28,7 @@ export type Tema = {
   titulo: string;
   textosMotivadores: string | null;
   origem: 'ENEM_OFICIAL' | 'AUTORAL';
-  ano: number;
+  ano: number | null;
 };
 
 export type TipoRedacao = 'PRATICA' | 'DIAGNOSTICA';
@@ -65,7 +65,7 @@ export type Avaliacao = {
 
 export type RedacaoResponse = {
   id: string;
-  tema: Tema;
+  tema: Tema | null;
   tipo: TipoRedacao;
   status: StatusRedacao;
   texto: string;

@@ -109,7 +109,7 @@ export function Editor() {
         method: 'POST',
         body: JSON.stringify({ temaId: tema.id, tipo, texto }),
       });
-      queryClient.setQueryData(['redacao', response.id], response);
+      queryClient.setQueryData(['redacoes', response.id], response);
       rascunho.apagar();
       void queryClient.invalidateQueries({ queryKey: redacoesQueryKey });
       allowNavigationRef.current = true;
@@ -205,7 +205,11 @@ export function Editor() {
         </Link>
         <div className="min-w-0 flex-1 leading-[1.25]">
           <span className="text-text-3 block text-xs font-semibold">
-            ENEM {tema.ano}
+            {tema.origem === 'AUTORAL'
+              ? 'Autoral'
+              : tema.ano !== null
+                ? `ENEM ${tema.ano}`
+                : 'ENEM'}
             <span className="lg:hidden">
               {' '}
               · {tipo === 'PRATICA' ? 'Prática' : 'Diagnóstica'}

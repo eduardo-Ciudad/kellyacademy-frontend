@@ -2,7 +2,8 @@ import { clearStoredSession, getStoredSession } from '@/lib/session';
 import type { ProblemDetail } from '@/types/api';
 
 const DEFAULT_TIMEOUT_MS = 20_000;
-const REDACAO_TIMEOUT_MS = 150_000;
+// pior caso do backend: 2 tentativas × (10s conexão + 60s leitura)
+const REDACAO_TIMEOUT_MS = 180_000;
 
 export type ApiErrorCode = 'HTTP' | 'TIMEOUT' | 'NETWORK';
 

@@ -38,7 +38,7 @@ export function Temas() {
       const matchesSearch =
         !term ||
         normalize(tema.titulo).includes(term) ||
-        tema.ano.toString().includes(term);
+        tema.ano?.toString().includes(term);
       const matchesFilter =
         filter === 'todos' ||
         (filter === 'praticados' ? practiced : !practiced);
@@ -184,7 +184,7 @@ function TemaCard({
     >
       <div className="flex shrink-0 items-center justify-between lg:w-full">
         <span className="tabular text-accent-text-hover lg:text-text text-[22px] font-bold lg:text-[30px]">
-          {tema.ano}
+          {tema.origem === 'AUTORAL' ? 'Autoral' : (tema.ano ?? 'ENEM')}
         </span>
         <span className="bg-accent-tint text-accent-text-hover rounded-pill ml-3 hidden px-2.5 py-1 text-xs font-semibold lg:inline">
           {tema.origem === 'ENEM_OFICIAL' ? 'ENEM oficial' : 'Autoral'}
