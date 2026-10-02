@@ -10,6 +10,7 @@ import { Historico } from '@/pages/Historico';
 import { NotFound } from '@/pages/NotFound';
 import { Resultado } from '@/pages/Resultado';
 import { Temas } from '@/pages/Temas';
+import { TemasPossiveis } from '@/pages/TemasPossiveis';
 
 const Evolucao = lazy(() =>
   import('@/pages/Evolucao').then((module) => ({ default: module.Evolucao })),
@@ -36,6 +37,10 @@ export const router = createBrowserRouter([
           {
             path: '/temas',
             element: <Temas />,
+          },
+          {
+            path: '/temas/possiveis',
+            element: <TemasPossiveis />,
           },
           {
             path: '/evolucao',

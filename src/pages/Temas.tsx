@@ -1,8 +1,15 @@
-import { ArrowLeft, ArrowRight, RotateCcw, Search } from 'lucide-react';
+import {
+  ArrowLeft,
+  ArrowRight,
+  ChevronRight,
+  RotateCcw,
+  Search,
+} from 'lucide-react';
 import { useMemo, useState, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/Button';
 import { Skeleton } from '@/components/ui/Skeleton';
+import { SparkIcon } from '@/components/ui/SparkIcon';
 import { useRedacoes } from '@/hooks/useRedacoes';
 import { useTemas } from '@/hooks/useTemas';
 import type { ResumoRedacao, Tema } from '@/types/api';
@@ -47,6 +54,8 @@ export function Temas() {
   }, [attemptsByTema, filter, search, temasQuery.data]);
   const isLoading = temasQuery.isLoading || redacoesQuery.isLoading;
   const hasError = temasQuery.isError || redacoesQuery.isError;
+  const temasPossiveisAdicionados =
+    temasQuery.data?.filter((tema) => tema.origem === 'PREVISAO').length ?? 0;
 
   function refetch() {
     void Promise.all([temasQuery.refetch(), redacoesQuery.refetch()]);
@@ -68,12 +77,50 @@ export function Temas() {
               Escolha um tema
             </h1>
             <p className="text-text-2 mt-1.5 hidden text-[15px] lg:block">
-              Temas oficiais do ENEM, do mais recente ao mais antigo.
+              Temas oficiais do ENEM e os temas possíveis que você adicionou.
             </p>
           </div>
         </div>
 
-        <div className="mt-3.5 flex flex-col gap-3 lg:mt-6 lg:flex-row lg:items-center">
+        <Link
+          to="/temas/possiveis"
+          className="focus-ring bg-accent-tint lg:rounded-card mt-3.5 flex min-h-11 items-center gap-3.5 rounded-[18px] px-4 py-3.5 lg:mt-6 lg:gap-[18px] lg:px-6 lg:py-5"
+        >
+          <span className="bg-accent lg:rounded-inner flex size-10 shrink-0 items-center justify-center rounded-xl text-white lg:size-12">
+            <SparkIcon size={22} />
+          </span>
+          <span className="min-w-0 flex-1">
+            <span className="block text-base font-bold lg:text-lg">
+              Possíveis temas do ENEM 2026
+            </span>
+            <span className="text-text-body mt-0.5 block text-[13px] leading-5 lg:text-sm lg:leading-[1.5]">
+              <span className="hidden lg:inline">
+                Recortes selecionados por força de evidências, com argumentos,
+                leis e agentes de intervenção para treinar.
+              </span>
+              <span className="lg:hidden">
+                {temasPossiveisAdicionados > 0
+                  ? `${temasPossiveisAdicionados} na sua lista`
+                  : 'Treine com recortes possíveis para 2026'}
+              </span>
+            </span>
+          </span>
+          {temasPossiveisAdicionados > 0 && (
+            <span className="text-text-body tabular hidden shrink-0 text-[13px] font-semibold lg:block">
+              {temasPossiveisAdicionados} na sua lista
+            </span>
+          )}
+          <span className="bg-accent rounded-pill hidden min-h-11 shrink-0 items-center gap-2 px-5 text-[15px] font-semibold text-white lg:flex">
+            Ver temas possíveis <ArrowRight size={16} aria-hidden="true" />
+          </span>
+          <ChevronRight
+            className="text-possivel shrink-0 lg:hidden"
+            size={18}
+            aria-hidden="true"
+          />
+        </Link>
+
+        <div className="mt-3 flex flex-col gap-3 lg:mt-6 lg:flex-row lg:items-center">
           <div className="relative lg:w-[380px]">
             <Search
               className="text-text-3 absolute top-[13px] left-4"
@@ -183,19 +230,32 @@ function TemaCard({
       className="focus-ring bg-surface text-text lg:rounded-card flex items-center gap-4 rounded-[18px] px-[18px] py-4 lg:h-[260px] lg:flex-col lg:items-stretch lg:gap-3 lg:p-[22px]"
     >
       <div className="flex shrink-0 items-center justify-between lg:w-full">
-        <span className="tabular text-accent-text-hover lg:text-text text-[22px] font-bold lg:text-[30px]">
+        <span
+          className={`tabular text-[22px] font-bold lg:text-[30px] ${tema.origem === 'PREVISAO' ? 'text-text-2' : 'text-accent-text-hover lg:text-text'}`}
+        >
           {tema.origem === 'AUTORAL' ? 'Autoral' : (tema.ano ?? 'ENEM')}
         </span>
-        <span className="bg-accent-tint text-accent-text-hover rounded-pill ml-3 hidden px-2.5 py-1 text-xs font-semibold lg:inline">
-          {tema.origem === 'ENEM_OFICIAL' ? 'ENEM oficial' : 'Autoral'}
-        </span>
+        {tema.origem === 'PREVISAO' ? (
+          <span className="text-possivel border-possivel-border rounded-pill ml-3 hidden items-center gap-1 border border-dashed px-2.5 py-1 text-xs font-semibold lg:inline-flex">
+            <SparkIcon size={12} double={false} /> Possível
+          </span>
+        ) : (
+          <span className="bg-accent-tint text-accent-text-hover rounded-pill ml-3 hidden px-2.5 py-1 text-xs font-semibold lg:inline">
+            {tema.origem === 'ENEM_OFICIAL' ? 'ENEM oficial' : 'Autoral'}
+          </span>
+        )}
       </div>
       <div className="min-w-0 flex-1 lg:flex lg:flex-col">
         <span className="text-[15px] leading-[1.35] font-semibold lg:text-base lg:leading-[1.4]">
           {tema.titulo}
         </span>
         <div className="text-text-3 mt-1 flex items-center justify-between text-[13px] lg:mt-auto">
-          <span>
+          <span className="flex min-w-0 items-center gap-2">
+            {tema.origem === 'PREVISAO' && (
+              <span className="text-possivel border-possivel-border rounded-pill inline-flex shrink-0 items-center gap-1 border border-dashed px-2 py-0.5 text-[11px] font-semibold lg:hidden">
+                <SparkIcon size={12} double={false} /> Possível
+              </span>
+            )}
             {practiced ? (
               <>
                 <span className="lg:hidden">Praticado</span>
