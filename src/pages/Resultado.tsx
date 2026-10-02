@@ -17,6 +17,7 @@ import { ScoreRing } from '@/components/ui/ScoreRing';
 import { useRedacao } from '@/hooks/useRedacao';
 import { ApiError } from '@/lib/api';
 import { competencias } from '@/lib/competencias';
+import { rotuloTema } from '@/lib/temas';
 import { cn } from '@/lib/utils';
 import type { Avaliacao, Competencia, RedacaoResponse } from '@/types/api';
 
@@ -42,8 +43,7 @@ function formattedDate(value: string) {
 
 function themeLabel(redacao: RedacaoResponse) {
   if (!redacao.tema) return null;
-  if (redacao.tema.origem === 'AUTORAL') return 'Autoral';
-  return redacao.tema.ano !== null ? `ENEM ${redacao.tema.ano}` : 'ENEM';
+  return rotuloTema(redacao.tema);
 }
 
 export function Resultado() {

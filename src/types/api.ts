@@ -34,8 +34,24 @@ export type Tema = {
   id: string;
   titulo: string;
   textosMotivadores: string | null;
-  origem: 'ENEM_OFICIAL' | 'AUTORAL';
+  origem: 'ENEM_OFICIAL' | 'AUTORAL' | 'PREVISAO';
   ano: number | null;
+};
+
+export type ForcaEvidencia = 'MUITO_FORTE' | 'FORTE' | 'VALE_TREINAR';
+
+export type TemaPossivel = {
+  id: string;
+  titulo: string;
+  ano: number;
+  forca: ForcaEvidencia;
+  eixo: string;
+  grupoSocial: string;
+  justificativa: string;
+  argumentos: string[];
+  marcosLegais: string[];
+  agentesIntervencao: string[];
+  adicionado: boolean;
 };
 
 export type TipoRedacao = 'PRATICA' | 'DIAGNOSTICA';

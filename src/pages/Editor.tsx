@@ -6,6 +6,7 @@ import {
   Info,
 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import { useIsMutating } from '@tanstack/react-query';
 import { Link, useBlocker, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/Button';
@@ -22,9 +23,11 @@ import { carregarRascunho, useRascunho } from '@/hooks/useRascunho';
 import { redacoesQueryKey } from '@/hooks/useRedacoes';
 import { evolucaoQueryKey } from '@/hooks/useEvolucao';
 import { useTemas } from '@/hooks/useTemas';
+import { alternarTemaPossivelMutationKey } from '@/hooks/useTemasPossiveis';
 import { useUsuario } from '@/hooks/useUsuario';
 import { api, ApiError } from '@/lib/api';
 import { queryClient } from '@/lib/queryClient';
+import { rotuloTema } from '@/lib/temas';
 import type { RedacaoResponse, TipoRedacao } from '@/types/api';
 
 type EditorMode = 'editing' | 'submitting';
@@ -52,6 +55,9 @@ export function Editor() {
   const { email } = useUsuario();
   const temasQuery = useTemas();
   const tema = temasQuery.data?.find((item) => item.id === temaId);
+  const temasPossiveisSendoAlternados = useIsMutating({
+    mutationKey: alternarTemaPossivelMutationKey,
+  });
   const initialDraftRef = useRef(carregarRascunho(email, temaId));
   const [texto, setTexto] = useState(initialDraftRef.current?.texto ?? '');
   const [tipo, setTipo] = useState<TipoRedacao>(
@@ -169,7 +175,10 @@ export function Editor() {
     }
   }
 
-  if (temasQuery.isLoading) {
+  if (
+    temasQuery.isLoading ||
+    (!tema && (temasQuery.isFetching || temasPossiveisSendoAlternados > 0))
+  ) {
     return (
       <main className="bg-bg flex min-h-screen items-center justify-center">
         <span className="text-text-2">Carregando tema…</span>
@@ -209,11 +218,7 @@ export function Editor() {
         </Link>
         <div className="min-w-0 flex-1 leading-[1.25]">
           <span className="text-text-3 block text-xs font-semibold">
-            {tema.origem === 'AUTORAL'
-              ? 'Autoral'
-              : tema.ano !== null
-                ? `ENEM ${tema.ano}`
-                : 'ENEM'}
+            {rotuloTema(tema)}
             <span className="lg:hidden">
               {' '}
               · {tipo === 'PRATICA' ? 'Prática' : 'Diagnóstica'}

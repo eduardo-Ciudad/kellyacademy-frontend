@@ -9,6 +9,7 @@ import { Skeleton } from '@/components/ui/Skeleton';
 import { useRedacoes } from '@/hooks/useRedacoes';
 import { useTemas } from '@/hooks/useTemas';
 import { useUsuario } from '@/hooks/useUsuario';
+import { rotuloTema } from '@/lib/temas';
 import type { ResumoRedacao, Tema } from '@/types/api';
 
 function shortDate(value: string) {
@@ -159,13 +160,7 @@ function RedacaoItem({
 }) {
   const evaluated = redacao.status === 'AVALIADA' && redacao.notaTotal !== null;
   const failed = redacao.status === 'ERRO';
-  const year = tema
-    ? tema.origem === 'AUTORAL'
-      ? 'Autoral'
-      : tema.ano !== null
-        ? `ENEM ${tema.ano}`
-        : 'ENEM'
-    : null;
+  const year = tema ? rotuloTema(tema) : null;
   const content = (
     <>
       <div className="min-w-0 flex-1 lg:flex-initial">

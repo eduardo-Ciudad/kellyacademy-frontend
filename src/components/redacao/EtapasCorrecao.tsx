@@ -1,6 +1,7 @@
 import { Check, Lock } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { SparkIcon } from '@/components/ui/SparkIcon';
+import { rotuloTema } from '@/lib/temas';
 import type { Tema } from '@/types/api';
 
 const etapas = [
@@ -30,11 +31,7 @@ export function EtapasCorrecao({ tema }: { tema: Tema }) {
         </span>
         <div className="min-w-0 leading-[1.25]">
           <span className="text-text-3 block text-xs font-semibold">
-            {tema.origem === 'AUTORAL'
-              ? 'Autoral'
-              : tema.ano !== null
-                ? `ENEM ${tema.ano}`
-                : 'ENEM'}
+            {rotuloTema(tema)}
           </span>
           <span className="text-text block truncate text-base font-semibold">
             {tema.titulo}
