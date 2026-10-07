@@ -1,5 +1,9 @@
 @import 'tailwindcss';
 
+:root {
+  --bottom-nav-h: calc(62px + env(safe-area-inset-bottom));
+}
+
 @theme {
   --font-sans: 'Figtree', sans-serif;
 

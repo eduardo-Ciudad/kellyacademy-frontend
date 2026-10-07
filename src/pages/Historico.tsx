@@ -50,7 +50,7 @@ export function Historico() {
   }
 
   return (
-    <div>
+    <div className="pb-[72px] lg:pb-0">
       <header className="flex items-center justify-between px-5 pt-5 pb-3 lg:hidden">
         <div className="flex items-center gap-2.5">
           <img src={icon} alt="" className="size-8 rounded-[9px]" />
