@@ -56,35 +56,37 @@ export function Resultado() {
     const notFound =
       query.error instanceof ApiError && query.error.status === 404;
     return (
-      <CenteredState
-        title={
-          notFound
-            ? 'Redação não encontrada'
-            : 'Não foi possível carregar a redação'
-        }
-        description={
-          notFound
-            ? 'Ela pode ter sido removida ou não estar disponível para esta conta.'
-            : 'Verifique sua conexão e tente novamente.'
-        }
-      >
-        {notFound ? (
-          <Link
-            className="text-accent-text hover:text-accent-text-hover font-semibold"
-            to="/"
-          >
-            Suas redações
-          </Link>
-        ) : (
-          <button
-            type="button"
-            onClick={() => void query.refetch()}
-            className="focus-ring bg-control hover:bg-surface-2 rounded-pill inline-flex min-h-11 items-center gap-2 px-5 text-sm font-semibold"
-          >
-            <RotateCcw size={16} aria-hidden="true" /> Tentar novamente
-          </button>
-        )}
-      </CenteredState>
+      <StateLayout>
+        <CenteredState
+          title={
+            notFound
+              ? 'Redação não encontrada'
+              : 'Não foi possível carregar a redação'
+          }
+          description={
+            notFound
+              ? 'Ela pode ter sido removida ou não estar disponível para esta conta.'
+              : 'Verifique sua conexão e tente novamente.'
+          }
+        >
+          {notFound ? (
+            <Link
+              className="text-accent-text hover:text-accent-text-hover font-semibold"
+              to="/"
+            >
+              Suas redações
+            </Link>
+          ) : (
+            <button
+              type="button"
+              onClick={() => void query.refetch()}
+              className="focus-ring bg-control hover:bg-surface-2 rounded-pill inline-flex min-h-11 items-center gap-2 px-5 text-sm font-semibold"
+            >
+              <RotateCcw size={16} aria-hidden="true" /> Tentar novamente
+            </button>
+          )}
+        </CenteredState>
+      </StateLayout>
     );
   }
 
@@ -93,46 +95,52 @@ export function Resultado() {
 
   if (redacao.status === 'ENVIADA' || redacao.status === 'EM_AVALIACAO') {
     return (
-      <CenteredState
-        title="Esta redação ainda está sendo corrigida"
-        description="A página será atualizada automaticamente assim que a avaliação terminar."
-      >
-        <span className="bg-accent-tint text-accent-text-hover rounded-pill inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold">
-          <span className="bg-accent size-2 animate-pulse rounded-full" />{' '}
-          Corrigindo
-        </span>
-      </CenteredState>
+      <StateLayout>
+        <CenteredState
+          title="Esta redação ainda está sendo corrigida"
+          description="A página será atualizada automaticamente assim que a avaliação terminar."
+        >
+          <span className="bg-accent-tint text-accent-text-hover rounded-pill inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold">
+            <span className="bg-accent size-2 animate-pulse rounded-full" />{' '}
+            Corrigindo
+          </span>
+        </CenteredState>
+      </StateLayout>
     );
   }
 
   if (redacao.status === 'ERRO') {
     return (
-      <CenteredState
-        title="A correção falhou. Esta tentativa não foi descontada do seu limite."
-        description="Se você escreveu neste navegador, o rascunho continua salvo."
-      >
-        {redacao.tema ? (
-          <Link
-            to={`/temas/${redacao.tema.id}/escrever`}
-            className="focus-ring bg-accent hover:bg-accent-hover rounded-pill inline-flex min-h-11 items-center px-6 text-sm font-semibold text-white"
-          >
-            Tentar de novo
-          </Link>
-        ) : (
-          <Link className="text-accent-text font-semibold" to="/temas">
-            Escolher outro tema
-          </Link>
-        )}
-      </CenteredState>
+      <StateLayout>
+        <CenteredState
+          title="A correção falhou. Esta tentativa não foi descontada do seu limite."
+          description="Se você escreveu neste navegador, o rascunho continua salvo."
+        >
+          {redacao.tema ? (
+            <Link
+              to={`/temas/${redacao.tema.id}/escrever`}
+              className="focus-ring bg-accent hover:bg-accent-hover rounded-pill inline-flex min-h-11 items-center px-6 text-sm font-semibold text-white"
+            >
+              Tentar de novo
+            </Link>
+          ) : (
+            <Link className="text-accent-text font-semibold" to="/temas">
+              Escolher outro tema
+            </Link>
+          )}
+        </CenteredState>
+      </StateLayout>
     );
   }
 
   if (!redacao.avaliacao) {
     return (
-      <CenteredState
-        title="Avaliação indisponível"
-        description="Não encontramos os dados desta correção."
-      />
+      <StateLayout>
+        <CenteredState
+          title="Avaliação indisponível"
+          description="Não encontramos os dados desta correção."
+        />
+      </StateLayout>
     );
   }
 
@@ -146,20 +154,20 @@ export function Resultado() {
 function PageTop({
   redacao,
   singleAction = false,
+  badge = false,
 }: {
   redacao: RedacaoResponse;
   singleAction?: boolean;
+  badge?: boolean;
 }) {
   return (
     <div className="flex items-center justify-between">
-      <Link
-        to="/"
-        aria-label="Voltar para suas redações"
-        className="focus-ring bg-surface text-text-2 hover:text-text flex size-11 items-center justify-center rounded-full text-sm font-medium lg:h-auto lg:w-auto lg:gap-1.5 lg:bg-transparent"
-      >
-        <ArrowLeft size={17} aria-hidden="true" />
-        <span className="hidden lg:inline">Suas redações</span>
-      </Link>
+      <BackToRedacoes />
+      {badge && (
+        <span className="bg-accent-tint text-accent-text-hover rounded-pill flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold lg:hidden">
+          <SparkIcon size={13} double={false} /> Corrigida por IA
+        </span>
+      )}
       {redacao.tema && (
         <div className="hidden gap-2 lg:flex">
           {!singleAction && (
@@ -173,6 +181,30 @@ function PageTop({
           <RewriteLink temaId={redacao.tema.id} />
         </div>
       )}
+    </div>
+  );
+}
+
+function BackToRedacoes() {
+  return (
+    <Link
+      to="/"
+      aria-label="Voltar para suas redações"
+      className="focus-ring bg-surface text-text-2 hover:text-text flex size-11 items-center justify-center rounded-full text-sm font-medium lg:h-auto lg:w-auto lg:gap-1.5 lg:bg-transparent"
+    >
+      <ArrowLeft size={17} aria-hidden="true" />
+      <span className="hidden lg:inline">Suas redações</span>
+    </Link>
+  );
+}
+
+function StateLayout({ children }: { children: ReactNode }) {
+  return (
+    <div className="flex flex-col px-4 pt-4 lg:p-0">
+      <div>
+        <BackToRedacoes />
+      </div>
+      {children}
     </div>
   );
 }
@@ -262,12 +294,7 @@ function ResultadoAvaliado({
 
   return (
     <article className="flex flex-col gap-4 px-4 pt-4 pb-8 lg:gap-5 lg:p-0">
-      <PageTop redacao={redacao} />
-      <div className="flex items-center justify-end lg:hidden">
-        <span className="bg-accent-tint text-accent-text-hover rounded-pill flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold">
-          <SparkIcon size={13} double={false} /> Corrigida por IA
-        </span>
-      </div>
+      <PageTop redacao={redacao} badge />
       <div className="px-1 lg:hidden">
         <HeaderMeta redacao={redacao} mobile />
         <h1 className="text-text mt-1.5 text-2xl leading-tight font-bold tracking-[-0.015em]">
@@ -641,7 +668,7 @@ function CenteredState({
   children?: ReactNode;
 }) {
   return (
-    <div className="flex min-h-[60vh] items-center justify-center px-5 text-center">
+    <div className="flex min-h-[60vh] items-center justify-center px-1 text-center">
       <div className="bg-surface rounded-card max-w-xl px-7 py-10">
         <h1 className="text-text text-2xl font-bold tracking-[-0.02em]">
           {title}
@@ -657,28 +684,29 @@ function CenteredState({
 
 function ResultadoSkeleton() {
   return (
-    <div
-      className="flex flex-col gap-5 px-4 pt-4 lg:p-0"
-      role="status"
-      aria-label="Carregando resultado"
-    >
-      <div className="flex justify-between">
-        <Skeleton className="h-10 w-36" />
-        <Skeleton className="h-10 w-72" />
-      </div>
-      <Skeleton className="h-[270px] lg:h-[204px]" />
-      <div className="grid gap-5 lg:grid-cols-[minmax(0,1.7fr)_minmax(280px,1fr)]">
-        <div className="space-y-5">
-          <Skeleton className="h-40" />
-          <Skeleton className="h-[520px]" />
+    <StateLayout>
+      <div
+        className="flex flex-col gap-5"
+        role="status"
+        aria-label="Carregando resultado"
+      >
+        <div className="hidden justify-end lg:flex">
+          <Skeleton className="h-10 w-72" />
         </div>
-        <div className="space-y-4">
-          <Skeleton className="h-40" />
-          <Skeleton className="h-40" />
-          <Skeleton className="h-16" />
+        <Skeleton className="h-[270px] lg:h-[204px]" />
+        <div className="grid gap-5 lg:grid-cols-[minmax(0,1.7fr)_minmax(280px,1fr)]">
+          <div className="space-y-5">
+            <Skeleton className="h-40" />
+            <Skeleton className="h-[520px]" />
+          </div>
+          <div className="space-y-4">
+            <Skeleton className="h-40" />
+            <Skeleton className="h-40" />
+            <Skeleton className="h-16" />
+          </div>
         </div>
+        <span className="sr-only">Carregando resultado…</span>
       </div>
-      <span className="sr-only">Carregando resultado…</span>
-    </div>
+    </StateLayout>
   );
 }
