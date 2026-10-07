@@ -3,12 +3,12 @@ import { ptBR } from 'date-fns/locale';
 import { Plus, RotateCcw } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import icon from '@/assets/studymind-icon.svg';
+import { AccountButton } from '@/components/layout/AccountButton';
 import { CorrecoesHojeCard } from '@/components/redacao/CorrecoesHojeCard';
 import { Button } from '@/components/ui/Button';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { useRedacoes } from '@/hooks/useRedacoes';
 import { useTemas } from '@/hooks/useTemas';
-import { useUsuario } from '@/hooks/useUsuario';
 import { rotuloTema } from '@/lib/temas';
 import type { ResumoRedacao, Tema } from '@/types/api';
 
@@ -23,7 +23,6 @@ function typeLabel(type: ResumoRedacao['tipo']) {
 export function Historico() {
   const redacoesQuery = useRedacoes();
   const temasQuery = useTemas();
-  const { iniciais } = useUsuario();
   const redacoes = redacoesQuery.data ?? [];
   const temasById = new Map(
     (temasQuery.data ?? []).map((tema) => [tema.id, tema]),
@@ -58,9 +57,7 @@ export function Historico() {
             Suas redações
           </h1>
         </div>
-        <span className="bg-control text-text flex size-9 items-center justify-center rounded-full text-[13px] font-semibold">
-          {iniciais}
-        </span>
+        <AccountButton />
       </header>
 
       <div className="hidden items-end justify-between lg:flex">

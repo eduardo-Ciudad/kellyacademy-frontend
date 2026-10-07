@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { useMemo, useState, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
+import { AccountButton } from '@/components/layout/AccountButton';
 import { Button } from '@/components/ui/Button';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { SparkIcon } from '@/components/ui/SparkIcon';
@@ -80,6 +81,7 @@ export function Temas() {
               Temas oficiais do ENEM e os temas possíveis que você adicionou.
             </p>
           </div>
+          <AccountButton className="ml-auto" />
         </div>
 
         <Link

@@ -21,6 +21,7 @@ import type {
   ValueType,
 } from 'recharts/types/component/DefaultTooltipContent';
 import { EvolucaoSkeleton } from '@/components/evolucao/EvolucaoSkeleton';
+import { AccountButton } from '@/components/layout/AccountButton';
 import { Button } from '@/components/ui/Button';
 import { useEvolucao } from '@/hooks/useEvolucao';
 import { chartTheme } from '@/lib/chartTheme';
@@ -157,6 +158,7 @@ function PageHeader() {
       >
         <Plus size={16} strokeWidth={2.4} aria-hidden="true" /> Nova redação
       </Link>
+      <AccountButton />
     </header>
   );
 }
