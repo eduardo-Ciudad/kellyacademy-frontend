@@ -27,7 +27,7 @@ export function LimiteDiarioDialog({
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-40 bg-black/65" />
-        <Dialog.Content className="bg-surface fixed inset-x-0 bottom-0 z-50 flex flex-col items-center gap-5 rounded-t-[28px] px-6 pt-3 pb-8 outline-none sm:inset-auto sm:top-1/2 sm:left-1/2 sm:w-[480px] sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-[28px] sm:p-8">
+        <Dialog.Content className="bg-surface fixed inset-x-0 bottom-0 z-50 flex max-h-[90dvh] flex-col items-center gap-5 overflow-y-auto overscroll-contain rounded-t-[28px] px-6 pt-3 pb-[calc(32px+env(safe-area-inset-bottom))] outline-none sm:inset-auto sm:top-1/2 sm:left-1/2 sm:max-h-[calc(100dvh-48px)] sm:w-[480px] sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-[28px] sm:p-8">
           <span className="bg-control rounded-pill h-1.5 w-10 sm:hidden" />
           <span className="bg-accent-tint text-accent-text-hover rounded-card mt-2 flex size-16 items-center justify-center">
             <Timer size={30} />
