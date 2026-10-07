@@ -6,12 +6,13 @@ import {
   Plus,
   Route,
 } from 'lucide-react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import logo from '@/assets/studymind-logo-escuro.svg';
 import { useAuth } from '@/lib/auth';
 import { CorrecoesHojeCard } from '@/components/redacao/CorrecoesHojeCard';
 import { useUsuario } from '@/hooks/useUsuario';
+import { isNavActive } from '@/components/layout/navMatch';
 
 const navItems = [
   { to: '/', label: 'Suas redações', icon: FileText },
@@ -22,6 +23,7 @@ const navItems = [
 export function Sidebar() {
   const { logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const { nome, iniciais } = useUsuario();
 
   function handleLogout() {
@@ -46,22 +48,24 @@ export function Sidebar() {
       </NavLink>
 
       <nav aria-label="Navegação principal" className="mt-6 space-y-1">
-        {navItems.map(({ to, label, icon: Icon }) => (
-          <NavLink
-            key={to}
-            to={to}
-            end={to === '/'}
-            className={({ isActive }) =>
-              `focus-ring rounded-input flex min-h-11 items-center gap-3 px-3 text-sm font-semibold transition-colors ${
-                isActive
+        {navItems.map(({ to, label, icon: Icon }) => {
+          const active = isNavActive(to, location.pathname);
+
+          return (
+            <NavLink
+              key={to}
+              to={to}
+              aria-current={active ? 'page' : undefined}
+              className={`focus-ring rounded-input flex min-h-11 items-center gap-3 px-3 text-sm font-semibold transition-colors ${
+                active
                   ? 'bg-nav-active text-accent-text'
                   : 'text-text-2 hover:bg-surface-2 hover:text-text'
-              }`
-            }
-          >
-            <Icon size={20} aria-hidden="true" /> {label}
-          </NavLink>
-        ))}
+              }`}
+            >
+              <Icon size={20} aria-hidden="true" /> {label}
+            </NavLink>
+          );
+        })}
 
         <SoonItem icon={Route} label="Plano de estudo" />
       </nav>
