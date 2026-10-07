@@ -4,6 +4,7 @@ import {
   ArrowLeft,
   Check,
   Info,
+  RotateCcw,
 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useIsMutating } from '@tanstack/react-query';
@@ -177,11 +178,46 @@ export function Editor() {
 
   if (
     temasQuery.isLoading ||
-    (!tema && (temasQuery.isFetching || temasPossiveisSendoAlternados > 0))
+    (!tema &&
+      !temasQuery.isError &&
+      (temasQuery.isFetching || temasPossiveisSendoAlternados > 0))
   ) {
     return (
       <main className="bg-bg flex min-h-screen items-center justify-center">
         <span className="text-text-2">Carregando tema…</span>
+      </main>
+    );
+  }
+
+  if (!tema && temasQuery.isError) {
+    return (
+      <main className="bg-bg flex min-h-screen items-center justify-center px-5 text-center">
+        <div role="alert">
+          <h1 className="text-text text-[28px] font-bold">
+            Não foi possível carregar o tema
+          </h1>
+          <p className="text-text-2 mt-2">
+            Verifique sua conexão e tente novamente. Seu rascunho continua salvo
+            neste navegador.
+          </p>
+          <Button
+            variant="secondary"
+            onClick={() => void temasQuery.refetch()}
+            disabled={temasQuery.isFetching}
+            className="mt-5"
+          >
+            <RotateCcw size={16} aria-hidden="true" />
+            {temasQuery.isFetching ? 'Tentando…' : 'Tentar novamente'}
+          </Button>
+          <div>
+            <Link
+              to="/temas"
+              className="text-accent-text mt-4 inline-block font-semibold"
+            >
+              Voltar para temas
+            </Link>
+          </div>
+        </div>
       </main>
     );
   }
