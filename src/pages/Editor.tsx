@@ -3,6 +3,8 @@ import {
   AlertTriangle,
   ArrowLeft,
   Check,
+  Camera,
+  ChevronRight,
   Info,
   RotateCcw,
 } from 'lucide-react';
@@ -27,9 +29,10 @@ import { useTemas } from '@/hooks/useTemas';
 import { alternarTemaPossivelMutationKey } from '@/hooks/useTemasPossiveis';
 import { useUsuario } from '@/hooks/useUsuario';
 import { api, ApiError } from '@/lib/api';
+import { temTrechoIlegivel } from '@/lib/transcricao';
 import { queryClient } from '@/lib/queryClient';
 import { rotuloTema } from '@/lib/temas';
-import type { RedacaoResponse, TipoRedacao } from '@/types/api';
+import type { OrigemRedacao, RedacaoResponse, TipoRedacao } from '@/types/api';
 
 type EditorMode = 'editing' | 'submitting';
 type EditorBanner = {
@@ -64,6 +67,9 @@ export function Editor() {
   const [tipo, setTipo] = useState<TipoRedacao>(
     initialDraftRef.current?.tipo ?? 'PRATICA',
   );
+  const [origem, setOrigem] = useState<OrigemRedacao>(
+    initialDraftRef.current?.origem ?? 'DIGITADO',
+  );
   const [mode, setMode] = useState<EditorMode>('editing');
   const [banner, setBanner] = useState<EditorBanner>();
   const [infoOpen, setInfoOpen] = useState(false);
@@ -72,16 +78,23 @@ export function Editor() {
   const sendingRef = useRef(false);
   const allowNavigationRef = useRef(false);
   const { atingido, limite } = useCorrecoesHoje();
-  const rascunho = useRascunho({ email, temaId, texto, tipo });
+  const rascunho = useRascunho({ email, temaId, texto, tipo, origem });
   const words = countWords(texto);
   const characters = texto.length;
   const empty = !texto.trim();
   const overLimit = characters > 5000;
+  const ilegivel = temTrechoIlegivel(texto);
   const submitReason = empty
     ? 'Escreva sua redação antes de enviar.'
     : overLimit
       ? 'Reduza o texto para no máximo 5.000 caracteres.'
-      : null;
+      : ilegivel
+        ? 'Troque o trecho [ilegível] pela palavra certa antes de enviar.'
+        : null;
+
+  useEffect(() => {
+    if (!texto) setOrigem('DIGITADO');
+  }, [texto]);
 
   const blocker = useBlocker(
     () => sendingRef.current && !allowNavigationRef.current,
@@ -115,7 +128,7 @@ export function Editor() {
     try {
       const response = await api<RedacaoResponse>('/redacoes', {
         method: 'POST',
-        body: JSON.stringify({ temaId: tema.id, tipo, texto }),
+        body: JSON.stringify({ temaId: tema.id, tipo, texto, origem }),
       });
       queryClient.setQueryData(['redacoes', response.id], response);
       rascunho.apagar();
@@ -279,6 +292,14 @@ export function Editor() {
           </span>
         )}
         <Button
+          variant="secondary"
+          className="hidden lg:flex"
+          onClick={() => void navigate(`/temas/${temaId}/foto`)}
+        >
+          <Camera size={16} />
+          Enviar foto
+        </Button>
+        <Button
           onClick={() => void submitRedacao()}
           disabled={Boolean(submitReason) || atingido}
           className="hidden lg:flex"
@@ -309,6 +330,11 @@ export function Editor() {
                 </button>
               ))}
             </div>
+            {origem === 'MANUSCRITO' && (
+              <span className="bg-accent-tint text-possivel rounded-pill ml-3 inline-flex h-8 items-center gap-1.5 px-3 text-xs font-semibold">
+                <Camera size={14} /> Transcrito da foto
+              </span>
+            )}
             <span className="text-text-3 hidden text-[13px] lg:block">
               Prática é para treinar. Diagnóstica mede seu nível atual.
             </span>
@@ -331,6 +357,24 @@ export function Editor() {
             <EditorAlert banner={banner} onRetry={() => void submitRedacao()} />
           )}
 
+          {empty && (
+            <Link
+              to={`/temas/${temaId}/foto`}
+              className="bg-surface rounded-card mx-4 flex items-center gap-3 p-4 lg:hidden"
+            >
+              <span className="bg-accent-tint text-accent-text rounded-input flex size-12 shrink-0 items-center justify-center">
+                <Camera size={21} />
+              </span>
+              <span className="min-w-0 flex-1">
+                <strong className="text-text block">Escreveu no papel?</strong>
+                <span className="text-text-2 mt-0.5 block text-sm leading-[1.4]">
+                  Envie a foto da redação e revise o texto antes da correção.
+                </span>
+              </span>
+              <ChevronRight className="text-text-3 shrink-0" size={20} />
+            </Link>
+          )}
+
           <div className="bg-surface lg:rounded-card flex min-h-0 flex-1 flex-col">
             <label htmlFor="texto" className="sr-only">
               Texto da redação
@@ -340,7 +384,11 @@ export function Editor() {
               value={texto}
               onChange={(event) => setTexto(event.target.value)}
               className="text-text min-h-0 flex-1 resize-none border-0 bg-transparent p-5 text-base leading-[1.8] outline-none lg:px-10 lg:py-8 lg:text-[17px] lg:leading-[1.85]"
-              placeholder="Comece a escrever sua redação…"
+              placeholder={
+                empty
+                  ? 'Ou comece a escrever sua redação…'
+                  : 'Comece a escrever sua redação…'
+              }
             />
             <div className="border-control text-text-2 tabular flex shrink-0 flex-col gap-2 border-t px-4 py-3 text-[13px] lg:flex-row lg:items-center lg:gap-5 lg:px-6 lg:py-3.5">
               <div className="flex items-center justify-between lg:contents">
@@ -416,6 +464,7 @@ export function Editor() {
         onOpenChange={setLimitOpen}
         limite={limitData.limite}
         retryAfter={limitData.retryAfter}
+        recurso="CORRECAO"
       />
     </main>
   );
