@@ -2,6 +2,7 @@ import * as Dialog from '@radix-ui/react-dialog';
 import { Check, Timer } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/Button';
+import type { RecursoIA } from '@/types/api';
 
 function formatRemaining(seconds: number) {
   const minutes = Math.max(1, Math.ceil(seconds / 60));
@@ -16,13 +17,18 @@ export function LimiteDiarioDialog({
   onOpenChange,
   limite,
   retryAfter,
+  recurso = 'CORRECAO',
+  onDigitar,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   limite: number;
   retryAfter: number;
+  recurso?: RecursoIA;
+  onDigitar?: () => void;
 }) {
   const navigate = useNavigate();
+  const transcricao = recurso === 'TRANSCRICAO';
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
@@ -34,10 +40,11 @@ export function LimiteDiarioDialog({
           </span>
           <div className="text-center">
             <Dialog.Title className="text-text text-[22px] font-bold tracking-[-0.015em]">
-              Você usou suas {limite} correções de hoje
+              Você usou suas {limite}{' '}
+              {transcricao ? 'transcrições' : 'correções'} de hoje
             </Dialog.Title>
             <Dialog.Description className="text-text-2 mt-2 text-[15px] leading-[1.55]">
-              Novas correções liberam em{' '}
+              Novas {transcricao ? 'transcrições' : 'correções'} liberam em{' '}
               <strong className="text-text">
                 {formatRemaining(retryAfter)}
               </strong>
@@ -46,22 +53,29 @@ export function LimiteDiarioDialog({
           </div>
           <div className="bg-surface-2 text-text-body flex w-full gap-3 rounded-[16px] px-4 py-3.5 text-sm leading-[1.5]">
             <Check className="text-success mt-0.5 shrink-0" size={18} />
-            Seu rascunho continua salvo. Você pode seguir escrevendo e enviar
-            amanhã.
+            {transcricao
+              ? 'Suas correções continuam disponíveis: você pode digitar o texto e enviar hoje mesmo.'
+              : 'Seu rascunho continua salvo. Você pode seguir escrevendo e enviar amanhã.'}
           </div>
           <div className="flex w-full flex-col gap-2.5">
             <Button
               className="h-[52px] w-full text-base"
-              onClick={() => onOpenChange(false)}
+              onClick={() => {
+                if (transcricao) onDigitar?.();
+                else onOpenChange(false);
+              }}
             >
-              Continuar escrevendo
+              {transcricao ? 'Digitar a redação' : 'Continuar escrevendo'}
             </Button>
             <Button
               variant="secondary"
               className="h-[52px] w-full text-base"
-              onClick={() => void navigate('/')}
+              onClick={() => {
+                if (transcricao) onOpenChange(false);
+                else void navigate('/');
+              }}
             >
-              Revisar correções anteriores
+              {transcricao ? 'Fechar' : 'Revisar correções anteriores'}
             </Button>
           </div>
         </Dialog.Content>

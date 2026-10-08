@@ -11,6 +11,7 @@ import { NotFound } from '@/pages/NotFound';
 import { Resultado } from '@/pages/Resultado';
 import { Temas } from '@/pages/Temas';
 import { TemasPossiveis } from '@/pages/TemasPossiveis';
+import { Transcricao } from '@/pages/Transcricao';
 
 const Evolucao = lazy(() =>
   import('@/pages/Evolucao').then((module) => ({ default: module.Evolucao })),
@@ -59,6 +60,10 @@ export const router = createBrowserRouter([
       {
         path: '/temas/:temaId/escrever',
         element: <Editor />,
+      },
+      {
+        path: '/temas/:temaId/foto',
+        element: <Transcricao />,
       },
     ],
   },
