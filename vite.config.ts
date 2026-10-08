@@ -1,3 +1,4 @@
+/// <reference types="vitest/config" />
 import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
@@ -14,18 +15,21 @@ export default defineConfig(({ mode }) => {
     },
     server: {
       proxy: Object.fromEntries(
-        ['/auth', '/usuarios', '/temas', '/redacoes'].map((route) => [
-          route,
-          {
-            target: apiTarget,
-            changeOrigin: true,
-            bypass: (req) =>
-              req.headers.accept?.includes('text/html')
-                ? '/index.html'
-                : undefined,
-          },
-        ]),
+        ['/auth', '/usuarios', '/temas', '/redacoes', '/transcricoes'].map(
+          (route) => [
+            route,
+            {
+              target: apiTarget,
+              changeOrigin: true,
+              bypass: (req) =>
+                req.headers.accept?.includes('text/html')
+                  ? '/index.html'
+                  : undefined,
+            },
+          ],
+        ),
       ),
     },
+    test: { include: ['src/**/*.test.ts'], environment: 'node' },
   };
 });

@@ -1,14 +1,27 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { TipoRedacao } from '@/types/api';
+import type { OrigemRedacao, TipoRedacao } from '@/types/api';
 
 export type Rascunho = {
   texto: string;
   tipo: TipoRedacao;
+  origem?: OrigemRedacao;
   atualizadoEm: string;
 };
 
 function draftKey(email: string, temaId: string) {
   return `studymind:rascunho:${email.trim().toLowerCase()}:${temaId}`;
+}
+
+export function gravarRascunho(
+  email: string,
+  temaId: string,
+  rascunho: Omit<Rascunho, 'atualizadoEm'>,
+) {
+  if (!email || !temaId) return;
+  localStorage.setItem(
+    draftKey(email, temaId),
+    JSON.stringify({ ...rascunho, atualizadoEm: new Date().toISOString() }),
+  );
 }
 
 export function carregarRascunho(
@@ -30,26 +43,24 @@ export function useRascunho({
   temaId,
   texto,
   tipo,
+  origem,
 }: {
   email: string;
   temaId: string;
   texto: string;
   tipo: TipoRedacao;
+  origem: OrigemRedacao;
 }) {
   const [salvo, setSalvo] = useState(() =>
     Boolean(carregarRascunho(email, temaId)),
   );
   const disabledRef = useRef(false);
-  const latestRef = useRef({ texto, tipo });
-  latestRef.current = { texto, tipo };
+  const latestRef = useRef({ texto, tipo, origem });
+  latestRef.current = { texto, tipo, origem };
 
   const salvarAgora = useCallback(() => {
     if (!email || !temaId || disabledRef.current) return;
-    const draft: Rascunho = {
-      ...latestRef.current,
-      atualizadoEm: new Date().toISOString(),
-    };
-    localStorage.setItem(draftKey(email, temaId), JSON.stringify(draft));
+    gravarRascunho(email, temaId, latestRef.current);
     setSalvo(true);
   }, [email, temaId]);
 
@@ -67,7 +78,7 @@ export function useRascunho({
     setSalvo(false);
     const timeoutId = window.setTimeout(salvarAgora, 500);
     return () => window.clearTimeout(timeoutId);
-  }, [salvarAgora, texto, tipo]);
+  }, [salvarAgora, texto, tipo, origem]);
 
   useEffect(() => {
     const handleBeforeUnload = () => salvarAgora();

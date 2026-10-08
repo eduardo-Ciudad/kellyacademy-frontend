@@ -1,9 +1,13 @@
 import { clearStoredSession, getStoredSession } from '@/lib/session';
-import type { ProblemDetail } from '@/types/api';
+import type {
+  MotivoImagemInvalida,
+  ProblemDetail,
+  RecursoIA,
+} from '@/types/api';
 
 const DEFAULT_TIMEOUT_MS = 20_000;
 // pior caso do backend: 2 tentativas × (10s conexão + 60s leitura)
-const REDACAO_TIMEOUT_MS = 180_000;
+const IA_TIMEOUT_MS = 180_000;
 
 export type ApiErrorCode = 'HTTP' | 'TIMEOUT' | 'NETWORK';
 
@@ -14,6 +18,8 @@ export class ApiError extends Error {
   erros?: Record<string, string | string[]>;
   retryAfter?: number;
   limite?: number;
+  recurso?: RecursoIA;
+  motivo?: MotivoImagemInvalida;
 
   constructor(options: {
     code: ApiErrorCode;
@@ -22,6 +28,8 @@ export class ApiError extends Error {
     erros?: Record<string, string | string[]>;
     retryAfter?: number;
     limite?: number;
+    recurso?: RecursoIA;
+    motivo?: MotivoImagemInvalida;
   }) {
     super(options.detail);
     this.name = 'ApiError';
@@ -31,6 +39,8 @@ export class ApiError extends Error {
     this.erros = options.erros;
     this.retryAfter = options.retryAfter;
     this.limite = options.limite;
+    this.recurso = options.recurso;
+    this.motivo = options.motivo;
   }
 }
 
@@ -64,14 +74,15 @@ export async function api<T>(
   options: RequestInit = {},
 ): Promise<T> {
   const method = options.method?.toUpperCase() ?? 'GET';
-  const isSubmission = method === 'POST' && /^\/redacoes\/?$/.test(path);
+  const isSubmission =
+    method === 'POST' && /^\/(?:redacoes|transcricoes)\/?$/.test(path);
   const timeoutController = new AbortController();
   const timeoutId = window.setTimeout(
     () =>
       timeoutController.abort(
         new DOMException('Tempo limite excedido.', 'TimeoutError'),
       ),
-    isSubmission ? REDACAO_TIMEOUT_MS : DEFAULT_TIMEOUT_MS,
+    isSubmission ? IA_TIMEOUT_MS : DEFAULT_TIMEOUT_MS,
   );
   const signal = options.signal
     ? AbortSignal.any([options.signal, timeoutController.signal])
@@ -80,7 +91,12 @@ export async function api<T>(
   const token = getStoredSession()?.accessToken;
   const isAuthRoute = /^\/auth(?:\/|$)/.test(path);
 
-  if (options.body && !headers.has('Content-Type'))
+  // FormData precisa ficar sem Content-Type para o navegador incluir o boundary.
+  if (
+    options.body &&
+    !(options.body instanceof FormData) &&
+    !headers.has('Content-Type')
+  )
     headers.set('Content-Type', 'application/json');
   if (token) headers.set('Authorization', `Bearer ${token}`);
 
@@ -109,6 +125,8 @@ export async function api<T>(
         erros: problem.erros,
         retryAfter: Number.isNaN(retryAfter) ? undefined : retryAfter,
         limite: problem.limite,
+        recurso: problem.recurso,
+        motivo: problem.motivo,
       });
     }
 

@@ -1,3 +1,7 @@
+export type RecursoIA = 'CORRECAO' | 'TRANSCRICAO';
+export type MotivoImagemInvalida =
+  'VAZIA' | 'GRANDE_DEMAIS' | 'TIPO_INVALIDO' | 'QUANTIDADE_INVALIDA';
+
 export type ProblemDetail = {
   title?: string;
   status?: number;
@@ -5,6 +9,8 @@ export type ProblemDetail = {
   instance?: string;
   erros?: Record<string, string | string[]>;
   limite?: number;
+  recurso?: RecursoIA;
+  motivo?: MotivoImagemInvalida;
 };
 
 export type LoginRequest = { email: string; senha: string };
@@ -23,7 +29,7 @@ export type LoginResponse = {
 
 export type Usuario = { id: string; email: string; role: string };
 
-export type CorrecoesHoje = {
+export type UsoHoje = {
   usadas: number;
   limite: number;
   restantes: number;
@@ -55,6 +61,7 @@ export type TemaPossivel = {
 };
 
 export type TipoRedacao = 'PRATICA' | 'DIAGNOSTICA';
+export type OrigemRedacao = 'DIGITADO' | 'MANUSCRITO';
 export type StatusRedacao = 'ENVIADA' | 'EM_AVALIACAO' | 'AVALIADA' | 'ERRO';
 
 export type ResumoRedacao = {
@@ -62,6 +69,7 @@ export type ResumoRedacao = {
   temaId: string;
   temaTitulo: string;
   tipo: TipoRedacao;
+  origem: OrigemRedacao;
   status: StatusRedacao;
   enviadaEm: string;
   notaTotal: number | null;
@@ -90,10 +98,18 @@ export type RedacaoResponse = {
   id: string;
   tema: Tema | null;
   tipo: TipoRedacao;
+  origem: OrigemRedacao;
   status: StatusRedacao;
   texto: string;
   enviadaEm: string;
   avaliacao: Avaliacao | null;
+};
+
+export type TranscricaoResponse = {
+  texto: string;
+  linhas: string[];
+  linhasComTrechoIlegivel: number[];
+  qtdLinhas: number;
 };
 
 export type NotasCompetencias = {
