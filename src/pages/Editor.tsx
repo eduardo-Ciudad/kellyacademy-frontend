@@ -360,7 +360,7 @@ export function Editor() {
           {empty && (
             <Link
               to={`/temas/${temaId}/foto`}
-              className="bg-surface rounded-card mx-4 flex items-center gap-3 p-4 lg:hidden"
+              className="bg-surface-2 rounded-card mx-4 my-4 flex items-center gap-3 p-4 lg:hidden"
             >
               <span className="bg-accent-tint text-accent-text rounded-input flex size-12 shrink-0 items-center justify-center">
                 <Camera size={21} />
