@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 import { EvolucaoSkeleton } from '@/components/evolucao/EvolucaoSkeleton';
+import { RepertorioSkeleton } from '@/components/repertorio/RepertorioSkeleton';
 import { AppShell } from '@/components/layout/AppShell';
 import { PublicOnlyRoute, RequireAuth } from '@/lib/auth';
 import { CriarConta } from '@/pages/CriarConta';
@@ -15,6 +16,11 @@ import { Transcricao } from '@/pages/Transcricao';
 
 const Evolucao = lazy(() =>
   import('@/pages/Evolucao').then((module) => ({ default: module.Evolucao })),
+);
+const Repertorio = lazy(() =>
+  import('@/pages/Repertorio').then((module) => ({
+    default: module.Repertorio,
+  })),
 );
 
 export const router = createBrowserRouter([
@@ -42,6 +48,14 @@ export const router = createBrowserRouter([
           {
             path: '/temas/possiveis',
             element: <TemasPossiveis />,
+          },
+          {
+            path: '/repertorio/:codigo?',
+            element: (
+              <Suspense fallback={<RepertorioSkeleton />}>
+                <Repertorio />
+              </Suspense>
+            ),
           },
           {
             path: '/evolucao',
