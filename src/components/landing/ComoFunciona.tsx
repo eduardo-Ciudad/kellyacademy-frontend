@@ -8,6 +8,7 @@ import {
 } from 'motion/react';
 import { DUR, EASE_OUT } from '@/components/landing/fx/motion';
 import { RevealGroup, RevealItem } from '@/components/landing/fx/Reveal';
+import { LandingCard } from '@/components/landing/ui/LandingCard';
 import { SectionHeader } from '@/components/landing/ui/SectionHeader';
 
 const steps = [
@@ -85,12 +86,12 @@ export function ComoFunciona() {
                   progress={scrollYProgress}
                   reduceMotion={Boolean(reduceMotion)}
                 />
-                <article className="border-border-subtle bg-surface rounded-card flex grow flex-col border p-[22px] transition duration-300 hover:-translate-y-1 hover:border-[#3e5a85] motion-reduce:transition-none">
+                <LandingCard className="flex grow flex-col p-[22px]">
                   <h3 className="text-text text-h3">{step.title}</h3>
                   <p className="text-text-2 text-body mt-2.5">
                     {step.description}
                   </p>
-                </article>
+                </LandingCard>
               </RevealItem>
             ))}
           </RevealGroup>

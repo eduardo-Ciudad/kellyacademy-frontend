@@ -6,7 +6,7 @@ export function CtaFinal() {
   return (
     <section id="comecar" className="scroll-mt-20 px-5 py-[120px] sm:px-6">
       <Reveal className="mx-auto max-w-[1200px]">
-        <div className="bg-accent relative overflow-hidden rounded-[32px] px-6 py-16 text-center sm:px-8 sm:py-20">
+        <div className="bg-accent rounded-panel relative overflow-hidden px-6 py-16 text-center sm:px-8 sm:py-20">
           <GridBackground className="opacity-70" />
           <div className="relative">
             <h2 className="text-h2 mx-auto max-w-[760px] text-balance text-white">

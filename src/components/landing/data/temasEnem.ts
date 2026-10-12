@@ -1,3 +1,6 @@
+// TODO: trocar pelo tema real escolhido pelo Eduardo
+export const TEMA_POSSIVEL_DESTAQUE = 'Seu próximo tema de treino';
+
 export const temasEnem = [
   {
     ano: '2024',

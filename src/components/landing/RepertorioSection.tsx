@@ -34,6 +34,7 @@ import {
   RevealItem,
 } from '@/components/landing/fx/Reveal';
 import { TextShimmer } from '@/components/landing/fx/TextShimmer';
+import { LandingCard } from '@/components/landing/ui/LandingCard';
 import { SectionHeader } from '@/components/landing/ui/SectionHeader';
 import { useRovingTabs } from '@/components/landing/useRovingTabs';
 import {
@@ -84,13 +85,13 @@ export function RepertorioSection() {
         <RevealGroup className="desk:grid-cols-4 desk:gap-4 mt-[52px] grid grid-cols-2 gap-3">
           {REPERTORIO_STATS.map((stat) => (
             <RevealItem key={stat.label}>
-              <div className="border-border-subtle bg-photo-drop/80 desk:px-[22px] rounded-[18px] border px-4 py-5">
+              <LandingCard as="div" className="desk:px-[22px] px-4 py-5">
                 <NumberTicker
                   value={stat.value}
                   className="text-text block text-[2.5rem] leading-none font-extrabold"
                 />
                 <p className="text-text-2 text-small mt-2">{stat.label}</p>
-              </div>
+              </LandingCard>
             </RevealItem>
           ))}
         </RevealGroup>
@@ -122,20 +123,20 @@ export function RepertorioSection() {
 
         <RevealGroup className="desk:grid-cols-3 mt-5 grid gap-5">
           {REPERTORIO_PILARES.map((pilar) => (
-            <RevealItem
-              key={pilar.titulo}
-              as="article"
-              className="border-border-subtle bg-surface hover:border-possivel-border rounded-card border p-6 transition duration-300 hover:-translate-y-1 motion-reduce:transition-none"
-            >
-              <div className="flex items-center justify-between gap-2">
-                <h3 className="text-text text-h3">{pilar.titulo}</h3>
-                {'emBreve' in pilar && pilar.emBreve ? (
-                  <span className="bg-warning-bg text-warning text-eyebrow rounded-pill shrink-0 px-2 py-1 font-semibold">
-                    EM BREVE
-                  </span>
-                ) : null}
-              </div>
-              <p className="text-text-2 text-body mt-2.5">{pilar.descricao}</p>
+            <RevealItem key={pilar.titulo}>
+              <LandingCard className="p-6">
+                <div className="flex items-center justify-between gap-2">
+                  <h3 className="text-text text-h3">{pilar.titulo}</h3>
+                  {'emBreve' in pilar && pilar.emBreve ? (
+                    <span className="bg-warning-bg text-warning text-eyebrow rounded-pill shrink-0 px-2 py-1 font-semibold">
+                      EM BREVE
+                    </span>
+                  ) : null}
+                </div>
+                <p className="text-text-2 text-body mt-2.5">
+                  {pilar.descricao}
+                </p>
+              </LandingCard>
             </RevealItem>
           ))}
         </RevealGroup>
@@ -205,7 +206,7 @@ function RepertorioExplorer() {
   return (
     <div
       ref={explorerRef}
-      className="border-control bg-surface relative mt-10 overflow-hidden rounded-[28px] border shadow-[0_40px_120px_-40px_#0866ff66]"
+      className="border-control bg-surface rounded-panel relative mt-10 overflow-hidden border shadow-[0_40px_120px_-40px_#0866ff66]"
     >
       <BorderBeam />
       <BorderBeam bottom />
@@ -245,7 +246,7 @@ function RepertorioExplorer() {
                   onKeyDown={(event) => onKeyDown(event, index)}
                   className={`focus-ring rounded-inner relative flex min-h-16 items-center gap-3.5 overflow-hidden border px-3.5 py-3 text-left transition-colors motion-reduce:transition-none ${
                     selected
-                      ? 'bg-surface-2 border-[#3e5a85]'
+                      ? 'bg-surface-2 border-border-hover'
                       : 'border-border-subtle hover:bg-surface-2 bg-transparent'
                   }`}
                 >

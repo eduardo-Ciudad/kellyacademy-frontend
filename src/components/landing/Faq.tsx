@@ -47,7 +47,7 @@ export function Faq() {
             return (
               <RevealItem
                 key={faq.question}
-                className="border-border-subtle bg-surface overflow-hidden rounded-[16px] border"
+                className="border-border-subtle bg-surface rounded-inner overflow-hidden border"
               >
                 <button
                   id={buttonId}
@@ -55,7 +55,7 @@ export function Faq() {
                   aria-expanded={open}
                   aria-controls={contentId}
                   onClick={() => setOpenIndex(open ? null : index)}
-                  className="focus-ring text-text text-body flex min-h-[60px] w-full items-center justify-between gap-4 rounded-[16px] px-[22px] py-[18px] text-left font-semibold"
+                  className="focus-ring text-text text-body rounded-inner flex min-h-[60px] w-full items-center justify-between gap-4 px-[22px] py-[18px] text-left font-semibold"
                 >
                   {faq.question}
                   <motion.span

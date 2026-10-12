@@ -52,6 +52,7 @@
   --color-photo-pill: #18191a;
   --color-control: #3a3b3c;
   --color-border-subtle: #2f3031;
+  --color-border-hover: #3e5a85;
   --color-text: #e4e6eb;
   --color-text-2: #b0b3b8;
   --color-text-3: #8a8d91;
@@ -85,9 +86,52 @@
   --color-possivel-border: #4a6385;
 
   --radius-card: 20px;
+  --radius-panel: 28px;
   --radius-inner: 14px;
   --radius-input: 12px;
   --radius-pill: 999px;
+}
+
+@layer components {
+  .landing-card {
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.04);
+  }
+
+  .landing-card::before {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    content: '';
+    background: radial-gradient(
+      360px circle at var(--mx, 50%) var(--my, 50%),
+      rgb(69 153 255 / 0.07),
+      transparent 60%
+    );
+    opacity: 0;
+    transition: opacity 200ms;
+  }
+
+  @media (hover: hover) {
+    .landing-card:not([data-variant='accent']):hover {
+      border-color: var(--color-border-hover);
+    }
+
+    .landing-card:hover::before {
+      opacity: 1;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .landing-card {
+      transition: none;
+    }
+
+    .landing-card::before,
+    .landing-card:hover::before {
+      opacity: 0;
+      transition: none;
+    }
+  }
 }
 
 body {

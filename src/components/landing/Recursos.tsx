@@ -6,8 +6,10 @@ import {
   useReducedMotion,
 } from 'motion/react';
 import { JuliaAvatar } from '@/components/landing/JuliaAvatar';
+import { TEMA_POSSIVEL_DESTAQUE } from '@/components/landing/data/temasEnem';
 import { RevealGroup, RevealItem } from '@/components/landing/fx/Reveal';
 import { DUR, EASE_OUT } from '@/components/landing/fx/motion';
+import { LandingCard } from '@/components/landing/ui/LandingCard';
 import { SectionHeader } from '@/components/landing/ui/SectionHeader';
 import { competencias } from '@/lib/competencias';
 
@@ -38,9 +40,14 @@ const transcription = [
 ] as const;
 
 const lineWidths = ['92%', '86%', '95%', '70%', '88%'] as const;
-
-const cardClass =
-  'border-border-subtle bg-surface hover:border-[#3e5a85] h-full rounded-[22px] border p-6 desk:p-7 transition duration-300 hover:-translate-y-1 motion-reduce:transition-none';
+const chartPoints = [
+  [42, 100],
+  [92, 82],
+  [142, 88],
+  [192, 58],
+  [242, 40],
+  [296, 18],
+] as const;
 
 export function Recursos() {
   return (
@@ -80,7 +87,7 @@ export function Recursos() {
 
 function CorrectionCard() {
   return (
-    <article className={`${cardClass} flex min-h-[360px] flex-col gap-[22px]`}>
+    <LandingCard className="desk:p-7 flex min-h-[360px] flex-col gap-5 p-6">
       <div className="max-w-[460px]">
         <h3 className="text-text text-h3">Correção por competência</h3>
         <p className="text-text-2 text-body mt-2.5">
@@ -116,7 +123,7 @@ function CorrectionCard() {
           );
         })}
       </div>
-    </article>
+    </LandingCard>
   );
 }
 
@@ -138,7 +145,7 @@ function PhotoCard() {
   }, [inView, reduceMotion]);
 
   return (
-    <article className={`${cardClass} flex min-h-[360px] flex-col gap-5`}>
+    <LandingCard className="desk:p-7 flex min-h-[360px] flex-col gap-5 p-6">
       <div>
         <h3 className="text-text text-h3">Foto da redação</h3>
         <p className="text-text-2 text-body mt-2.5">
@@ -193,7 +200,7 @@ function PhotoCard() {
           />
         ) : null}
       </div>
-    </article>
+    </LandingCard>
   );
 }
 
@@ -204,33 +211,50 @@ function EvolutionCard() {
   const visible = reduceMotion || inView;
 
   return (
-    <article className={`${cardClass} flex min-h-[330px] flex-col gap-5`}>
-      <div>
-        <h3 className="text-text text-h3">Evolução visível</h3>
-        <p className="text-text-2 text-body mt-2.5">
-          Acompanhe sua nota e cada competência ao longo das redações.
-        </p>
+    <LandingCard className="desk:p-7 flex min-h-[330px] flex-col gap-5 p-6">
+      <div className="desk:flex-nowrap flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <h3 className="text-text text-h3">Evolução visível</h3>
+          <p className="text-text-2 text-body mt-2.5">
+            Acompanhe sua nota e cada competência ao longo das redações.
+          </p>
+        </div>
+        <span className="bg-success-bg text-success text-small rounded-pill shrink-0 px-3 py-1.5">
+          +320 desde a 1ª redação
+        </span>
       </div>
       <svg
         ref={chartRef}
-        viewBox="0 0 300 120"
+        viewBox="0 0 310 120"
         role="img"
         aria-label="Exemplo de gráfico de evolução da nota subindo ao longo de seis redações"
         className="mt-auto w-full"
       >
-        {[30, 70, 110].map((y) => (
-          <line
-            key={y}
-            x1="0"
-            y1={y}
-            x2="300"
-            y2={y}
-            stroke="var(--color-border-subtle)"
-            strokeWidth="1"
-          />
+        {[
+          { y: 110, label: '560' },
+          { y: 70, label: '720' },
+          { y: 30, label: '880' },
+        ].map(({ y, label }) => (
+          <g key={label}>
+            <text
+              x="0"
+              y={y + 3}
+              className="fill-text-3 text-eyebrow tabular font-mono"
+            >
+              {label}
+            </text>
+            <line
+              x1="36"
+              y1={y}
+              x2="306"
+              y2={y}
+              stroke="var(--color-border-subtle)"
+              strokeWidth="1"
+            />
+          </g>
         ))}
         <motion.polyline
-          points="6,100 62,82 118,88 174,58 230,40 294,18"
+          points={chartPoints.map(([x, y]) => `${x},${y}`).join(' ')}
           fill="none"
           stroke="var(--color-accent)"
           strokeWidth="3"
@@ -243,26 +267,38 @@ function EvolutionCard() {
             ease: EASE_OUT,
           }}
         />
-        <motion.circle
-          cx="294"
-          cy="18"
-          r="5"
-          fill="var(--color-accent-text)"
-          initial={reduceMotion ? false : { opacity: 0, scale: 0.5 }}
-          animate={{ opacity: visible ? 1 : 0, scale: visible ? 1 : 0.5 }}
-          transition={{
-            duration: reduceMotion ? 0 : DUR.fast,
-            delay: reduceMotion ? 0 : DUR.slow,
-          }}
-        />
+        {chartPoints.map(([x, y], index) => {
+          const last = index === chartPoints.length - 1;
+          return (
+            <motion.circle
+              key={`${x}-${y}`}
+              cx={x}
+              cy={y}
+              r={last ? 5 : 3}
+              fill={last ? 'var(--color-accent-text)' : 'var(--color-accent)'}
+              initial={reduceMotion ? false : { opacity: 0, scale: 0.5 }}
+              animate={{
+                opacity: visible ? 1 : 0,
+                scale: visible ? 1 : 0.5,
+              }}
+              transition={{
+                duration: reduceMotion ? 0 : DUR.fast,
+                delay: reduceMotion
+                  ? 0
+                  : DUR.slow * (index / (chartPoints.length - 1)),
+                ease: EASE_OUT,
+              }}
+            />
+          );
+        })}
       </svg>
-    </article>
+    </LandingCard>
   );
 }
 
 function ThemesCard() {
   return (
-    <article className={`${cardClass} flex min-h-[330px] flex-col gap-5`}>
+    <LandingCard className="desk:p-7 flex min-h-[330px] flex-col gap-5 p-6">
       <div>
         <h3 className="text-text text-h3">Possíveis temas 2026</h3>
         <p className="text-text-2 text-body mt-2.5">
@@ -275,15 +311,25 @@ function ThemesCard() {
           POSSÍVEL TEMA
         </p>
         <p className="text-text text-body mt-1.5 font-semibold">
-          Seu próximo tema de treino
+          {TEMA_POSSIVEL_DESTAQUE}
         </p>
-        <div className="mt-3 flex gap-2">
-          <span className="bg-accent-tint text-accent-text rounded-pill px-2.5 py-1 text-xs">
+        <div className="mt-3 flex flex-wrap gap-2">
+          {['Tecnologia e sociedade', 'Cidadania'].map((axis) => (
+            <span
+              key={axis}
+              className="border-possivel-border text-possivel text-small rounded-pill border px-2.5 py-1"
+            >
+              {axis}
+            </span>
+          ))}
+        </div>
+        <div className="mt-2 flex gap-2">
+          <span className="bg-accent-tint text-accent-text text-small rounded-pill px-2.5 py-1">
             + Adicionar aos meus temas
           </span>
         </div>
       </div>
-    </article>
+    </LandingCard>
   );
 }
 
@@ -315,9 +361,10 @@ function JuliaCard() {
   }, [inView, reduceMotion]);
 
   return (
-    <article
+    <LandingCard
       ref={cardRef}
-      className="border-nav-active bg-accent-tint hover:border-possivel-border desk:p-8 relative flex h-full flex-wrap items-center gap-7 rounded-[22px] border p-6 transition duration-300 hover:-translate-y-1 motion-reduce:transition-none"
+      variant="highlight"
+      className="desk:p-7 flex flex-wrap items-center gap-5 p-6"
     >
       <span className="relative size-[84px] shrink-0">
         {!reduceMotion ? (
@@ -343,7 +390,7 @@ function JuliaCard() {
       </div>
 
       <div className="flex min-h-[154px] min-w-[260px] flex-1 basis-[300px] flex-col gap-2 sm:min-h-[126px]">
-        <div className="bg-accent text-small self-end rounded-[16px_16px_4px_16px] px-3.5 py-2.5 text-white">
+        <div className="bg-accent text-small rounded-inner self-end px-3.5 py-2.5 text-white">
           O que é repertório produtivo?
         </div>
         <div
@@ -355,7 +402,7 @@ function JuliaCard() {
               <motion.div
                 key="typing"
                 aria-hidden="true"
-                className="bg-bg flex h-10 items-center gap-1 rounded-[16px_16px_16px_4px] px-3.5 py-2.5"
+                className="bg-bg rounded-inner flex h-10 items-center gap-1 px-3.5 py-2.5"
                 initial={{ opacity: 0, y: 6 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0 }}
@@ -378,7 +425,7 @@ function JuliaCard() {
             ) : messageState === 'answer' ? (
               <motion.div
                 key="answer"
-                className="bg-bg text-text-body text-small rounded-[16px_16px_16px_4px] px-3.5 py-2.5"
+                className="bg-bg text-text-body text-small rounded-inner px-3.5 py-2.5"
                 initial={reduceMotion ? false : { opacity: 0, y: 6 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{
@@ -393,6 +440,6 @@ function JuliaCard() {
           </AnimatePresence>
         </div>
       </div>
-    </article>
+    </LandingCard>
   );
 }

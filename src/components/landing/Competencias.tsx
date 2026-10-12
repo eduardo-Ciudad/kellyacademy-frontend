@@ -59,7 +59,7 @@ export function Competencias() {
                   onKeyDown={(event) => onKeyDown(event, index)}
                   className={`focus-ring rounded-inner flex min-h-14 items-center gap-3.5 border px-4 py-3.5 text-left text-base font-semibold transition-colors motion-reduce:transition-none ${
                     selected
-                      ? 'bg-surface border-[#3e5a85]'
+                      ? 'bg-surface border-border-hover'
                       : 'border-border-subtle hover:bg-surface bg-transparent'
                   }`}
                 >
@@ -80,7 +80,7 @@ export function Competencias() {
         </div>
 
         <Reveal>
-          <div className="border-border-subtle bg-surface relative self-start overflow-hidden rounded-[24px] border">
+          <div className="border-border-subtle bg-surface rounded-panel relative self-start overflow-hidden border">
             <BorderBeam />
             <AnimatePresence mode="wait" initial={false}>
               <CompetenciaPanel
