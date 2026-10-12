@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 import { EvolucaoSkeleton } from '@/components/evolucao/EvolucaoSkeleton';
+import { HomeGate } from '@/components/landing/HomeGate';
 import { RepertorioSkeleton } from '@/components/repertorio/RepertorioSkeleton';
 import { AppShell } from '@/components/layout/AppShell';
 import { PublicOnlyRoute, RequireAuth } from '@/lib/auth';
@@ -25,6 +26,11 @@ const Repertorio = lazy(() =>
 
 export const router = createBrowserRouter([
   {
+    path: '/',
+    element: <HomeGate />,
+    children: [{ index: true, element: <Historico /> }],
+  },
+  {
     element: <PublicOnlyRoute />,
     children: [
       { path: '/entrar', element: <Entrar /> },
@@ -37,10 +43,6 @@ export const router = createBrowserRouter([
       {
         element: <AppShell />,
         children: [
-          {
-            path: '/',
-            element: <Historico />,
-          },
           {
             path: '/temas',
             element: <Temas />,

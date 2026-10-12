@@ -109,17 +109,26 @@ export function useAuth() {
   return context;
 }
 
-export function RequireAuth() {
+// Mantém o aviso de expiração consistente em qualquer gate autenticado.
+// eslint-disable-next-line react-refresh/only-export-components
+export function useSessionExpiryNotice() {
   const { isAuthenticated, sessionEndReason, clearSessionEndReason } =
     useAuth();
-  const location = useLocation();
+  const sessionExpired = !isAuthenticated && sessionEndReason === 'expired';
 
   useEffect(() => {
-    if (!isAuthenticated && sessionEndReason === 'expired') {
-      toast.error('Sua sessão expirou. Entre novamente.');
-      clearSessionEndReason();
-    }
-  }, [clearSessionEndReason, isAuthenticated, sessionEndReason]);
+    if (!sessionExpired) return;
+    toast.error('Sua sessão expirou. Entre novamente.');
+    clearSessionEndReason();
+  }, [clearSessionEndReason, sessionExpired]);
+
+  return sessionExpired;
+}
+
+export function RequireAuth() {
+  const { isAuthenticated } = useAuth();
+  const location = useLocation();
+  useSessionExpiryNotice();
 
   return isAuthenticated ? (
     <Outlet />
