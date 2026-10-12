@@ -201,8 +201,8 @@ function RepertorioExplorer() {
     >
       <BorderBeam />
       <BorderBeam bottom />
-      <div className="grid min-[960px]:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)]">
-        <div className="border-border-subtle flex flex-col gap-2.5 border-b p-4 min-[960px]:border-r min-[960px]:border-b-0 sm:p-6">
+      <div className="grid grid-cols-1 min-[960px]:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)]">
+        <div className="border-border-subtle flex min-w-0 flex-col gap-2.5 border-b p-4 min-[960px]:border-r min-[960px]:border-b-0 sm:p-6">
           <Link
             to="/criar-conta"
             aria-label="Criar conta para buscar no repertório"
@@ -288,7 +288,7 @@ function RepertorioExplorer() {
           </div>
         </div>
 
-        <div className="min-[960px]:min-h-[620px]">
+        <div className="min-w-0 min-[960px]:min-h-[620px]">
           <AnimatePresence mode="wait" initial={false}>
             <FichaPanel
               key={activeFicha.nome}
