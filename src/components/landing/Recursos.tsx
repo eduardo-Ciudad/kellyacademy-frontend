@@ -1,6 +1,8 @@
 import { useRef } from 'react';
 import { motion, useInView, useReducedMotion } from 'motion/react';
 import { JuliaAvatar } from '@/components/landing/JuliaAvatar';
+import { RevealGroup, RevealItem } from '@/components/landing/fx/Reveal';
+import { DUR, EASE_OUT } from '@/components/landing/fx/motion';
 import { SectionHeader } from '@/components/landing/ui/SectionHeader';
 import { competencias } from '@/lib/competencias';
 
@@ -25,7 +27,7 @@ const comments = [
 const lineWidths = ['92%', '86%', '95%', '70%', '88%', '60%'] as const;
 
 const cardClass =
-  'border-border-subtle bg-surface hover:border-[#3e5a85] rounded-[22px] border p-6 min-[960px]:p-7 transition duration-300 hover:-translate-y-1 motion-reduce:transition-none';
+  'border-border-subtle bg-surface hover:border-[#3e5a85] rounded-[22px] border p-6 desk:p-7 transition duration-300 hover:-translate-y-1 motion-reduce:transition-none';
 
 export function Recursos() {
   return (
@@ -41,13 +43,23 @@ export function Recursos() {
           layout="split"
         />
 
-        <div className="mt-12 grid grid-cols-1 gap-5 min-[960px]:grid-cols-6">
-          <CorrectionCard />
-          <PhotoCard />
-          <EvolutionCard />
-          <ThemesCard />
-          <JuliaCard />
-        </div>
+        <RevealGroup className="desk:grid-cols-6 mt-12 grid grid-cols-1 gap-5">
+          <RevealItem className="desk:col-span-4">
+            <CorrectionCard />
+          </RevealItem>
+          <RevealItem className="desk:col-span-2">
+            <PhotoCard />
+          </RevealItem>
+          <RevealItem className="desk:col-span-3">
+            <EvolutionCard />
+          </RevealItem>
+          <RevealItem className="desk:col-span-3">
+            <ThemesCard />
+          </RevealItem>
+          <RevealItem className="col-span-full">
+            <JuliaCard />
+          </RevealItem>
+        </RevealGroup>
       </div>
     </section>
   );
@@ -55,9 +67,7 @@ export function Recursos() {
 
 function CorrectionCard() {
   return (
-    <article
-      className={`${cardClass} flex min-h-[360px] flex-col gap-[22px] min-[960px]:col-span-4`}
-    >
+    <article className={`${cardClass} flex min-h-[360px] flex-col gap-[22px]`}>
       <div className="max-w-[460px]">
         <h3 className="text-text text-h3">Correção por competência</h3>
         <p className="text-text-2 text-body mt-2.5">
@@ -101,9 +111,7 @@ function PhotoCard() {
   const reduceMotion = useReducedMotion();
 
   return (
-    <article
-      className={`${cardClass} flex min-h-[360px] flex-col gap-5 min-[960px]:col-span-2`}
-    >
+    <article className={`${cardClass} flex min-h-[360px] flex-col gap-5`}>
       <div>
         <h3 className="text-text text-h3">Foto da redação</h3>
         <p className="text-text-2 text-body mt-2.5">
@@ -143,9 +151,7 @@ function EvolutionCard() {
   const visible = reduceMotion || inView;
 
   return (
-    <article
-      className={`${cardClass} flex min-h-[330px] flex-col gap-5 min-[960px]:col-span-3`}
-    >
+    <article className={`${cardClass} flex min-h-[330px] flex-col gap-5`}>
       <div>
         <h3 className="text-text text-h3">Evolução visível</h3>
         <p className="text-text-2 text-body mt-2.5">
@@ -179,7 +185,10 @@ function EvolutionCard() {
           strokeLinejoin="round"
           initial={reduceMotion ? false : { pathLength: 0 }}
           animate={{ pathLength: visible ? 1 : 0 }}
-          transition={{ duration: reduceMotion ? 0 : 1.5, ease: 'easeInOut' }}
+          transition={{
+            duration: reduceMotion ? 0 : DUR.slow,
+            ease: EASE_OUT,
+          }}
         />
         <motion.circle
           cx="294"
@@ -189,8 +198,8 @@ function EvolutionCard() {
           initial={reduceMotion ? false : { opacity: 0, scale: 0.5 }}
           animate={{ opacity: visible ? 1 : 0, scale: visible ? 1 : 0.5 }}
           transition={{
-            duration: reduceMotion ? 0 : 0.3,
-            delay: reduceMotion ? 0 : 1.3,
+            duration: reduceMotion ? 0 : DUR.fast,
+            delay: reduceMotion ? 0 : DUR.slow,
           }}
         />
       </svg>
@@ -200,9 +209,7 @@ function EvolutionCard() {
 
 function ThemesCard() {
   return (
-    <article
-      className={`${cardClass} flex min-h-[330px] flex-col gap-5 min-[960px]:col-span-3`}
-    >
+    <article className={`${cardClass} flex min-h-[330px] flex-col gap-5`}>
       <div>
         <h3 className="text-text text-h3">Possíveis temas 2026</h3>
         <p className="text-text-2 text-body mt-2.5">
@@ -231,14 +238,14 @@ function JuliaCard() {
   const reduceMotion = useReducedMotion();
 
   return (
-    <article className="border-nav-active bg-accent-tint hover:border-possivel-border relative col-span-full flex flex-wrap items-center gap-7 rounded-[22px] border p-6 transition duration-300 hover:-translate-y-1 motion-reduce:transition-none min-[960px]:p-8">
+    <article className="border-nav-active bg-accent-tint hover:border-possivel-border desk:p-8 relative flex flex-wrap items-center gap-7 rounded-[22px] border p-6 transition duration-300 hover:-translate-y-1 motion-reduce:transition-none">
       <span className="relative size-[84px] shrink-0">
         {!reduceMotion ? (
           <motion.span
             aria-hidden="true"
             className="bg-accent absolute inset-0 rounded-full opacity-35"
             animate={{ scale: [1, 2.2], opacity: [0.35, 0] }}
-            transition={{ duration: 2, ease: [0, 0, 0.2, 1], repeat: Infinity }}
+            transition={{ duration: 2, ease: 'easeInOut', repeat: Infinity }}
           />
         ) : null}
         <span className="relative block">

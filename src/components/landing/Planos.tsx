@@ -1,6 +1,7 @@
 import { Check } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { BorderBeam } from '@/components/landing/fx/BorderBeam';
+import { RevealGroup, RevealItem } from '@/components/landing/fx/Reveal';
 import { SectionHeader } from '@/components/landing/ui/SectionHeader';
 
 const freeFeatures = [
@@ -29,8 +30,11 @@ export function Planos() {
           className="max-w-[640px]"
         />
 
-        <div className="mt-12 grid gap-5 min-[960px]:grid-cols-2">
-          <article className="border-border-subtle bg-surface flex flex-col gap-[22px] rounded-[24px] border p-6 sm:p-8">
+        <RevealGroup className="desk:grid-cols-2 mt-12 grid gap-5">
+          <RevealItem
+            as="article"
+            className="border-border-subtle bg-surface flex flex-col gap-[22px] rounded-[24px] border p-6 sm:p-8"
+          >
             <div>
               <h3 className="text-text text-h3">Grátis</h3>
               <p className="text-text-2 text-body mt-2">
@@ -45,9 +49,12 @@ export function Planos() {
             >
               Criar conta grátis
             </Link>
-          </article>
+          </RevealItem>
 
-          <article className="border-accent bg-surface relative flex flex-col gap-[22px] overflow-hidden rounded-[24px] border p-6 sm:p-8">
+          <RevealItem
+            as="article"
+            className="border-accent bg-surface relative flex flex-col gap-[22px] overflow-hidden rounded-[24px] border p-6 sm:p-8"
+          >
             <BorderBeam />
             <div className="flex items-start justify-between gap-3">
               <div>
@@ -69,8 +76,8 @@ export function Planos() {
             >
               Em breve
             </button>
-          </article>
-        </div>
+          </RevealItem>
+        </RevealGroup>
       </div>
     </section>
   );

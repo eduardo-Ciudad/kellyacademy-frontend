@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { motion, useInView, useReducedMotion } from 'motion/react';
+import { useInView, useReducedMotion } from 'motion/react';
 import { JuliaAvatar } from '@/components/landing/JuliaAvatar';
 import { BorderBeam } from '@/components/landing/fx/BorderBeam';
 import { competencias } from '@/lib/competencias';
@@ -68,15 +68,9 @@ export function HeroMock() {
   const julia = reduceMotion ? 1 : juliaProgress(cycleTime);
 
   return (
-    <motion.div
+    <div
       ref={containerRef}
       className="relative mt-16 w-full max-w-[1080px] text-left"
-      animate={reduceMotion || !inView ? { y: 0 } : { y: [0, -6, 0] }}
-      transition={
-        reduceMotion
-          ? { duration: 0 }
-          : { duration: 5, ease: 'easeInOut', repeat: Infinity }
-      }
     >
       <div className="border-control bg-surface relative overflow-hidden rounded-[22px] border shadow-[0_40px_120px_-30px_#0866ff55,0_0_0_1px_#00000040]">
         <BorderBeam />
@@ -95,8 +89,8 @@ export function HeroMock() {
           </span>
         </div>
 
-        <div className="grid min-[960px]:grid-cols-[minmax(0,1.45fr)_minmax(0,1fr)]">
-          <div className="border-border-subtle border-b px-5 py-7 min-[960px]:border-r min-[960px]:border-b-0 min-[960px]:px-[30px]">
+        <div className="desk:grid-cols-[minmax(0,1.45fr)_minmax(0,1fr)] grid">
+          <div className="border-border-subtle desk:border-r desk:border-b-0 desk:px-[30px] border-b px-5 py-7">
             <p className="text-text-3 text-eyebrow font-mono uppercase">TEMA</p>
             <p className="text-text text-body mt-1.5 font-semibold">
               Democratização do acesso ao cinema no Brasil
@@ -157,7 +151,7 @@ export function HeroMock() {
             </div>
           </div>
 
-          <div className="flex flex-col gap-4 px-5 pt-[26px] pb-6 min-[960px]:px-[26px]">
+          <div className="desk:px-[26px] flex flex-col gap-4 px-5 pt-[26px] pb-6">
             <span className="sr-only">Nota estimada: 880 de 1000</span>
             <div
               aria-hidden="true"
@@ -228,7 +222,7 @@ export function HeroMock() {
           </div>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
 

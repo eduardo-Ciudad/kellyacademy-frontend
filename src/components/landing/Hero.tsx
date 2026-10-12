@@ -1,40 +1,61 @@
-import { motion, type Variants, useReducedMotion } from 'motion/react';
+import { useRef } from 'react';
+import {
+  motion,
+  type Variants,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+} from 'motion/react';
 import { Link } from 'react-router-dom';
 import { GridBackground } from '@/components/landing/fx/GridBackground';
+import { DUR, EASE_OUT, fadeUp, stagger } from '@/components/landing/fx/motion';
 import { TextShimmer } from '@/components/landing/fx/TextShimmer';
 import { HeroMock } from '@/components/landing/HeroMock';
 
-const containerVariants: Variants = {
+const headline = 'Descubra onde sua redação perde pontos.';
+const headlineWords = ['Descubra', 'onde', 'sua', 'redação'] as const;
+const accentWords = ['perde', 'pontos.'] as const;
+
+const wordStagger: Variants = {
   hidden: {},
-  visible: { transition: { delayChildren: 0.05, staggerChildren: 0.12 } },
+  visible: { transition: { staggerChildren: 0.05 } },
 };
 
-const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 18 },
+const word: Variants = {
+  hidden: { opacity: 0, y: 12, filter: 'blur(6px)' },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.8, ease: [0.2, 0.7, 0.2, 1] },
+    filter: 'blur(0px)',
+    transition: { duration: DUR.slow, ease: EASE_OUT },
   },
 };
 
 export function Hero() {
   const reduceMotion = useReducedMotion();
+  const heroRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ['start start', 'end center'],
+  });
+  const mockScale = useTransform(scrollYProgress, [0, 1], [0.96, 1]);
+  const mockRotateX = useTransform(scrollYProgress, [0, 1], [8, 0]);
 
   return (
     <section
+      ref={heroRef}
       id="topo"
       className="relative scroll-mt-20 px-5 pt-20 pb-10 sm:px-6 sm:pt-24"
     >
       <GridBackground />
       <motion.div
         className="relative mx-auto flex max-w-[1200px] flex-col items-center text-center"
-        variants={containerVariants}
+        variants={stagger}
         initial={reduceMotion ? 'visible' : 'hidden'}
         animate="visible"
       >
         <motion.a
-          variants={itemVariants}
+          variants={fadeUp}
           href="#repertorio"
           className="focus-ring border-control bg-surface rounded-pill inline-flex max-w-full items-center gap-2.5 border py-[7px] pr-3.5 pl-2 text-sm font-medium"
         >
@@ -60,16 +81,39 @@ export function Hero() {
         </motion.a>
 
         <motion.h1
-          variants={itemVariants}
+          aria-label={headline}
+          variants={wordStagger}
           className="text-text text-display mt-7 max-w-[920px] text-balance"
         >
-          Descubra onde sua redação{' '}
-          <span className="text-accent-text">perde pontos.</span>
+          <span aria-hidden="true">
+            {headlineWords.map((headlineWord) => (
+              <motion.span
+                key={headlineWord}
+                variants={reduceMotion ? undefined : word}
+                className="mr-[0.22em] inline-block"
+              >
+                {headlineWord}
+              </motion.span>
+            ))}
+            <span className="text-accent-text inline-block">
+              {accentWords.map((headlineWord, index) => (
+                <motion.span
+                  key={headlineWord}
+                  variants={reduceMotion ? undefined : word}
+                  className={
+                    index === 0 ? 'mr-[0.22em] inline-block' : 'inline-block'
+                  }
+                >
+                  {headlineWord}
+                </motion.span>
+              ))}
+            </span>
+          </span>
         </motion.h1>
 
         <motion.p
-          variants={itemVariants}
-          className="text-text-2 mt-6 max-w-[640px] text-lg leading-[1.55] text-pretty min-[960px]:text-xl"
+          variants={fadeUp}
+          className="text-text-2 desk:text-xl mt-6 max-w-[640px] text-lg leading-[1.55] text-pretty"
         >
           A Kelly Academy corrige sua redação do ENEM competência por
           competência, mostra o trecho exato que segurou a nota e diz o que
@@ -77,7 +121,7 @@ export function Hero() {
         </motion.p>
 
         <motion.div
-          variants={itemVariants}
+          variants={fadeUp}
           className="mt-9 flex flex-wrap justify-center gap-3"
         >
           <Link
@@ -108,17 +152,27 @@ export function Hero() {
         </motion.div>
 
         <motion.p
-          variants={itemVariants}
+          variants={fadeUp}
           className="text-text-3 text-small mt-[18px] font-mono"
         >
           3 correções grátis por dia · sem cartão de crédito
         </motion.p>
 
         <motion.div
-          variants={itemVariants}
+          variants={fadeUp}
           className="flex w-full justify-center"
+          style={{ perspective: 1200 }}
         >
-          <HeroMock />
+          <motion.div
+            className="flex w-full justify-center"
+            style={{
+              scale: reduceMotion ? 1 : mockScale,
+              rotateX: reduceMotion ? 0 : mockRotateX,
+              transformOrigin: 'center top',
+            }}
+          >
+            <HeroMock />
+          </motion.div>
         </motion.div>
       </motion.div>
     </section>

@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { competenciasLanding } from '@/components/landing/data/competenciasLanding';
 import { BorderBeam } from '@/components/landing/fx/BorderBeam';
+import { DUR, EASE_OUT } from '@/components/landing/fx/motion';
+import { Reveal } from '@/components/landing/fx/Reveal';
 import { SectionHeader } from '@/components/landing/ui/SectionHeader';
 import { useRovingTabs } from '@/components/landing/useRovingTabs';
 import { competencias } from '@/lib/competencias';
@@ -24,7 +26,7 @@ export function Competencias() {
       id="competencias"
       className="scroll-mt-20 px-5 pt-[120px] pb-10 sm:px-6"
     >
-      <div className="mx-auto grid max-w-[1200px] gap-10 min-[960px]:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+      <div className="desk:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] mx-auto grid max-w-[1200px] gap-10">
         <div>
           <SectionHeader
             eyebrow="As 5 competências"
@@ -77,17 +79,19 @@ export function Competencias() {
           </div>
         </div>
 
-        <div className="border-border-subtle bg-surface relative self-start overflow-hidden rounded-[24px] border">
-          <BorderBeam />
-          <AnimatePresence mode="wait" initial={false}>
-            <CompetenciaPanel
-              key={activeCompetencia.codigo}
-              index={activeIndex}
-              competencia={activeCompetencia}
-              content={activeContent}
-            />
-          </AnimatePresence>
-        </div>
+        <Reveal>
+          <div className="border-border-subtle bg-surface relative self-start overflow-hidden rounded-[24px] border">
+            <BorderBeam />
+            <AnimatePresence mode="wait" initial={false}>
+              <CompetenciaPanel
+                key={activeCompetencia.codigo}
+                index={activeIndex}
+                competencia={activeCompetencia}
+                content={activeContent}
+              />
+            </AnimatePresence>
+          </div>
+        </Reveal>
       </div>
     </section>
   );
@@ -113,7 +117,10 @@ function CompetenciaPanel({
       initial={reduceMotion ? false : { opacity: 0, x: 12 }}
       animate={{ opacity: 1, x: 0 }}
       exit={reduceMotion ? undefined : { opacity: 0, x: -8 }}
-      transition={{ duration: reduceMotion ? 0 : 0.28, ease: 'easeOut' }}
+      transition={{
+        duration: reduceMotion ? 0 : DUR.fast,
+        ease: EASE_OUT,
+      }}
       className="flex flex-col gap-[22px] p-6 sm:p-9"
     >
       <div className="flex items-center gap-3.5">

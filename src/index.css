@@ -5,6 +5,8 @@
 }
 
 @theme {
+  --breakpoint-desk: 60rem;
+
   --font-sans:
     'Figtree Variable', 'Figtree', ui-sans-serif, system-ui, sans-serif;
   --font-mono: 'Geist Mono Variable', 'Geist Mono', ui-monospace, monospace;

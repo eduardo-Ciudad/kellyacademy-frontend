@@ -25,7 +25,7 @@ export function LandingNav() {
           <img src={logo} alt="Kelly Academy" className="h-10 w-auto" />
         </a>
 
-        <div className="hidden items-center gap-7 min-[960px]:flex">
+        <div className="desk:flex hidden items-center gap-7">
           {navLinks.map(([label, href]) => (
             <a
               key={href}

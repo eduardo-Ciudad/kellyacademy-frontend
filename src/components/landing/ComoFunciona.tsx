@@ -1,5 +1,7 @@
 import { useRef } from 'react';
 import { motion, useInView, useReducedMotion } from 'motion/react';
+import { DUR, EASE_OUT } from '@/components/landing/fx/motion';
+import { RevealGroup, RevealItem } from '@/components/landing/fx/Reveal';
 import { SectionHeader } from '@/components/landing/ui/SectionHeader';
 
 const steps = [
@@ -50,22 +52,29 @@ export function ComoFunciona() {
         <div ref={flowRef} className="relative mt-14">
           <div
             aria-hidden="true"
-            className="bg-border-subtle absolute top-[27px] right-0 left-0 hidden h-0.5 overflow-hidden rounded-sm min-[960px]:block"
+            className="bg-border-subtle desk:block absolute top-[27px] right-0 left-0 hidden h-0.5 overflow-hidden rounded-sm"
           >
             <motion.div
               className="bg-accent h-full origin-left"
               initial={reduceMotion ? false : { scaleX: 0 }}
               animate={{ scaleX: reduceMotion || inView ? 1 : 0 }}
               transition={{
-                duration: reduceMotion ? 0 : 1.4,
-                ease: [0.2, 0.7, 0.2, 1],
+                duration: reduceMotion ? 0 : DUR.slow,
+                ease: EASE_OUT,
               }}
             />
           </div>
 
-          <ol className="relative grid list-none grid-cols-1 gap-5 p-0 min-[960px]:grid-cols-4 sm:grid-cols-2">
+          <RevealGroup
+            as="ol"
+            className="desk:grid-cols-4 relative grid list-none grid-cols-1 gap-5 p-0 sm:grid-cols-2"
+          >
             {steps.map((step) => (
-              <li key={step.number} className="flex flex-col gap-4">
+              <RevealItem
+                key={step.number}
+                as="li"
+                className="flex flex-col gap-4"
+              >
                 <span className="border-accent bg-bg relative flex size-14 items-center justify-center rounded-full border-2">
                   <span className="text-accent-text text-small tabular font-mono font-medium">
                     {step.number}
@@ -77,9 +86,9 @@ export function ComoFunciona() {
                     {step.description}
                   </p>
                 </article>
-              </li>
+              </RevealItem>
             ))}
-          </ol>
+          </RevealGroup>
         </div>
       </div>
     </section>

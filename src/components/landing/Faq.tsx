@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { motion, useReducedMotion } from 'motion/react';
+import { DUR, EASE_OUT } from '@/components/landing/fx/motion';
+import { RevealGroup, RevealItem } from '@/components/landing/fx/Reveal';
 import { SectionHeader } from '@/components/landing/ui/SectionHeader';
 
 const faqs = [
@@ -37,13 +39,13 @@ export function Faq() {
           align="center"
           className="mb-9"
         />
-        <div className="flex flex-col gap-2.5">
+        <RevealGroup className="flex flex-col gap-2.5">
           {faqs.map((faq, index) => {
             const open = openIndex === index;
             const contentId = `faq-content-${index}`;
             const buttonId = `faq-button-${index}`;
             return (
-              <div
+              <RevealItem
                 key={faq.question}
                 className="border-border-subtle bg-surface overflow-hidden rounded-[16px] border"
               >
@@ -60,7 +62,7 @@ export function Faq() {
                     aria-hidden="true"
                     className="text-accent-text text-h3 shrink-0 leading-none"
                     animate={{ rotate: open ? 45 : 0 }}
-                    transition={{ duration: reduceMotion ? 0 : 0.25 }}
+                    transition={{ duration: reduceMotion ? 0 : DUR.fast }}
                   >
                     +
                   </motion.span>
@@ -73,8 +75,8 @@ export function Faq() {
                   initial={false}
                   animate={{ height: open ? 'auto' : 0, opacity: open ? 1 : 0 }}
                   transition={{
-                    duration: reduceMotion ? 0 : 0.3,
-                    ease: 'easeOut',
+                    duration: reduceMotion ? 0 : DUR.base,
+                    ease: EASE_OUT,
                   }}
                   className="overflow-hidden"
                 >
@@ -82,10 +84,10 @@ export function Faq() {
                     {faq.answer}
                   </p>
                 </motion.div>
-              </div>
+              </RevealItem>
             );
           })}
-        </div>
+        </RevealGroup>
       </div>
     </section>
   );

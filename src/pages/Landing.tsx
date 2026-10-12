@@ -9,7 +9,6 @@ import { LandingNav } from '@/components/landing/LandingNav';
 import { Planos } from '@/components/landing/Planos';
 import { RepertorioSection } from '@/components/landing/RepertorioSection';
 import { Recursos } from '@/components/landing/Recursos';
-import { SectionReveal } from '@/components/landing/SectionReveal';
 import { TemasMarquee } from '@/components/landing/TemasMarquee';
 
 export default function Landing() {
@@ -26,30 +25,14 @@ export default function Landing() {
       <LandingNav />
       <main>
         <Hero />
-        <SectionReveal>
-          <TemasMarquee />
-        </SectionReveal>
-        <SectionReveal>
-          <RepertorioSection />
-        </SectionReveal>
-        <SectionReveal>
-          <ComoFunciona />
-        </SectionReveal>
-        <SectionReveal>
-          <Recursos />
-        </SectionReveal>
-        <SectionReveal>
-          <Competencias />
-        </SectionReveal>
-        <SectionReveal>
-          <Planos />
-        </SectionReveal>
-        <SectionReveal>
-          <Faq />
-        </SectionReveal>
-        <SectionReveal>
-          <CtaFinal />
-        </SectionReveal>
+        <TemasMarquee />
+        <RepertorioSection />
+        <ComoFunciona />
+        <Recursos />
+        <Competencias />
+        <Planos />
+        <Faq />
+        <CtaFinal />
       </main>
       <LandingFooter />
     </div>

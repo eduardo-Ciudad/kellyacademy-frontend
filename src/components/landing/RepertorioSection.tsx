@@ -26,7 +26,13 @@ import {
 import { BorderBeam } from '@/components/landing/fx/BorderBeam';
 import { GridBackground } from '@/components/landing/fx/GridBackground';
 import { Marquee } from '@/components/landing/fx/Marquee';
+import { DUR, EASE_OUT } from '@/components/landing/fx/motion';
 import { NumberTicker } from '@/components/landing/fx/NumberTicker';
+import {
+  Reveal,
+  RevealGroup,
+  RevealItem,
+} from '@/components/landing/fx/Reveal';
 import { TextShimmer } from '@/components/landing/fx/TextShimmer';
 import { SectionHeader } from '@/components/landing/ui/SectionHeader';
 import { useRovingTabs } from '@/components/landing/useRovingTabs';
@@ -75,20 +81,19 @@ export function RepertorioSection() {
           className="mx-auto max-w-[900px]"
         />
 
-        <div className="mt-[52px] grid grid-cols-2 gap-3 min-[960px]:grid-cols-4 min-[960px]:gap-4">
+        <RevealGroup className="desk:grid-cols-4 desk:gap-4 mt-[52px] grid grid-cols-2 gap-3">
           {REPERTORIO_STATS.map((stat) => (
-            <div
-              key={stat.label}
-              className="border-border-subtle bg-photo-drop/80 rounded-[18px] border px-4 py-5 min-[960px]:px-[22px]"
-            >
-              <NumberTicker
-                value={stat.value}
-                className="text-text block text-[2.5rem] leading-none font-extrabold"
-              />
-              <p className="text-text-2 text-small mt-2">{stat.label}</p>
-            </div>
+            <RevealItem key={stat.label}>
+              <div className="border-border-subtle bg-photo-drop/80 desk:px-[22px] rounded-[18px] border px-4 py-5">
+                <NumberTicker
+                  value={stat.value}
+                  className="text-text block text-[2.5rem] leading-none font-extrabold"
+                />
+                <p className="text-text-2 text-small mt-2">{stat.label}</p>
+              </div>
+            </RevealItem>
           ))}
-        </div>
+        </RevealGroup>
 
         <div
           className="mt-[22px] overflow-hidden"
@@ -111,12 +116,15 @@ export function RepertorioSection() {
           </Marquee>
         </div>
 
-        <RepertorioExplorer />
+        <Reveal>
+          <RepertorioExplorer />
+        </Reveal>
 
-        <div className="mt-5 grid gap-5 min-[960px]:grid-cols-3">
+        <RevealGroup className="desk:grid-cols-3 mt-5 grid gap-5">
           {REPERTORIO_PILARES.map((pilar) => (
-            <article
+            <RevealItem
               key={pilar.titulo}
+              as="article"
               className="border-border-subtle bg-surface hover:border-possivel-border rounded-card border p-6 transition duration-300 hover:-translate-y-1 motion-reduce:transition-none"
             >
               <div className="flex items-center justify-between gap-2">
@@ -128,9 +136,9 @@ export function RepertorioSection() {
                 ) : null}
               </div>
               <p className="text-text-2 text-body mt-2.5">{pilar.descricao}</p>
-            </article>
+            </RevealItem>
           ))}
-        </div>
+        </RevealGroup>
 
         <div className="mt-10 flex justify-center">
           <Link
@@ -201,8 +209,8 @@ function RepertorioExplorer() {
     >
       <BorderBeam />
       <BorderBeam bottom />
-      <div className="grid grid-cols-1 min-[960px]:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)]">
-        <div className="border-border-subtle flex min-w-0 flex-col gap-2.5 border-b p-4 min-[960px]:border-r min-[960px]:border-b-0 sm:p-6">
+      <div className="desk:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)] grid grid-cols-1">
+        <div className="border-border-subtle desk:border-r desk:border-b-0 flex min-w-0 flex-col gap-2.5 border-b p-4 sm:p-6">
           <Link
             to="/criar-conta"
             aria-label="Criar conta para buscar no repertório"
@@ -288,7 +296,7 @@ function RepertorioExplorer() {
           </div>
         </div>
 
-        <div className="min-w-0 min-[960px]:min-h-[620px]">
+        <div className="desk:min-h-[620px] min-w-0">
           <AnimatePresence mode="wait" initial={false}>
             <FichaPanel
               key={activeFicha.nome}
@@ -321,8 +329,11 @@ function FichaPanel({
       initial={reduceMotion ? false : { opacity: 0, x: 12 }}
       animate={{ opacity: 1, x: 0 }}
       exit={reduceMotion ? undefined : { opacity: 0, x: -8 }}
-      transition={{ duration: reduceMotion ? 0 : 0.28, ease: 'easeOut' }}
-      className="flex flex-col gap-5 p-5 min-[960px]:min-h-[620px] sm:p-8 sm:px-[34px]"
+      transition={{
+        duration: reduceMotion ? 0 : DUR.fast,
+        ease: EASE_OUT,
+      }}
+      className="desk:min-h-[620px] flex flex-col gap-5 p-5 sm:p-8 sm:px-[34px]"
     >
       <div className="flex flex-wrap items-center justify-between gap-3">
         <span
