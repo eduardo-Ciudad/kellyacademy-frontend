@@ -52,7 +52,8 @@ export function AccountSheet({
           className="bg-surface fixed inset-x-0 bottom-0 z-50 max-h-[85dvh] overflow-y-auto overscroll-contain rounded-t-[28px] px-5 pt-3 pb-[calc(24px+env(safe-area-inset-bottom))] outline-none lg:hidden"
           style={{
             transform: `translateY(${dragOffset}px)`,
-            transition: dragStartRef.current === null ? 'transform 180ms' : 'none',
+            transition:
+              dragStartRef.current === null ? 'transform 180ms' : 'none',
           }}
         >
           <div

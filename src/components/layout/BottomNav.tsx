@@ -1,9 +1,6 @@
 import { BarChart3, BookOpenText, FileText, Plus } from 'lucide-react';
 import { NavLink, useLocation } from 'react-router-dom';
-import {
-  isNavActive,
-  type NavDestination,
-} from '@/components/layout/navMatch';
+import { isNavActive, type NavDestination } from '@/components/layout/navMatch';
 
 export function BottomNav() {
   const location = useLocation();

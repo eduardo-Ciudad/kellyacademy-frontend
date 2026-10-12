@@ -303,7 +303,7 @@ export function CapturaFoto(props: Props) {
         )}
         <p className="text-text-3 flex items-start justify-center gap-2 text-center text-xs leading-[1.5]">
           <Lock size={14} className="mt-0.5 shrink-0" />A foto vai para a IA do
-          Google só para ler o texto e não fica guardada no StudyMind. No plano
+          Google só para ler o texto e não fica guardada na Kelly Academy. No plano
           gratuito, o Google pode usar o conteúdo para melhorar os produtos
           dele.
         </p>

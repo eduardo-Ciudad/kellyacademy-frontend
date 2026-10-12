@@ -28,3 +28,9 @@ Use-os como referência exata de layout, espaçamentos, cores, raios e textos.
 | Evolucao.html | 09 Sua evolução (desktop) | /evolucao |
 | M-Evolucao.html | Sua evolução (mobile) | /evolucao |
 | Evolucao-Vazia.html | Sua evolução sem redações | /evolucao (estado vazio) |
+| Temas-v2.html | 04 Escolher tema, com entrada para temas possíveis (desktop) | /temas (substitui Temas.html) |
+| M-Temas-v2.html | Escolher tema, com entrada para temas possíveis (mobile) | /temas (substitui M-Temas.html) |
+| Temas-Possiveis.html | 10 Possíveis temas do ENEM 2026 (desktop, interativo) | /temas/possiveis |
+| M-Temas-Possiveis.html | Possíveis temas do ENEM 2026 (mobile, interativo) | /temas/possiveis |
+
+Nas telas de temas possíveis, os dados de exemplo ficam no `renderVals()` do bloco `text/x-dc` (no app vêm de `GET /temas/possiveis`). `Possiveis.dc.html` = Temas-Possiveis.html, `MPossiveis.dc.html` = M-Temas-Possiveis.html, `Main.dc.html` = Temas-v2.html, `MTemas.dc.html` = M-Temas-v2.html.

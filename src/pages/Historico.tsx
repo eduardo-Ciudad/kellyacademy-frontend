@@ -2,7 +2,7 @@ import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { Plus, RotateCcw } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import icon from '@/assets/studymind-icon.svg';
+import icon from '@/assets/kelly-icon.svg';
 import { AccountButton } from '@/components/layout/AccountButton';
 import { CorrecoesHojeCard } from '@/components/redacao/CorrecoesHojeCard';
 import { Button } from '@/components/ui/Button';
@@ -52,7 +52,7 @@ export function Historico() {
     <div className="pb-[72px] lg:pb-0">
       <header className="flex items-center justify-between px-5 pt-5 pb-3 lg:hidden">
         <div className="flex items-center gap-2.5">
-          <img src={icon} alt="" className="size-8 rounded-[9px]" />
+          <img src={icon} alt="" className="size-8" />
           <h1 className="text-text text-[22px] font-bold tracking-[-0.02em]">
             Suas redações
           </h1>
@@ -248,7 +248,7 @@ function StatusChip({ status }: { status: ResumoRedacao['status'] }) {
 function EmptyState() {
   return (
     <div className="bg-surface rounded-card mx-5 mt-2 flex flex-col items-center px-6 py-12 text-center lg:mx-0 lg:mt-6">
-      <img src={icon} alt="" className="rounded-inner size-12" />
+      <img src={icon} alt="" className="size-12" />
       <h2 className="text-text mt-5 text-lg font-bold">
         Escreva sua primeira redação
       </h2>

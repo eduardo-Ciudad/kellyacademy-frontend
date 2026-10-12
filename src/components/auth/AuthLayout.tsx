@@ -1,6 +1,6 @@
 import type { PropsWithChildren } from 'react';
 import { Check } from 'lucide-react';
-import logo from '@/assets/studymind-logo-escuro.svg';
+import logo from '@/assets/kelly-logo-escuro.svg';
 import { ScoreRing } from '@/components/ui/ScoreRing';
 import { SparkIcon } from '@/components/ui/SparkIcon';
 
@@ -28,7 +28,7 @@ export function AuthLayout({ children, variant }: AuthLayoutProps) {
         <div className="flex flex-1 flex-col">{children}</div>
 
         <p className="text-text-3 hidden text-[13px] lg:block">
-          StudyMind Redação · treino para a redação do ENEM
+          Kelly Academy · treino para a redação do ENEM
         </p>
       </section>
 
@@ -40,7 +40,7 @@ export function AuthLayout({ children, variant }: AuthLayoutProps) {
 }
 
 function Brand() {
-  return <img src={logo} alt="StudyMind Redação" className="h-9 w-auto" />;
+  return <img src={logo} alt="Kelly Academy" className="h-11 w-auto" />;
 }
 
 function LoginPanel() {

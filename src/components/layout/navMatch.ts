@@ -1,9 +1,6 @@
 export type NavDestination = '/' | '/temas' | '/evolucao';
 
-export function isNavActive(
-  to: NavDestination,
-  pathname: string,
-): boolean {
+export function isNavActive(to: NavDestination, pathname: string): boolean {
   if (to === '/') {
     return pathname === '/' || pathname.startsWith('/redacoes/');
   }

@@ -7,7 +7,7 @@ import {
   Route,
 } from 'lucide-react';
 import { NavLink, useLocation } from 'react-router-dom';
-import logo from '@/assets/studymind-logo-escuro.svg';
+import logo from '@/assets/kelly-logo-escuro.svg';
 import { SoonItem } from '@/components/layout/SoonItem';
 import { CorrecoesHojeCard } from '@/components/redacao/CorrecoesHojeCard';
 import { useLogout } from '@/hooks/useLogout';
@@ -29,8 +29,8 @@ export function Sidebar() {
     <aside className="border-border-subtle bg-bg fixed inset-y-0 left-0 z-20 hidden w-[248px] flex-col border-r px-4 py-5 lg:flex">
       <img
         src={logo}
-        alt="StudyMind Redação"
-        className="ml-2 h-8 w-auto self-start"
+        alt="Kelly Academy"
+        className="ml-2 h-10 w-auto self-start"
       />
 
       <NavLink

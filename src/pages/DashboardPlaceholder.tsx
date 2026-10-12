@@ -4,7 +4,7 @@ export function DashboardPlaceholder({ title }: { title: string }) {
   return (
     <section>
       <p className="text-accent-text text-sm font-semibold">
-        StudyMind Redação
+        Kelly Academy
       </p>
       <h1 className="text-text mt-1 text-[28px] font-bold tracking-[-0.02em]">
         {title}
