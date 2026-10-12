@@ -22,7 +22,7 @@ export default function Landing() {
   }, []);
 
   return (
-    <div className="bg-bg text-text min-h-screen overflow-x-clip">
+    <div className="bg-bg text-text min-h-screen overflow-x-clip font-sans">
       <LandingNav />
       <main>
         <Hero />

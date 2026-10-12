@@ -5,8 +5,9 @@
 }
 
 @theme {
-  --font-sans: 'Figtree', sans-serif;
-  --font-mono: 'Geist Mono', ui-monospace, monospace;
+  --font-sans:
+    'Figtree Variable', 'Figtree', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'Geist Mono Variable', 'Geist Mono', ui-monospace, monospace;
 
   --color-bg: #18191a;
   --color-surface: #242526;
@@ -52,6 +53,13 @@
   --radius-inner: 14px;
   --radius-input: 12px;
   --radius-pill: 999px;
+}
+
+body {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 @layer base {

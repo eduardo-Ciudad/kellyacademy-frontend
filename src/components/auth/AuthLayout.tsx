@@ -8,7 +8,7 @@ type AuthLayoutProps = PropsWithChildren<{ variant: 'login' | 'cadastro' }>;
 
 export function AuthLayout({ children, variant }: AuthLayoutProps) {
   return (
-    <main className="bg-bg min-h-[100dvh] lg:flex lg:p-6">
+    <main className="bg-bg min-h-[100dvh] font-sans lg:flex lg:p-6">
       <section className="flex min-h-[100dvh] flex-col px-6 pt-[calc(56px+env(safe-area-inset-top))] pb-[calc(32px+env(safe-area-inset-bottom))] lg:min-h-[calc(100vh-48px)] lg:w-[500px] lg:shrink-0 lg:px-10 lg:py-4 xl:w-[600px] xl:px-14">
         <Brand />
 
