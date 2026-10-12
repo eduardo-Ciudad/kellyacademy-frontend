@@ -1,5 +1,10 @@
-import { useRef } from 'react';
-import { motion, useInView, useReducedMotion } from 'motion/react';
+import { useEffect, useRef, useState } from 'react';
+import {
+  AnimatePresence,
+  motion,
+  useInView,
+  useReducedMotion,
+} from 'motion/react';
 import { JuliaAvatar } from '@/components/landing/JuliaAvatar';
 import { RevealGroup, RevealItem } from '@/components/landing/fx/Reveal';
 import { DUR, EASE_OUT } from '@/components/landing/fx/motion';
@@ -24,7 +29,15 @@ const comments = [
   },
 ] as const;
 
-const lineWidths = ['92%', '86%', '95%', '70%', '88%', '60%'] as const;
+const transcription = [
+  'Na Constituição de 1988, a cultura é tratada',
+  'como direito de todos. Entretanto,',
+  'as salas de cinema se concentram nas',
+  'capitais, o que afasta grande parte',
+  'da população do audiovisual.',
+] as const;
+
+const lineWidths = ['92%', '86%', '95%', '70%', '88%'] as const;
 
 const cardClass =
   'border-border-subtle bg-surface hover:border-[#3e5a85] h-full rounded-[22px] border p-6 desk:p-7 transition duration-300 hover:-translate-y-1 motion-reduce:transition-none';
@@ -108,7 +121,21 @@ function CorrectionCard() {
 }
 
 function PhotoCard() {
+  const frameRef = useRef<HTMLDivElement>(null);
+  const inView = useInView(frameRef, { once: true, amount: 0.5 });
   const reduceMotion = useReducedMotion();
+  const [transcribed, setTranscribed] = useState(Boolean(reduceMotion));
+
+  useEffect(() => {
+    if (reduceMotion) {
+      setTranscribed(true);
+      return;
+    }
+    if (!inView) return;
+
+    const timer = window.setTimeout(() => setTranscribed(true), 1700);
+    return () => window.clearTimeout(timer);
+  }, [inView, reduceMotion]);
 
   return (
     <article className={`${cardClass} flex min-h-[360px] flex-col gap-5`}>
@@ -119,26 +146,52 @@ function PhotoCard() {
           transcreve para corrigir.
         </p>
       </div>
-      <div className="border-border-subtle bg-photo-view rounded-inner relative mt-auto flex h-[170px] flex-col gap-[13px] overflow-hidden border px-[22px] py-5">
-        {lineWidths.map((width) => (
-          <span
-            key={width}
-            aria-hidden="true"
-            className="bg-control h-[3px] rounded-sm"
-            style={{ width }}
-          />
+      <div
+        ref={frameRef}
+        className="border-border-subtle bg-photo-view rounded-inner relative mt-auto flex h-[170px] flex-col justify-center gap-1 overflow-hidden border px-[22px] py-5"
+      >
+        {transcription.map((text, index) => (
+          <span key={text} className="relative block min-h-5">
+            <motion.span
+              aria-hidden="true"
+              className="bg-control absolute top-1/2 left-0 h-[3px] -translate-y-1/2 rounded-sm"
+              style={{ width: lineWidths[index] }}
+              initial={false}
+              animate={{ opacity: transcribed ? 0 : 1 }}
+              transition={{
+                duration: reduceMotion ? 0 : DUR.fast,
+                delay: transcribed && !reduceMotion ? index * 0.12 : 0,
+                ease: EASE_OUT,
+              }}
+            />
+            <motion.span
+              className="text-text-body text-small absolute inset-0"
+              initial={false}
+              animate={{ opacity: transcribed ? 1 : 0 }}
+              transition={{
+                duration: reduceMotion ? 0 : DUR.fast,
+                delay:
+                  transcribed && !reduceMotion ? index * 0.12 + DUR.fast : 0,
+                ease: EASE_OUT,
+              }}
+            >
+              {text}
+            </motion.span>
+          </span>
         ))}
-        <motion.span
-          aria-hidden="true"
-          className="bg-accent absolute right-[8%] left-[8%] h-0.5 shadow-[0_0_14px_2px_#0866ff88]"
-          initial={false}
-          animate={reduceMotion ? { top: '50%' } : { top: ['6%', '88%', '6%'] }}
-          transition={
-            reduceMotion
-              ? { duration: 0 }
-              : { duration: 3.4, ease: 'easeInOut', repeat: Infinity }
-          }
-        />
+        {!reduceMotion ? (
+          <motion.span
+            aria-hidden="true"
+            className="bg-accent absolute right-[8%] left-[8%] h-0.5 shadow-[0_0_14px_2px_#0866ff88]"
+            initial={{ top: '6%' }}
+            animate={inView ? { top: ['6%', '88%', '6%'] } : { top: '6%' }}
+            transition={
+              inView
+                ? { duration: 3.4, ease: 'easeInOut', repeat: Infinity }
+                : { duration: 0 }
+            }
+          />
+        ) : null}
       </div>
     </article>
   );
@@ -235,10 +288,37 @@ function ThemesCard() {
 }
 
 function JuliaCard() {
+  const cardRef = useRef<HTMLElement>(null);
+  const inView = useInView(cardRef, { once: true, amount: 0.4 });
   const reduceMotion = useReducedMotion();
+  const [messageState, setMessageState] = useState<
+    'question' | 'typing' | 'answer'
+  >(reduceMotion ? 'answer' : 'question');
+
+  useEffect(() => {
+    if (reduceMotion) {
+      setMessageState('answer');
+      return;
+    }
+    if (!inView) return;
+
+    const typingTimer = window.setTimeout(() => setMessageState('typing'), 400);
+    const answerTimer = window.setTimeout(
+      () => setMessageState('answer'),
+      1300,
+    );
+
+    return () => {
+      window.clearTimeout(typingTimer);
+      window.clearTimeout(answerTimer);
+    };
+  }, [inView, reduceMotion]);
 
   return (
-    <article className="border-nav-active bg-accent-tint hover:border-possivel-border desk:p-8 relative flex h-full flex-wrap items-center gap-7 rounded-[22px] border p-6 transition duration-300 hover:-translate-y-1 motion-reduce:transition-none">
+    <article
+      ref={cardRef}
+      className="border-nav-active bg-accent-tint hover:border-possivel-border desk:p-8 relative flex h-full flex-wrap items-center gap-7 rounded-[22px] border p-6 transition duration-300 hover:-translate-y-1 motion-reduce:transition-none"
+    >
       <span className="relative size-[84px] shrink-0">
         {!reduceMotion ? (
           <motion.span
@@ -262,13 +342,55 @@ function JuliaCard() {
         </p>
       </div>
 
-      <div className="flex min-w-[260px] flex-1 basis-[300px] flex-col gap-2">
+      <div className="flex min-h-[154px] min-w-[260px] flex-1 basis-[300px] flex-col gap-2 sm:min-h-[126px]">
         <div className="bg-accent text-small self-end rounded-[16px_16px_4px_16px] px-3.5 py-2.5 text-white">
           O que é repertório produtivo?
         </div>
-        <div className="bg-bg text-text-body text-small max-w-[320px] self-start rounded-[16px_16px_16px_4px] px-3.5 py-2.5">
-          É quando a referência que você usou ajuda de verdade o seu argumento,
-          em vez de só aparecer no texto.
+        <div
+          aria-live="polite"
+          className="relative min-h-[84px] max-w-[320px] self-start sm:min-h-[74px]"
+        >
+          <AnimatePresence initial={false} mode="wait">
+            {messageState === 'typing' ? (
+              <motion.div
+                key="typing"
+                aria-hidden="true"
+                className="bg-bg flex h-10 items-center gap-1 rounded-[16px_16px_16px_4px] px-3.5 py-2.5"
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: DUR.fast, ease: EASE_OUT }}
+              >
+                {[0, 1, 2].map((dot) => (
+                  <motion.span
+                    key={dot}
+                    className="bg-text-3 size-1.5 rounded-full"
+                    animate={{ opacity: [0.35, 1, 0.35] }}
+                    transition={{
+                      duration: DUR.slow,
+                      delay: dot * 0.12,
+                      ease: 'easeInOut',
+                      repeat: Infinity,
+                    }}
+                  />
+                ))}
+              </motion.div>
+            ) : messageState === 'answer' ? (
+              <motion.div
+                key="answer"
+                className="bg-bg text-text-body text-small rounded-[16px_16px_16px_4px] px-3.5 py-2.5"
+                initial={reduceMotion ? false : { opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: reduceMotion ? 0 : DUR.base,
+                  ease: EASE_OUT,
+                }}
+              >
+                É quando a referência que você usou ajuda de verdade o seu
+                argumento, em vez de só aparecer no texto.
+              </motion.div>
+            ) : null}
+          </AnimatePresence>
         </div>
       </div>
     </article>
