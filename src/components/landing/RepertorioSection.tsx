@@ -206,7 +206,7 @@ function RepertorioExplorer() {
   return (
     <div
       ref={explorerRef}
-      className="border-control bg-surface rounded-panel relative mt-10 overflow-hidden border shadow-[0_40px_120px_-40px_#0866ff66]"
+      className="border-control bg-surface rounded-panel shadow-raised relative mt-10 overflow-hidden border"
     >
       <BorderBeam />
       <BorderBeam bottom />

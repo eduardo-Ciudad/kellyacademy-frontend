@@ -189,7 +189,7 @@ function PhotoCard() {
         {!reduceMotion ? (
           <motion.span
             aria-hidden="true"
-            className="bg-accent absolute right-[8%] left-[8%] h-0.5 shadow-[0_0_14px_2px_#0866ff88]"
+            className="bg-accent absolute right-[8%] left-[8%] h-0.5 shadow-[0_0_6px_rgb(8_102_255/0.35)]"
             initial={{ top: '6%' }}
             animate={inView ? { top: ['6%', '88%', '6%'] } : { top: '6%' }}
             transition={

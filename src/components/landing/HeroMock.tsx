@@ -72,7 +72,7 @@ export function HeroMock() {
       ref={containerRef}
       className="relative mt-16 w-full max-w-[1080px] text-left"
     >
-      <div className="border-control bg-surface rounded-panel relative overflow-hidden border shadow-[0_40px_120px_-30px_#0866ff55,0_0_0_1px_#00000040]">
+      <div className="border-control bg-surface rounded-panel shadow-raised relative overflow-hidden border">
         <BorderBeam />
         <BorderBeam bottom />
 
