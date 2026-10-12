@@ -131,7 +131,7 @@ function CompetenciaPanel({
         </span>
       </div>
 
-      <h3 className="text-text text-h3">{content.nomeOficial}</h3>
+      <h3 className="text-text text-h3-lg">{content.nomeOficial}</h3>
 
       <div>
         <p className="text-text-3 text-eyebrow mb-2 font-mono uppercase">

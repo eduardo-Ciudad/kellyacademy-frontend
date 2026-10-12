@@ -38,7 +38,7 @@ export function Recursos() {
           eyebrow="Recursos"
           title="Tudo o que a redação pede, num lugar só."
           description="Da folha escrita à mão até o repertório certo para o tema — sem trocar de aplicativo."
-          className="max-w-[760px]"
+          layout="split"
         />
 
         <div className="mt-12 grid grid-cols-1 gap-5 min-[960px]:grid-cols-6">

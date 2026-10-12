@@ -71,6 +71,7 @@ export function RepertorioSection() {
           }
           description="Pensadores, artigos da Constituição, dados oficiais e obras culturais — curados por eixo temático, com a ideia central, como encaixar no argumento e o erro que derruba a sua C2."
           align="center"
+          eyebrowVariant="pill"
           className="mx-auto max-w-[900px]"
         />
 
@@ -82,7 +83,7 @@ export function RepertorioSection() {
             >
               <NumberTicker
                 value={stat.value}
-                className="text-text tabular block text-[2.5rem] leading-none font-extrabold"
+                className="text-text block text-[2.5rem] leading-none font-extrabold"
               />
               <p className="text-text-2 text-small mt-2">{stat.label}</p>
             </div>
@@ -335,7 +336,7 @@ function FichaPanel({
       </div>
 
       <div>
-        <h3 className="text-text text-h3">{ficha.nome}</h3>
+        <h3 className="text-text text-h3-lg">{ficha.nome}</h3>
         {ficha.subtitulo ? (
           <p className="text-text-2 text-body mt-1.5">{ficha.subtitulo}</p>
         ) : null}

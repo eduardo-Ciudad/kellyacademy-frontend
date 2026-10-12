@@ -5,6 +5,8 @@ type SectionHeaderProps = {
   title: ReactNode;
   description?: string;
   align?: 'left' | 'center';
+  eyebrowVariant?: 'text' | 'pill';
+  layout?: 'stack' | 'split';
   className?: string;
 };
 
@@ -13,23 +15,36 @@ export function SectionHeader({
   title,
   description,
   align = 'left',
+  eyebrowVariant = 'text',
+  layout = 'stack',
   className = '',
 }: SectionHeaderProps) {
   const centered = align === 'center';
+  const split = layout === 'split';
 
   return (
     <header
-      className={`${centered ? 'mx-auto items-center text-center' : 'items-start'} flex flex-col ${className}`}
+      className={`${centered ? 'mx-auto items-center text-center' : 'items-start'} ${split ? 'gap-6 min-[960px]:flex-row min-[960px]:items-end min-[960px]:justify-between' : ''} flex flex-col ${className}`}
     >
-      {eyebrow ? (
-        <p className="text-accent-text text-eyebrow flex items-center gap-2 font-mono uppercase">
-          {eyebrow}
-        </p>
-      ) : null}
-      <h2 className="text-text text-h2 mt-3.5 text-balance">{title}</h2>
+      <div
+        className={`${centered ? 'items-center' : 'items-start'} ${split ? 'max-w-[640px]' : ''} flex flex-col`}
+      >
+        {eyebrow ? (
+          <p
+            className={
+              eyebrowVariant === 'pill'
+                ? 'border-possivel-border bg-photo-drop text-possivel text-small rounded-pill flex items-center gap-2 border px-3.5 py-[7px] font-semibold'
+                : 'text-accent-text text-eyebrow flex items-center gap-2 font-mono uppercase'
+            }
+          >
+            {eyebrow}
+          </p>
+        ) : null}
+        <h2 className="text-text text-h2 mt-3.5 text-balance">{title}</h2>
+      </div>
       {description ? (
         <p
-          className={`text-text-2 text-lead mt-[18px] max-w-[60ch] text-pretty ${centered ? 'mx-auto' : ''}`}
+          className={`text-text-2 text-lead max-w-[60ch] text-pretty ${split ? 'min-[960px]:max-w-[380px]' : 'mt-[18px]'} ${centered ? 'mx-auto' : ''}`}
         >
           {description}
         </p>
