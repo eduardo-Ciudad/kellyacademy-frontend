@@ -28,6 +28,7 @@ import { GridBackground } from '@/components/landing/fx/GridBackground';
 import { Marquee } from '@/components/landing/fx/Marquee';
 import { NumberTicker } from '@/components/landing/fx/NumberTicker';
 import { TextShimmer } from '@/components/landing/fx/TextShimmer';
+import { SectionHeader } from '@/components/landing/ui/SectionHeader';
 import { useRovingTabs } from '@/components/landing/useRovingTabs';
 import {
   FUNCAO_ARGUMENTATIVA_LABELS,
@@ -55,21 +56,23 @@ export function RepertorioSection() {
     >
       <GridBackground className="opacity-80" />
       <div className="relative mx-auto max-w-[1200px]">
-        <header className="flex flex-col items-center text-center">
-          <span className="border-possivel-border bg-photo-drop text-possivel rounded-pill inline-flex items-center gap-2 border px-3.5 py-[7px] text-[13px] font-bold">
-            <BookOpen size={14} strokeWidth={2} aria-hidden="true" />O
-            DIFERENCIAL DA KELLY
-          </span>
-          <h2 className="text-text mt-[22px] max-w-[900px] text-[34px] leading-[1.02] font-extrabold tracking-[-1.2px] text-balance min-[960px]:text-[64px] min-[960px]:tracking-[-2.2px]">
-            Repertório que você sabe <TextShimmer>usar</TextShimmer>, não só
-            decorar.
-          </h2>
-          <p className="text-text-2 mt-[22px] max-w-[680px] text-[17px] leading-[1.6] text-pretty min-[960px]:text-[19px]">
-            Pensadores, artigos da Constituição, dados oficiais e obras
-            culturais — curados por eixo temático, com a ideia central, como
-            encaixar no argumento e o erro que derruba a sua C2.
-          </p>
-        </header>
+        <SectionHeader
+          eyebrow={
+            <>
+              <BookOpen size={14} strokeWidth={2} aria-hidden="true" />O
+              DIFERENCIAL DA KELLY
+            </>
+          }
+          title={
+            <>
+              Repertório que você sabe <TextShimmer>usar</TextShimmer>, não só
+              decorar.
+            </>
+          }
+          description="Pensadores, artigos da Constituição, dados oficiais e obras culturais — curados por eixo temático, com a ideia central, como encaixar no argumento e o erro que derruba a sua C2."
+          align="center"
+          className="mx-auto max-w-[900px]"
+        />
 
         <div className="mt-[52px] grid grid-cols-2 gap-3 min-[960px]:grid-cols-4 min-[960px]:gap-4">
           {REPERTORIO_STATS.map((stat) => (
@@ -79,9 +82,9 @@ export function RepertorioSection() {
             >
               <NumberTicker
                 value={stat.value}
-                className="text-text block text-[38px] leading-none font-extrabold tracking-[-1.4px] min-[960px]:text-[44px]"
+                className="text-text tabular block text-[2.5rem] leading-none font-extrabold"
               />
-              <p className="text-text-2 mt-2 text-sm leading-5">{stat.label}</p>
+              <p className="text-text-2 text-small mt-2">{stat.label}</p>
             </div>
           ))}
         </div>
@@ -116,18 +119,14 @@ export function RepertorioSection() {
               className="border-border-subtle bg-surface hover:border-possivel-border rounded-card border p-6 transition duration-300 hover:-translate-y-1 motion-reduce:transition-none"
             >
               <div className="flex items-center justify-between gap-2">
-                <h3 className="text-text text-[19px] font-bold">
-                  {pilar.titulo}
-                </h3>
+                <h3 className="text-text text-h3">{pilar.titulo}</h3>
                 {'emBreve' in pilar && pilar.emBreve ? (
-                  <span className="bg-warning-bg text-warning rounded-pill shrink-0 px-2 py-1 text-[11px] font-bold">
+                  <span className="bg-warning-bg text-warning text-eyebrow rounded-pill shrink-0 px-2 py-1 font-semibold">
                     EM BREVE
                   </span>
                 ) : null}
               </div>
-              <p className="text-text-2 mt-2.5 text-[15px] leading-[1.6]">
-                {pilar.descricao}
-              </p>
+              <p className="text-text-2 text-body mt-2.5">{pilar.descricao}</p>
             </article>
           ))}
         </div>
@@ -135,7 +134,7 @@ export function RepertorioSection() {
         <div className="mt-10 flex justify-center">
           <Link
             to="/criar-conta"
-            className="focus-ring bg-accent hover:bg-accent-hover rounded-pill inline-flex min-h-14 items-center gap-2.5 px-7 text-[17px] font-bold text-white transition hover:-translate-y-px active:translate-y-0 motion-reduce:transition-none"
+            className="focus-ring bg-accent hover:bg-accent-hover rounded-pill text-body inline-flex min-h-14 items-center gap-2.5 px-7 font-semibold text-white transition hover:-translate-y-px active:translate-y-0 motion-reduce:transition-none"
           >
             Explorar o repertório
             <ArrowRight size={18} strokeWidth={2.2} aria-hidden="true" />
@@ -206,7 +205,7 @@ function RepertorioExplorer() {
           <Link
             to="/criar-conta"
             aria-label="Criar conta para buscar no repertório"
-            className="focus-ring border-control bg-bg text-text-3 hover:border-possivel-border rounded-input mb-1.5 flex min-h-12 items-center gap-2.5 border px-3.5 text-left text-[15px] transition-colors motion-reduce:transition-none"
+            className="focus-ring border-control bg-bg text-text-3 hover:border-possivel-border rounded-input text-body mb-1.5 flex min-h-12 items-center gap-2.5 border px-3.5 text-left transition-colors motion-reduce:transition-none"
           >
             <Search size={16} strokeWidth={2} aria-hidden="true" />
             <span>Buscar por tema, pensador ou palavra-chave</span>
@@ -242,15 +241,15 @@ function RepertorioExplorer() {
                   }`}
                 >
                   <span
-                    className={`${styles.text} ${styles.background} flex size-[38px] shrink-0 items-center justify-center rounded-[10px] text-[13px] font-extrabold`}
+                    className={`${styles.text} ${styles.background} text-small flex size-[38px] shrink-0 items-center justify-center rounded-[10px] font-semibold`}
                   >
                     {ficha.iniciais}
                   </span>
                   <span className="flex min-w-0 flex-col gap-[3px]">
-                    <span className="text-text truncate text-base font-bold">
+                    <span className="text-text text-body truncate font-semibold">
                       {ficha.nome}
                     </span>
-                    <span className="text-text-3 truncate font-mono text-[11px] tracking-[0.6px]">
+                    <span className="text-text-3 text-eyebrow truncate font-mono uppercase">
                       {TIPO_ENTIDADE_LABELS[ficha.tipo].toUpperCase()} ·{' '}
                       {ficha.eixo}
                     </span>
@@ -267,7 +266,7 @@ function RepertorioExplorer() {
             })}
           </div>
           <div className="mx-1 mt-2 flex min-h-11 items-center justify-between gap-3">
-            <p className="text-text-3 text-[13px]">
+            <p className="text-text-3 text-small">
               Exemplos reais da base · 63 repertórios ativos
             </p>
             {automaticAvailable ? (
@@ -326,31 +325,27 @@ function FichaPanel({
     >
       <div className="flex flex-wrap items-center justify-between gap-3">
         <span
-          className={`rounded-pill px-3 py-1.5 font-mono text-xs tracking-[1.2px] ${styles.text} ${styles.background}`}
+          className={`text-eyebrow rounded-pill px-3 py-1.5 font-mono uppercase ${styles.text} ${styles.background}`}
         >
           {ficha.typeLabel}
         </span>
-        <span className="border-possivel-border text-possivel rounded-pill border px-3 py-1 text-[13px]">
+        <span className="border-possivel-border text-possivel text-small rounded-pill border px-3 py-1">
           Eixo: {ficha.eixo}
         </span>
       </div>
 
       <div>
-        <h3 className="text-text text-[30px] leading-[1.1] font-extrabold tracking-[-1px] sm:text-[36px]">
-          {ficha.nome}
-        </h3>
+        <h3 className="text-text text-h3">{ficha.nome}</h3>
         {ficha.subtitulo ? (
-          <p className="text-text-2 mt-1.5 text-[17px]">{ficha.subtitulo}</p>
+          <p className="text-text-2 text-body mt-1.5">{ficha.subtitulo}</p>
         ) : null}
       </div>
 
       <div>
-        <p className="text-text-3 mb-2 font-mono text-[11px] tracking-[1.4px]">
+        <p className="text-text-3 text-eyebrow mb-2 font-mono uppercase">
           IDEIA CENTRAL
         </p>
-        <p className="text-text text-[17px] leading-[1.65]">
-          {ficha.ideiaCentral}
-        </p>
+        <p className="text-text text-body">{ficha.ideiaCentral}</p>
       </div>
 
       {ficha.lembre ? (
@@ -362,12 +357,10 @@ function FichaPanel({
             className="text-accent-text mt-0.5 shrink-0"
           />
           <div>
-            <p className="text-accent-text mb-1 text-[13px] font-bold">
+            <p className="text-accent-text text-small mb-1 font-semibold">
               Lembre na prova
             </p>
-            <p className="text-text-body text-[15px] leading-[1.6]">
-              {ficha.lembre}
-            </p>
+            <p className="text-text-body text-body">{ficha.lembre}</p>
           </div>
         </div>
       ) : null}
@@ -389,10 +382,10 @@ function FichaPanel({
 
       {ficha.exemplo ? (
         <div>
-          <p className="text-text-3 mb-2 font-mono text-[11px] tracking-[1.4px]">
+          <p className="text-text-3 text-eyebrow mb-2 font-mono uppercase">
             NA SUA REDAÇÃO
           </p>
-          <p className="border-accent text-text-body border-l-2 pl-3.5 text-base leading-[1.7] italic">
+          <p className="border-accent text-text-body text-body border-l-2 pl-3.5 italic">
             {ficha.exemplo}
           </p>
         </div>
@@ -402,7 +395,7 @@ function FichaPanel({
         {ficha.funcoes.map((funcao) => (
           <span
             key={funcao}
-            className="bg-surface-2 text-text-2 rounded-pill px-[11px] py-1.5 text-[12.5px]"
+            className="bg-surface-2 text-text-2 text-small rounded-pill px-[11px] py-1.5"
           >
             {FUNCAO_ARGUMENTATIVA_LABELS[funcao]}
           </span>
@@ -423,8 +416,8 @@ function InfoBlock({
 }) {
   return (
     <div className="border-border-subtle bg-photo-drop rounded-inner border px-4 py-3.5">
-      <p className={`${tone} mb-1.5 text-[13px] font-bold`}>{title}</p>
-      <p className="text-text-body text-[14.5px] leading-[1.6]">{children}</p>
+      <p className={`${tone} text-small mb-1.5 font-semibold`}>{title}</p>
+      <p className="text-text-body text-body">{children}</p>
     </div>
   );
 }

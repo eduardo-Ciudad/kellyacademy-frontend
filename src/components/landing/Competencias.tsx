@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { competenciasLanding } from '@/components/landing/data/competenciasLanding';
 import { BorderBeam } from '@/components/landing/fx/BorderBeam';
+import { SectionHeader } from '@/components/landing/ui/SectionHeader';
 import { useRovingTabs } from '@/components/landing/useRovingTabs';
 import { competencias } from '@/lib/competencias';
 
@@ -25,16 +26,12 @@ export function Competencias() {
     >
       <div className="mx-auto grid max-w-[1200px] gap-10 min-[960px]:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
         <div>
-          <p className="text-accent-text font-mono text-xs tracking-[1.6px]">
-            AS 5 COMPETÊNCIAS
-          </p>
-          <h2 className="text-text mt-3.5 text-[34px] leading-[1.05] font-extrabold tracking-[-1.1px] min-[960px]:text-[52px] min-[960px]:tracking-[-1.6px]">
-            A mesma régua do ENEM.
-          </h2>
-          <p className="text-text-2 mt-[18px] mb-7 text-lg leading-[1.6]">
-            Cada competência vale até 200 pontos. A Kelly avalia as cinco
-            separadamente, para você saber exatamente onde focar.
-          </p>
+          <SectionHeader
+            eyebrow="As 5 competências"
+            title="A mesma régua do ENEM."
+            description="Cada competência vale até 200 pontos. A Kelly avalia as cinco separadamente, para você saber exatamente onde focar."
+            className="mb-7"
+          />
 
           <div
             role="tablist"
@@ -65,7 +62,7 @@ export function Competencias() {
                   }`}
                 >
                   <span
-                    className="rounded-lg px-[9px] py-1.5 text-[13px] font-extrabold"
+                    className="text-small rounded-lg px-[9px] py-1.5 font-semibold"
                     style={{
                       color: competencia.hex,
                       backgroundColor: competencia.bgHex,
@@ -121,7 +118,7 @@ function CompetenciaPanel({
     >
       <div className="flex items-center gap-3.5">
         <span
-          className="rounded-[10px] px-3 py-2 text-lg font-extrabold"
+          className="text-body rounded-[10px] px-3 py-2 font-semibold"
           style={{
             color: competencia.hex,
             backgroundColor: competencia.bgHex,
@@ -129,31 +126,25 @@ function CompetenciaPanel({
         >
           {competencia.codigo}
         </span>
-        <span className="text-text-3 font-mono text-[13px]">
+        <span className="text-text-3 text-small tabular font-mono">
           0 — 200 PONTOS
         </span>
       </div>
 
-      <h3 className="text-text text-[26px] leading-[1.2] font-bold sm:text-[28px]">
-        {content.nomeOficial}
-      </h3>
+      <h3 className="text-text text-h3">{content.nomeOficial}</h3>
 
       <div>
-        <p className="text-text-3 mb-2 font-mono text-[11px] tracking-[1.4px]">
+        <p className="text-text-3 text-eyebrow mb-2 font-mono uppercase">
           O QUE A KELLY OLHA
         </p>
-        <p className="text-text-body text-[17px] leading-[1.65]">
-          {content.olha}
-        </p>
+        <p className="text-text-body text-body">{content.olha}</p>
       </div>
 
       <div className="border-border-subtle bg-photo-drop rounded-inner border px-[18px] py-4">
-        <p className="text-text-3 mb-2 font-mono text-[11px] tracking-[1.4px]">
+        <p className="text-text-3 text-eyebrow mb-2 font-mono uppercase">
           EXEMPLO DE APONTAMENTO
         </p>
-        <p className="text-text text-[15.5px] leading-[1.6]">
-          {content.exemplo}
-        </p>
+        <p className="text-text text-body">{content.exemplo}</p>
       </div>
     </motion.article>
   );

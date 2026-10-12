@@ -7,7 +7,7 @@ export function TemasMarquee() {
 
   return (
     <section aria-label="Temas" className="overflow-hidden pt-14 pb-6">
-      <p className="text-text-3 mx-auto mb-[22px] max-w-[760px] px-5 text-center font-mono text-xs leading-5 tracking-[1.6px] sm:px-6">
+      <p className="text-text-3 text-eyebrow mx-auto mb-[22px] max-w-[760px] px-5 text-center font-mono uppercase sm:px-6">
         TREINE COM TEMAS DE EDIÇÕES ANTERIORES E POSSÍVEIS TEMAS DO ENEM 2026
       </p>
       <div
@@ -36,7 +36,7 @@ export function TemasMarquee() {
 
 function ThemePill({ ano, nome }: (typeof temasEnem)[number]) {
   return (
-    <span className="border-border-subtle bg-photo-drop text-text-2 rounded-pill inline-flex shrink-0 items-center border px-[18px] py-2.5 text-[15px] whitespace-nowrap">
+    <span className="border-border-subtle bg-photo-drop text-text-2 text-body rounded-pill inline-flex shrink-0 items-center border px-[18px] py-2.5 whitespace-nowrap">
       <span className="text-accent-text mr-2.5 font-mono text-xs">{ano}</span>
       {nome}
     </span>

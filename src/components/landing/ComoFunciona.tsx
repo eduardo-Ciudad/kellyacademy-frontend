@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 import { motion, useInView, useReducedMotion } from 'motion/react';
+import { SectionHeader } from '@/components/landing/ui/SectionHeader';
 
 const steps = [
   {
@@ -39,18 +40,12 @@ export function ComoFunciona() {
       className="scroll-mt-20 px-5 pt-[120px] pb-10 sm:px-6"
     >
       <div className="mx-auto max-w-[1200px]">
-        <header className="max-w-[720px]">
-          <p className="text-accent-text font-mono text-xs tracking-[1.6px]">
-            COMO FUNCIONA
-          </p>
-          <h2 className="text-text mt-3.5 text-[34px] leading-[1.05] font-extrabold tracking-[-1.1px] text-balance min-[960px]:text-[52px] min-[960px]:tracking-[-1.6px]">
-            Um ciclo de treino que aprende com cada redação.
-          </h2>
-          <p className="text-text-2 mt-[18px] text-lg leading-[1.6]">
-            Você não precisa de mais redações corrigidas. Precisa saber o que
-            mudar entre uma e outra.
-          </p>
-        </header>
+        <SectionHeader
+          eyebrow="Como funciona"
+          title="Um ciclo de treino que aprende com cada redação."
+          description="Você não precisa de mais redações corrigidas. Precisa saber o que mudar entre uma e outra."
+          className="max-w-[720px]"
+        />
 
         <div ref={flowRef} className="relative mt-14">
           <div
@@ -72,13 +67,13 @@ export function ComoFunciona() {
             {steps.map((step) => (
               <li key={step.number} className="flex flex-col gap-4">
                 <span className="border-accent bg-bg relative flex size-14 items-center justify-center rounded-full border-2">
-                  <span className="text-accent-text font-mono text-[15px] font-medium">
+                  <span className="text-accent-text text-small tabular font-mono font-medium">
                     {step.number}
                   </span>
                 </span>
                 <article className="border-border-subtle bg-surface rounded-card flex grow flex-col border p-[22px] transition duration-300 hover:-translate-y-1 hover:border-[#3e5a85] motion-reduce:transition-none">
-                  <h3 className="text-text text-xl font-bold">{step.title}</h3>
-                  <p className="text-text-2 mt-2.5 text-[15px] leading-[1.6]">
+                  <h3 className="text-text text-h3">{step.title}</h3>
+                  <p className="text-text-2 text-body mt-2.5">
                     {step.description}
                   </p>
                 </article>

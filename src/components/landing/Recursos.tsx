@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import { motion, useInView, useReducedMotion } from 'motion/react';
 import { JuliaAvatar } from '@/components/landing/JuliaAvatar';
+import { SectionHeader } from '@/components/landing/ui/SectionHeader';
 import { competencias } from '@/lib/competencias';
 
 const comments = [
@@ -33,20 +34,12 @@ export function Recursos() {
       className="scroll-mt-20 px-5 pt-[120px] pb-10 sm:px-6"
     >
       <div className="mx-auto max-w-[1200px]">
-        <header className="flex flex-wrap items-end justify-between gap-6">
-          <div className="max-w-[640px]">
-            <p className="text-accent-text font-mono text-xs tracking-[1.6px]">
-              RECURSOS
-            </p>
-            <h2 className="text-text mt-3.5 text-[34px] leading-[1.05] font-extrabold tracking-[-1.1px] text-balance min-[960px]:text-[52px] min-[960px]:tracking-[-1.6px]">
-              Tudo o que a redação pede, num lugar só.
-            </h2>
-          </div>
-          <p className="text-text-2 max-w-[380px] text-[17px] leading-[1.6]">
-            Da folha escrita à mão até o repertório certo para o tema — sem
-            trocar de aplicativo.
-          </p>
-        </header>
+        <SectionHeader
+          eyebrow="Recursos"
+          title="Tudo o que a redação pede, num lugar só."
+          description="Da folha escrita à mão até o repertório certo para o tema — sem trocar de aplicativo."
+          className="max-w-[760px]"
+        />
 
         <div className="mt-12 grid grid-cols-1 gap-5 min-[960px]:grid-cols-6">
           <CorrectionCard />
@@ -66,10 +59,8 @@ function CorrectionCard() {
       className={`${cardClass} flex min-h-[360px] flex-col gap-[22px] min-[960px]:col-span-4`}
     >
       <div className="max-w-[460px]">
-        <h3 className="text-text text-2xl font-bold">
-          Correção por competência
-        </h3>
-        <p className="text-text-2 mt-2.5 text-[15.5px] leading-[1.6]">
+        <h3 className="text-text text-h3">Correção por competência</h3>
+        <p className="text-text-2 text-body mt-2.5">
           Nota de 0 a 200 em cada uma das cinco competências, com o trecho
           marcado e a explicação do que faltou.
         </p>
@@ -85,7 +76,7 @@ function CorrectionCard() {
               className="border-border-subtle bg-photo-drop rounded-inner flex items-start gap-3 border px-3.5 py-3"
             >
               <span
-                className="rounded-lg px-2 py-1 text-xs font-extrabold"
+                className="text-eyebrow rounded-lg px-2 py-1 font-semibold"
                 style={{
                   color: competencia.hex,
                   backgroundColor: competencia.bgHex,
@@ -93,7 +84,7 @@ function CorrectionCard() {
               >
                 {comment.code}
               </span>
-              <p className="text-sm leading-[1.5]">
+              <p className="text-small">
                 <span className="text-text-3">“{comment.excerpt}”</span>
                 <br />
                 <span className="text-text-body">{comment.tip}</span>
@@ -114,8 +105,8 @@ function PhotoCard() {
       className={`${cardClass} flex min-h-[360px] flex-col gap-5 min-[960px]:col-span-2`}
     >
       <div>
-        <h3 className="text-text text-2xl font-bold">Foto da redação</h3>
-        <p className="text-text-2 mt-2.5 text-[15.5px] leading-[1.6]">
+        <h3 className="text-text text-h3">Foto da redação</h3>
+        <p className="text-text-2 text-body mt-2.5">
           Escreveu à mão, como no dia da prova? Tire uma foto e a Kelly
           transcreve para corrigir.
         </p>
@@ -156,8 +147,8 @@ function EvolutionCard() {
       className={`${cardClass} flex min-h-[330px] flex-col gap-5 min-[960px]:col-span-3`}
     >
       <div>
-        <h3 className="text-text text-2xl font-bold">Evolução visível</h3>
-        <p className="text-text-2 mt-2.5 text-[15.5px] leading-[1.6]">
+        <h3 className="text-text text-h3">Evolução visível</h3>
+        <p className="text-text-2 text-body mt-2.5">
           Acompanhe sua nota e cada competência ao longo das redações.
         </p>
       </div>
@@ -213,17 +204,17 @@ function ThemesCard() {
       className={`${cardClass} flex min-h-[330px] flex-col gap-5 min-[960px]:col-span-3`}
     >
       <div>
-        <h3 className="text-text text-2xl font-bold">Possíveis temas 2026</h3>
-        <p className="text-text-2 mt-2.5 text-[15.5px] leading-[1.6]">
+        <h3 className="text-text text-h3">Possíveis temas 2026</h3>
+        <p className="text-text-2 text-body mt-2.5">
           Uma lista pesquisada de temas prováveis, com mini-análise e sugestão
           de argumentos.
         </p>
       </div>
       <div className="border-possivel-border bg-photo-drop rounded-inner mt-auto border p-3.5">
-        <p className="text-possivel font-mono text-[11px] tracking-[1.2px]">
+        <p className="text-possivel text-eyebrow font-mono uppercase">
           POSSÍVEL TEMA
         </p>
-        <p className="text-text mt-1.5 text-[15px] font-semibold">
+        <p className="text-text text-body mt-1.5 font-semibold">
           Seu próximo tema de treino
         </p>
         <div className="mt-3 flex gap-2">
@@ -256,10 +247,8 @@ function JuliaCard() {
       </span>
 
       <div className="min-w-[260px] flex-1 basis-[360px]">
-        <h3 className="text-text text-[26px] font-bold">
-          Conheça a Julia, sua assistente.
-        </h3>
-        <p className="text-text-body mt-2.5 max-w-[620px] text-base leading-[1.6]">
+        <h3 className="text-text text-h3">Conheça a Julia, sua assistente.</h3>
+        <p className="text-text-body text-body mt-2.5 max-w-[620px]">
           Ficou com dúvida sobre a correção? A Julia explica, em linguagem
           simples, por que uma competência perdeu pontos e como o sistema
           funciona.
@@ -267,10 +256,10 @@ function JuliaCard() {
       </div>
 
       <div className="flex min-w-[260px] flex-1 basis-[300px] flex-col gap-2">
-        <div className="bg-accent self-end rounded-[16px_16px_4px_16px] px-3.5 py-2.5 text-sm text-white">
+        <div className="bg-accent text-small self-end rounded-[16px_16px_4px_16px] px-3.5 py-2.5 text-white">
           O que é repertório produtivo?
         </div>
-        <div className="bg-bg text-text-body max-w-[320px] self-start rounded-[16px_16px_16px_4px] px-3.5 py-2.5 text-sm leading-[1.5]">
+        <div className="bg-bg text-text-body text-small max-w-[320px] self-start rounded-[16px_16px_16px_4px] px-3.5 py-2.5">
           É quando a referência que você usou ajuda de verdade o seu argumento,
           em vez de só aparecer no texto.
         </div>

@@ -97,13 +97,11 @@ export function HeroMock() {
 
         <div className="grid min-[960px]:grid-cols-[minmax(0,1.45fr)_minmax(0,1fr)]">
           <div className="border-border-subtle border-b px-5 py-7 min-[960px]:border-r min-[960px]:border-b-0 min-[960px]:px-[30px]">
-            <p className="text-text-3 font-mono text-[11px] tracking-[1.4px]">
-              TEMA
-            </p>
-            <p className="text-text mt-1.5 text-[17px] font-bold">
+            <p className="text-text-3 text-eyebrow font-mono uppercase">TEMA</p>
+            <p className="text-text text-body mt-1.5 font-semibold">
               Democratização do acesso ao cinema no Brasil
             </p>
-            <div className="text-text-body mt-[18px] text-[15.5px] leading-[1.85]">
+            <div className="text-text-body text-body mt-[18px]">
               <p className="mb-3">
                 Na Constituição de 1988, a cultura é tratada como direito de
                 todos. Entretanto,{' '}
@@ -166,10 +164,10 @@ export function HeroMock() {
               className="flex items-end justify-between gap-3"
             >
               <div>
-                <p className="text-text-3 font-mono text-[11px] tracking-[1.4px]">
+                <p className="text-text-3 text-eyebrow font-mono uppercase">
                   NOTA ESTIMADA
                 </p>
-                <p className="text-text mt-1.5 text-[56px] leading-none font-extrabold tracking-[-2px]">
+                <p className="text-text tabular mt-1.5 text-[3.5rem] leading-none font-extrabold">
                   {score}
                   <span className="text-text-3 text-xl font-semibold tracking-normal">
                     {' '}
@@ -177,7 +175,7 @@ export function HeroMock() {
                   </span>
                 </p>
               </div>
-              <span className="bg-success-bg text-success rounded-pill mb-1 px-2.5 py-1.5 text-xs font-bold whitespace-nowrap">
+              <span className="bg-success-bg text-success rounded-pill mb-1 px-2.5 py-1.5 text-xs font-semibold whitespace-nowrap">
                 +80 vs. anterior
               </span>
             </div>
@@ -188,7 +186,7 @@ export function HeroMock() {
                 const animatedValue = Math.round((value * progress) / 40) * 40;
                 return (
                   <div key={competencia.codigo}>
-                    <div className="mb-1.5 flex justify-between gap-3 text-[13px]">
+                    <div className="text-small mb-1.5 flex justify-between gap-3">
                       <span className="text-text-2 min-w-0 truncate">
                         <strong style={{ color: competencia.hex }}>
                           {competencia.codigo}
@@ -221,7 +219,7 @@ export function HeroMock() {
               }}
             >
               <JuliaAvatar size={34} loading="eager" />
-              <p className="text-text-body text-[13.5px] leading-[1.5]">
+              <p className="text-text-body text-small">
                 <strong className="text-text">Julia</strong> · Sua C3 perdeu
                 pontos porque o 2º argumento não foi desenvolvido. Quer ver
                 repertórios sobre esse tema?

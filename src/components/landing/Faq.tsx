@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { motion, useReducedMotion } from 'motion/react';
+import { SectionHeader } from '@/components/landing/ui/SectionHeader';
 
 const faqs = [
   {
@@ -31,9 +32,11 @@ export function Faq() {
   return (
     <section id="faq" className="scroll-mt-20 px-5 pt-[120px] pb-10 sm:px-6">
       <div className="mx-auto max-w-[820px]">
-        <h2 className="text-text mb-9 text-center text-[34px] leading-[1.1] font-extrabold tracking-[-1.1px] min-[960px]:text-[44px] min-[960px]:tracking-[-1.4px]">
-          Dúvidas frequentes
-        </h2>
+        <SectionHeader
+          title="Dúvidas frequentes"
+          align="center"
+          className="mb-9"
+        />
         <div className="flex flex-col gap-2.5">
           {faqs.map((faq, index) => {
             const open = openIndex === index;
@@ -50,12 +53,12 @@ export function Faq() {
                   aria-expanded={open}
                   aria-controls={contentId}
                   onClick={() => setOpenIndex(open ? null : index)}
-                  className="focus-ring text-text flex min-h-[60px] w-full items-center justify-between gap-4 rounded-[16px] px-[22px] py-[18px] text-left text-[17px] font-semibold"
+                  className="focus-ring text-text text-body flex min-h-[60px] w-full items-center justify-between gap-4 rounded-[16px] px-[22px] py-[18px] text-left font-semibold"
                 >
                   {faq.question}
                   <motion.span
                     aria-hidden="true"
-                    className="text-accent-text shrink-0 text-[22px] leading-none"
+                    className="text-accent-text text-h3 shrink-0 leading-none"
                     animate={{ rotate: open ? 45 : 0 }}
                     transition={{ duration: reduceMotion ? 0 : 0.25 }}
                   >
@@ -75,7 +78,7 @@ export function Faq() {
                   }}
                   className="overflow-hidden"
                 >
-                  <p className="text-text-2 px-[22px] pb-5 text-base leading-[1.65]">
+                  <p className="text-text-2 text-body px-[22px] pb-5">
                     {faq.answer}
                   </p>
                 </motion.div>

@@ -38,7 +38,7 @@ export function Hero() {
           href="#repertorio"
           className="focus-ring border-control bg-surface rounded-pill inline-flex max-w-full items-center gap-2.5 border py-[7px] pr-3.5 pl-2 text-sm font-medium"
         >
-          <span className="bg-accent-tint text-accent-text rounded-pill px-2.5 py-[3px] text-xs font-bold">
+          <span className="bg-accent-tint text-accent-text rounded-pill px-2.5 py-[3px] text-xs font-semibold">
             NOVO
           </span>
           <TextShimmer className="truncate">
@@ -61,7 +61,7 @@ export function Hero() {
 
         <motion.h1
           variants={itemVariants}
-          className="text-text mt-7 max-w-[920px] text-[44px] leading-[1.02] font-extrabold tracking-[-1.6px] text-balance min-[960px]:text-[72px] min-[960px]:tracking-[-2.4px]"
+          className="text-text text-display mt-7 max-w-[920px] text-balance"
         >
           Descubra onde sua redação{' '}
           <span className="text-accent-text">perde pontos.</span>
@@ -82,7 +82,7 @@ export function Hero() {
         >
           <Link
             to="/criar-conta"
-            className="focus-ring bg-accent hover:bg-accent-hover rounded-pill inline-flex min-h-14 items-center gap-2.5 px-7 text-[17px] font-bold text-white transition hover:-translate-y-px active:translate-y-0 motion-reduce:transition-none"
+            className="focus-ring bg-accent hover:bg-accent-hover rounded-pill text-body inline-flex min-h-14 items-center gap-2.5 px-7 font-semibold text-white transition hover:-translate-y-px active:translate-y-0 motion-reduce:transition-none"
           >
             Corrigir minha redação
             <svg
@@ -101,7 +101,7 @@ export function Hero() {
           </Link>
           <a
             href="#como-funciona"
-            className="focus-ring border-control text-text hover:bg-surface-2 rounded-pill inline-flex min-h-14 items-center border px-[26px] text-[17px] font-semibold transition hover:-translate-y-px active:translate-y-0 motion-reduce:transition-none"
+            className="focus-ring border-control text-text hover:bg-surface-2 rounded-pill text-body inline-flex min-h-14 items-center border px-[26px] font-semibold transition hover:-translate-y-px active:translate-y-0 motion-reduce:transition-none"
           >
             Ver como funciona
           </a>
@@ -109,7 +109,7 @@ export function Hero() {
 
         <motion.p
           variants={itemVariants}
-          className="text-text-3 mt-[18px] font-mono text-[13px]"
+          className="text-text-3 text-small mt-[18px] font-mono"
         >
           3 correções grátis por dia · sem cartão de crédito
         </motion.p>

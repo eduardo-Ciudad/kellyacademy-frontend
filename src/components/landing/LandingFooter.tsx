@@ -58,7 +58,7 @@ function FooterColumn({
 }) {
   return (
     <div>
-      <h2 className="text-text text-sm font-bold">{title}</h2>
+      <h2 className="text-text text-sm font-semibold">{title}</h2>
       <div className="text-text-3 hover:[&_a]:text-text mt-4 flex flex-col items-start gap-3 text-sm [&_a]:transition-colors motion-reduce:[&_a]:transition-none">
         {children}
       </div>
