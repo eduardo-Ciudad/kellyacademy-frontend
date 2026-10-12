@@ -15,19 +15,25 @@ export default defineConfig(({ mode }) => {
     },
     server: {
       proxy: Object.fromEntries(
-        ['/auth', '/usuarios', '/temas', '/redacoes', '/transcricoes'].map(
-          (route) => [
-            route,
-            {
-              target: apiTarget,
-              changeOrigin: true,
-              bypass: (req) =>
-                req.headers.accept?.includes('text/html')
-                  ? '/index.html'
-                  : undefined,
-            },
-          ],
-        ),
+        [
+          '/auth',
+          '/usuarios',
+          '/temas',
+          '/redacoes',
+          '/transcricoes',
+          '/repertorios',
+          '/macroeixos',
+        ].map((route) => [
+          route,
+          {
+            target: apiTarget,
+            changeOrigin: true,
+            bypass: (req) =>
+              req.headers.accept?.includes('text/html')
+                ? '/index.html'
+                : undefined,
+          },
+        ]),
       ),
     },
     test: { include: ['src/**/*.test.ts'], environment: 'node' },

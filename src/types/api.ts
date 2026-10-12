@@ -140,3 +140,105 @@ export type Evolucao = {
   competenciaFoco: 1 | 2 | 3 | 4 | 5 | null;
   serie: PontoEvolucao[];
 };
+
+export type TipoEntidade =
+  | 'PERSON'
+  | 'CONCEPT'
+  | 'CULTURAL_WORK'
+  | 'LEGAL_SOURCE'
+  | 'EVIDENCE'
+  | 'INSTITUTION'
+  | 'EVENT';
+
+export type FuncaoArgumentativa =
+  | 'EXPLAIN_CAUSE'
+  | 'EXPLAIN_CONSEQUENCE'
+  | 'SHOW_INEQUALITY'
+  | 'SHOW_INVISIBILITY'
+  | 'DEFINE_CONCEPT'
+  | 'SOCIAL_CRITIQUE'
+  | 'HISTORICAL_CONTEXT'
+  | 'PROVE_PROBLEM'
+  | 'LEGAL_GAP'
+  | 'COMPARE_REALITY'
+  | 'EXAMPLE'
+  | 'SUPPORT_INTERVENTION';
+
+export type Nivel = 'LOW' | 'MEDIUM' | 'HIGH';
+export type Dificuldade = 'BASIC' | 'INTERMEDIATE' | 'ADVANCED';
+export type PapelRepertorio = 'REPERTOIRE' | 'EVIDENCE' | 'BOTH';
+export type TipoEvidencia =
+  | 'OFFICIAL_STATISTICS'
+  | 'NATIONAL_SURVEY'
+  | 'OFFICIAL_HEALTH_SURVEILLANCE'
+  | 'ACADEMIC_RESEARCH'
+  | 'SCIENTIFIC_STUDY'
+  | 'SCOPING_REVIEW'
+  | 'SYSTEMATIC_REVIEW'
+  | 'INTEGRATIVE_REVIEW'
+  | 'INSTITUTIONAL_REPORT'
+  | 'INSTITUTIONAL_SUMMARY'
+  | 'ADMINISTRATIVE_DATA'
+  | 'TIME_SERIES'
+  | 'CROSS_SECTIONAL'
+  | 'CONTENT_ANALYSIS';
+export type TipoFonte = 'PROFILE' | 'CONCEPT' | 'GENERAL';
+
+export type ProblemaSocial = {
+  slug: string;
+  nome: string;
+  macroeixo: string;
+};
+
+export type Macroeixo = {
+  slug: string;
+  nome: string;
+  problemas: ProblemaSocial[];
+};
+
+export type RepertorioResumo = {
+  codigo: string;
+  nome: string;
+  subtitulo: string | null;
+  tipo: TipoEntidade;
+  tipoDescricao: string | null;
+  lembreNaProva: string | null;
+  saturacao: Nivel | null;
+  riscoUso: Nivel | null;
+  problemas: ProblemaSocial[];
+};
+
+export type FonteRepertorio = {
+  tipo: TipoFonte;
+  descricao: string;
+  url: string | null;
+};
+
+export type EvidenciaRepertorio = {
+  tipos: TipoEvidencia[];
+  populacao: string | null;
+  ano: number | null;
+};
+
+export type Repertorio = RepertorioResumo & {
+  papel: PapelRepertorio;
+  area: string | null;
+  pais: string | null;
+  ideiaCentral: string | null;
+  comoUsar: string | null;
+  exemploAplicacao: string | null;
+  erroComum: string | null;
+  dificuldade: Dificuldade | null;
+  funcoesArgumentativas: FuncaoArgumentativa[];
+  fontes: FonteRepertorio[];
+  evidencia: EvidenciaRepertorio | null;
+};
+
+export type Pagina<T> = {
+  itens: T[];
+  pagina: number;
+  tamanho: number;
+  totalItens: number;
+  totalPaginas: number;
+  temProxima: boolean;
+};
