@@ -1,4 +1,4 @@
-import { BarChart3, BookOpenText, FileText, Plus } from 'lucide-react';
+import { BarChart3, BookOpenText, FileText, Library, Plus } from 'lucide-react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { isNavActive, type NavDestination } from '@/components/layout/navMatch';
 
@@ -17,7 +17,7 @@ export function BottomNav() {
 
       <nav
         aria-label="Navegação principal"
-        className="border-border-subtle bg-surface fixed inset-x-0 bottom-0 z-20 grid h-[var(--bottom-nav-h)] grid-cols-3 border-t px-3 pt-2 pb-[env(safe-area-inset-bottom)] lg:hidden"
+        className="border-border-subtle bg-surface fixed inset-x-0 bottom-0 z-20 grid h-[var(--bottom-nav-h)] grid-cols-4 border-t px-1 pt-2 pb-[env(safe-area-inset-bottom)] lg:hidden"
       >
         <MobileLink
           to="/"
@@ -29,6 +29,12 @@ export function BottomNav() {
           to="/temas"
           label="Temas"
           icon={BookOpenText}
+          pathname={location.pathname}
+        />
+        <MobileLink
+          to="/repertorio"
+          label="Repertório"
+          icon={Library}
           pathname={location.pathname}
         />
         <MobileLink

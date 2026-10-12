@@ -2,6 +2,7 @@ import {
   BarChart3,
   BookOpenText,
   FileText,
+  Library,
   LogOut,
   Plus,
   Route,
@@ -17,6 +18,7 @@ import { isNavActive } from '@/components/layout/navMatch';
 const navItems = [
   { to: '/', label: 'Suas redações', icon: FileText },
   { to: '/temas', label: 'Temas', icon: BookOpenText },
+  { to: '/repertorio', label: 'Repertório', icon: Library },
   { to: '/evolucao', label: 'Evolução', icon: BarChart3 },
 ] as const;
 
