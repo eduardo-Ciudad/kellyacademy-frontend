@@ -24,7 +24,7 @@ export function SectionHeader({
   const split = layout === 'split';
 
   return (
-    <Reveal className={className}>
+    <Reveal className={`${centered ? 'mx-auto' : ''} ${className}`.trim()}>
       <header
         className={`${centered ? 'mx-auto items-center text-center' : 'items-start'} ${split ? 'desk:flex-row desk:items-end desk:justify-between gap-6' : ''} flex flex-col`}
       >

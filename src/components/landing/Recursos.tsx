@@ -27,7 +27,7 @@ const comments = [
 const lineWidths = ['92%', '86%', '95%', '70%', '88%', '60%'] as const;
 
 const cardClass =
-  'border-border-subtle bg-surface hover:border-[#3e5a85] rounded-[22px] border p-6 desk:p-7 transition duration-300 hover:-translate-y-1 motion-reduce:transition-none';
+  'border-border-subtle bg-surface hover:border-[#3e5a85] h-full rounded-[22px] border p-6 desk:p-7 transition duration-300 hover:-translate-y-1 motion-reduce:transition-none';
 
 export function Recursos() {
   return (
@@ -238,7 +238,7 @@ function JuliaCard() {
   const reduceMotion = useReducedMotion();
 
   return (
-    <article className="border-nav-active bg-accent-tint hover:border-possivel-border desk:p-8 relative flex flex-wrap items-center gap-7 rounded-[22px] border p-6 transition duration-300 hover:-translate-y-1 motion-reduce:transition-none">
+    <article className="border-nav-active bg-accent-tint hover:border-possivel-border desk:p-8 relative flex h-full flex-wrap items-center gap-7 rounded-[22px] border p-6 transition duration-300 hover:-translate-y-1 motion-reduce:transition-none">
       <span className="relative size-[84px] shrink-0">
         {!reduceMotion ? (
           <motion.span
