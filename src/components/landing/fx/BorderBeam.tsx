@@ -1,4 +1,5 @@
 import { motion, useReducedMotion } from 'motion/react';
+import { useIsMobileLanding } from '@/components/landing/fx/useIsMobileLanding';
 
 type BorderBeamProps = {
   bottom?: boolean;
@@ -6,8 +7,11 @@ type BorderBeamProps = {
 
 export function BorderBeam({ bottom = false }: BorderBeamProps) {
   const reduceMotion = useReducedMotion();
+  const isMobile = useIsMobileLanding();
   const beamClass =
     'pointer-events-none absolute z-10 h-px w-[35%] bg-gradient-to-r from-transparent via-accent-text to-transparent';
+
+  if (isMobile) return null;
 
   if (reduceMotion) {
     return (

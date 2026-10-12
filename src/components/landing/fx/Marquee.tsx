@@ -5,6 +5,7 @@ import {
   useMotionValue,
   useReducedMotion,
 } from 'motion/react';
+import { useIsMobileLanding } from '@/components/landing/fx/useIsMobileLanding';
 
 type MarqueeProps = {
   children: ReactNode;
@@ -20,8 +21,9 @@ export function Marquee({
   className = '',
 }: MarqueeProps) {
   const reduceMotion = useReducedMotion();
+  const isMobile = useIsMobileLanding();
 
-  if (reduceMotion) {
+  if (reduceMotion || isMobile) {
     return (
       <div className={`flex flex-wrap justify-center gap-3 ${className}`}>
         {children}

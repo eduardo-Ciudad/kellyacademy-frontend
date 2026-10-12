@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { motion, useReducedMotion } from 'motion/react';
+import { useIsMobileLanding } from '@/components/landing/fx/useIsMobileLanding';
 
 type TextShimmerProps = {
   children: ReactNode;
@@ -8,8 +9,9 @@ type TextShimmerProps = {
 
 export function TextShimmer({ children, className = '' }: TextShimmerProps) {
   const reduceMotion = useReducedMotion();
+  const isMobile = useIsMobileLanding();
 
-  if (reduceMotion) {
+  if (reduceMotion || isMobile) {
     return <span className={`text-text-2 ${className}`}>{children}</span>;
   }
 

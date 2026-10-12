@@ -9,6 +9,7 @@ import { JuliaAvatar } from '@/components/landing/JuliaAvatar';
 import { TEMA_POSSIVEL_DESTAQUE } from '@/components/landing/data/temasEnem';
 import { RevealGroup, RevealItem } from '@/components/landing/fx/Reveal';
 import { DUR, EASE_OUT } from '@/components/landing/fx/motion';
+import { useIsMobileLanding } from '@/components/landing/fx/useIsMobileLanding';
 import { LandingCard } from '@/components/landing/ui/LandingCard';
 import { SectionHeader } from '@/components/landing/ui/SectionHeader';
 import { competencias } from '@/lib/competencias';
@@ -337,6 +338,7 @@ function JuliaCard() {
   const cardRef = useRef<HTMLElement>(null);
   const inView = useInView(cardRef, { once: true, amount: 0.4 });
   const reduceMotion = useReducedMotion();
+  const isMobile = useIsMobileLanding();
   const [messageState, setMessageState] = useState<
     'question' | 'typing' | 'answer'
   >(reduceMotion ? 'answer' : 'question');
@@ -367,7 +369,7 @@ function JuliaCard() {
       className="desk:p-7 flex flex-wrap items-center gap-5 p-6"
     >
       <span className="relative size-[84px] shrink-0">
-        {!reduceMotion ? (
+        {!reduceMotion && !isMobile ? (
           <motion.span
             aria-hidden="true"
             className="bg-accent absolute inset-0 rounded-full opacity-35"

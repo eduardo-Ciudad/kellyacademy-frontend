@@ -8,8 +8,16 @@ import {
 } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { GridBackground } from '@/components/landing/fx/GridBackground';
-import { DUR, EASE_OUT, fadeUp, stagger } from '@/components/landing/fx/motion';
+import {
+  DUR,
+  EASE_OUT,
+  fadeUp,
+  mobileFadeUp,
+  mobileStagger,
+  stagger,
+} from '@/components/landing/fx/motion';
 import { TextShimmer } from '@/components/landing/fx/TextShimmer';
+import { useIsMobileLanding } from '@/components/landing/fx/useIsMobileLanding';
 import { HeroMock } from '@/components/landing/HeroMock';
 
 const headline = 'Descubra onde sua redação perde pontos.';
@@ -31,15 +39,19 @@ const word: Variants = {
   },
 };
 
+const mobileWord: Variants = {
+  hidden: { opacity: 0, y: 8 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: DUR.base, ease: EASE_OUT },
+  },
+};
+
 export function Hero() {
   const reduceMotion = useReducedMotion();
+  const isMobile = useIsMobileLanding();
   const heroRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: heroRef,
-    offset: ['start start', 'end center'],
-  });
-  const mockScale = useTransform(scrollYProgress, [0, 1], [0.96, 1]);
-  const mockRotateX = useTransform(scrollYProgress, [0, 1], [8, 0]);
 
   return (
     <section
@@ -50,12 +62,12 @@ export function Hero() {
       <GridBackground />
       <motion.div
         className="relative mx-auto flex max-w-[1200px] flex-col items-center text-center"
-        variants={stagger}
+        variants={isMobile ? mobileStagger : stagger}
         initial={reduceMotion ? 'visible' : 'hidden'}
         animate="visible"
       >
         <motion.a
-          variants={fadeUp}
+          variants={isMobile ? mobileFadeUp : fadeUp}
           href="#repertorio"
           className="focus-ring border-control bg-surface rounded-pill inline-flex max-w-full items-center gap-2.5 border py-[7px] pr-3.5 pl-2 text-sm font-medium"
         >
@@ -89,7 +101,9 @@ export function Hero() {
             {headlineWords.map((headlineWord) => (
               <motion.span
                 key={headlineWord}
-                variants={reduceMotion ? undefined : word}
+                variants={
+                  reduceMotion ? undefined : isMobile ? mobileWord : word
+                }
                 className="mr-[0.22em] inline-block"
               >
                 {headlineWord}
@@ -99,7 +113,9 @@ export function Hero() {
               {accentWords.map((headlineWord, index) => (
                 <motion.span
                   key={headlineWord}
-                  variants={reduceMotion ? undefined : word}
+                  variants={
+                    reduceMotion ? undefined : isMobile ? mobileWord : word
+                  }
                   className={
                     index === 0 ? 'mr-[0.22em] inline-block' : 'inline-block'
                   }
@@ -112,7 +128,7 @@ export function Hero() {
         </motion.h1>
 
         <motion.p
-          variants={fadeUp}
+          variants={isMobile ? mobileFadeUp : fadeUp}
           className="text-text-2 desk:text-xl mt-6 max-w-[640px] text-lg leading-[1.55] text-pretty"
         >
           A Kelly Academy corrige sua redação do ENEM competência por
@@ -121,7 +137,7 @@ export function Hero() {
         </motion.p>
 
         <motion.div
-          variants={fadeUp}
+          variants={isMobile ? mobileFadeUp : fadeUp}
           className="mt-9 flex flex-wrap justify-center gap-3"
         >
           <Link
@@ -152,29 +168,48 @@ export function Hero() {
         </motion.div>
 
         <motion.p
-          variants={fadeUp}
+          variants={isMobile ? mobileFadeUp : fadeUp}
           className="text-text-3 text-small mt-[18px] font-mono"
         >
           3 correções grátis por dia · sem cartão de crédito
         </motion.p>
 
         <motion.div
-          variants={fadeUp}
+          variants={isMobile ? mobileFadeUp : fadeUp}
           className="flex w-full justify-center"
           style={{ perspective: 1200 }}
         >
-          <motion.div
-            className="flex w-full justify-center"
-            style={{
-              scale: reduceMotion ? 1 : mockScale,
-              rotateX: reduceMotion ? 0 : mockRotateX,
-              transformOrigin: 'center top',
-            }}
-          >
-            <HeroMock />
-          </motion.div>
+          {isMobile || reduceMotion ? (
+            <div className="flex w-full justify-center">
+              <HeroMock />
+            </div>
+          ) : (
+            <DesktopHeroMock heroRef={heroRef} />
+          )}
         </motion.div>
       </motion.div>
     </section>
+  );
+}
+
+function DesktopHeroMock({
+  heroRef,
+}: {
+  heroRef: React.RefObject<HTMLElement | null>;
+}) {
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ['start start', 'end center'],
+  });
+  const scale = useTransform(scrollYProgress, [0, 1], [0.96, 1]);
+  const rotateX = useTransform(scrollYProgress, [0, 1], [8, 0]);
+
+  return (
+    <motion.div
+      className="flex w-full justify-center"
+      style={{ scale, rotateX, transformOrigin: 'center top' }}
+    >
+      <HeroMock />
+    </motion.div>
   );
 }

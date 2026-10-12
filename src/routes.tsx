@@ -4,16 +4,42 @@ import { EvolucaoSkeleton } from '@/components/evolucao/EvolucaoSkeleton';
 import { HomeGate } from '@/components/landing/HomeGate';
 import { RepertorioSkeleton } from '@/components/repertorio/RepertorioSkeleton';
 import { AppShell } from '@/components/layout/AppShell';
+import { LazyRoute } from '@/components/routing/LazyRoute';
 import { PublicOnlyRoute, RequireAuth } from '@/lib/auth';
-import { CriarConta } from '@/pages/CriarConta';
-import { Entrar } from '@/pages/Entrar';
-import { Editor } from '@/pages/Editor';
-import { Historico } from '@/pages/Historico';
-import { NotFound } from '@/pages/NotFound';
-import { Resultado } from '@/pages/Resultado';
-import { Temas } from '@/pages/Temas';
-import { TemasPossiveis } from '@/pages/TemasPossiveis';
-import { Transcricao } from '@/pages/Transcricao';
+
+const CriarConta = lazy(() =>
+  import('@/pages/CriarConta').then((module) => ({
+    default: module.CriarConta,
+  })),
+);
+const Entrar = lazy(() =>
+  import('@/pages/Entrar').then((module) => ({ default: module.Entrar })),
+);
+const Editor = lazy(() =>
+  import('@/pages/Editor').then((module) => ({ default: module.Editor })),
+);
+const Historico = lazy(() =>
+  import('@/pages/Historico').then((module) => ({ default: module.Historico })),
+);
+const NotFound = lazy(() =>
+  import('@/pages/NotFound').then((module) => ({ default: module.NotFound })),
+);
+const Resultado = lazy(() =>
+  import('@/pages/Resultado').then((module) => ({ default: module.Resultado })),
+);
+const Temas = lazy(() =>
+  import('@/pages/Temas').then((module) => ({ default: module.Temas })),
+);
+const TemasPossiveis = lazy(() =>
+  import('@/pages/TemasPossiveis').then((module) => ({
+    default: module.TemasPossiveis,
+  })),
+);
+const Transcricao = lazy(() =>
+  import('@/pages/Transcricao').then((module) => ({
+    default: module.Transcricao,
+  })),
+);
 
 const Evolucao = lazy(() =>
   import('@/pages/Evolucao').then((module) => ({ default: module.Evolucao })),
@@ -28,13 +54,36 @@ export const router = createBrowserRouter([
   {
     path: '/',
     element: <HomeGate />,
-    children: [{ index: true, element: <Historico /> }],
+    children: [
+      {
+        index: true,
+        element: (
+          <LazyRoute>
+            <Historico />
+          </LazyRoute>
+        ),
+      },
+    ],
   },
   {
     element: <PublicOnlyRoute />,
     children: [
-      { path: '/entrar', element: <Entrar /> },
-      { path: '/criar-conta', element: <CriarConta /> },
+      {
+        path: '/entrar',
+        element: (
+          <LazyRoute>
+            <Entrar />
+          </LazyRoute>
+        ),
+      },
+      {
+        path: '/criar-conta',
+        element: (
+          <LazyRoute>
+            <CriarConta />
+          </LazyRoute>
+        ),
+      },
     ],
   },
   {
@@ -45,11 +94,19 @@ export const router = createBrowserRouter([
         children: [
           {
             path: '/temas',
-            element: <Temas />,
+            element: (
+              <LazyRoute>
+                <Temas />
+              </LazyRoute>
+            ),
           },
           {
             path: '/temas/possiveis',
-            element: <TemasPossiveis />,
+            element: (
+              <LazyRoute>
+                <TemasPossiveis />
+              </LazyRoute>
+            ),
           },
           {
             path: '/repertorio/:codigo?',
@@ -69,19 +126,38 @@ export const router = createBrowserRouter([
           },
           {
             path: '/redacoes/:id',
-            element: <Resultado />,
+            element: (
+              <LazyRoute>
+                <Resultado />
+              </LazyRoute>
+            ),
           },
         ],
       },
       {
         path: '/temas/:temaId/escrever',
-        element: <Editor />,
+        element: (
+          <LazyRoute>
+            <Editor />
+          </LazyRoute>
+        ),
       },
       {
         path: '/temas/:temaId/foto',
-        element: <Transcricao />,
+        element: (
+          <LazyRoute>
+            <Transcricao />
+          </LazyRoute>
+        ),
       },
     ],
   },
-  { path: '*', element: <NotFound /> },
+  {
+    path: '*',
+    element: (
+      <LazyRoute>
+        <NotFound />
+      </LazyRoute>
+    ),
+  },
 ]);
