@@ -6,6 +6,7 @@
 
 @theme {
   --font-sans: 'Figtree', sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, monospace;
 
   --color-bg: #18191a;
   --color-surface: #242526;
@@ -62,6 +63,12 @@
     color-scheme: dark;
     font-family: var(--font-sans);
     background: var(--color-bg);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
   }
 
   body {
