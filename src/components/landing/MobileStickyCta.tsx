@@ -12,7 +12,7 @@ export function MobileStickyCta({ suppressed = false }: MobileStickyCtaProps) {
   const reduceMotion = useReducedMotion();
   const [visible, setVisible] = useState(false);
   const heroButtonVisible = useRef(true);
-  const finalCtaReached = useRef(false);
+  const finalCtaPassed = useRef(false);
 
   useEffect(() => {
     if (!isMobile) {
@@ -28,10 +28,11 @@ export function MobileStickyCta({ suppressed = false }: MobileStickyCtaProps) {
       entries.forEach((entry) => {
         if (entry.target === heroButton)
           heroButtonVisible.current = entry.isIntersecting;
-        if (entry.target === finalCta && entry.isIntersecting)
-          finalCtaReached.current = true;
+        if (entry.target === finalCta)
+          finalCtaPassed.current =
+            entry.isIntersecting || entry.boundingClientRect.top < 0;
       });
-      setVisible(!heroButtonVisible.current && !finalCtaReached.current);
+      setVisible(!heroButtonVisible.current && !finalCtaPassed.current);
     });
 
     observer.observe(heroButton);

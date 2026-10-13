@@ -34,6 +34,8 @@ import {
   RevealItem,
 } from '@/components/landing/fx/Reveal';
 import { TextShimmer } from '@/components/landing/fx/TextShimmer';
+import { useIsMobileLanding } from '@/components/landing/fx/useIsMobileLanding';
+import { RepertorioMobile } from '@/components/landing/RepertorioMobile';
 import { LandingCard } from '@/components/landing/ui/LandingCard';
 import { SectionHeader } from '@/components/landing/ui/SectionHeader';
 import { useRovingTabs } from '@/components/landing/useRovingTabs';
@@ -55,7 +57,21 @@ const TYPE_STYLES: Record<
   CULTURAL_WORK: { text: 'text-c5', background: 'bg-c5-bg' },
 };
 
-export function RepertorioSection() {
+export function RepertorioSection({
+  onMobileSheetOpenChange,
+}: {
+  onMobileSheetOpenChange?: (open: boolean) => void;
+}) {
+  const isMobile = useIsMobileLanding();
+
+  return isMobile ? (
+    <RepertorioMobile onSheetOpenChange={onMobileSheetOpenChange} />
+  ) : (
+    <RepertorioDesktop />
+  );
+}
+
+function RepertorioDesktop() {
   return (
     <section
       id="repertorio"

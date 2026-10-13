@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { ComoFunciona } from '@/components/landing/ComoFunciona';
 import { Competencias } from '@/components/landing/Competencias';
 import { CtaFinal } from '@/components/landing/CtaFinal';
@@ -13,6 +13,9 @@ import { Recursos } from '@/components/landing/Recursos';
 import { TemasMarquee } from '@/components/landing/TemasMarquee';
 
 export default function Landing() {
+  const [mobileRepertorioSheetOpen, setMobileRepertorioSheetOpen] =
+    useState(false);
+
   useEffect(() => {
     const previousTitle = document.title;
     document.title = 'Kelly Academy — Correção de redação do ENEM com IA';
@@ -27,7 +30,9 @@ export default function Landing() {
       <main className="desk:pb-0 pb-[calc(78px+env(safe-area-inset-bottom))]">
         <Hero />
         <TemasMarquee />
-        <RepertorioSection />
+        <RepertorioSection
+          onMobileSheetOpenChange={setMobileRepertorioSheetOpen}
+        />
         <ComoFunciona />
         <Recursos />
         <Competencias />
@@ -36,7 +41,7 @@ export default function Landing() {
         <CtaFinal />
       </main>
       <LandingFooter />
-      <MobileStickyCta />
+      <MobileStickyCta suppressed={mobileRepertorioSheetOpen} />
     </div>
   );
 }
