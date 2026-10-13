@@ -16,25 +16,23 @@ const steps = [
     number: '01',
     title: 'Diagnóstico',
     description:
-      'Escreva ou envie a foto da redação. A Kelly corrige nas cinco competências e encontra seu ponto mais fraco.',
+      'Escreva ou fotografe a redação. A Kelly acha seu ponto mais fraco.',
   },
   {
     number: '02',
     title: 'Estudo',
     description:
-      'Repertório e explicações focados na competência que mais tira pontos de você.',
+      'Repertório e explicações focados na competência que mais tira pontos.',
   },
   {
     number: '03',
     title: 'Prática',
-    description:
-      'Treine com temas de edições anteriores e possíveis temas de 2026.',
+    description: 'Temas de edições anteriores e possíveis temas de 2026.',
   },
   {
     number: '04',
     title: 'Nova avaliação',
-    description:
-      'Escreva de novo e compare. A evolução de cada competência fica registrada.',
+    description: 'Escreva de novo e compare a evolução de cada competência.',
   },
 ] as const;
 
@@ -54,8 +52,7 @@ export function ComoFunciona() {
       <div className="mx-auto max-w-[1200px]">
         <SectionHeader
           eyebrow="Como funciona"
-          title="Um ciclo de treino que aprende com cada redação."
-          description="Você não precisa de mais redações corrigidas. Precisa saber o que mudar entre uma e outra."
+          title="Um ciclo que aprende com cada redação."
           className="max-w-[720px]"
         />
 

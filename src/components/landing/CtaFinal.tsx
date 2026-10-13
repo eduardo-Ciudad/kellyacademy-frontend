@@ -13,8 +13,7 @@ export function CtaFinal() {
               Sua próxima redação pode ser a melhor.
             </h2>
             <p className="text-lead mx-auto mt-5 max-w-[520px] text-[#e6efff]">
-              Envie hoje e descubra em minutos o que separa você da nota que
-              quer.
+              Descubra em minutos o que separa você da nota que quer.
             </p>
             <Link
               to="/criar-conta"

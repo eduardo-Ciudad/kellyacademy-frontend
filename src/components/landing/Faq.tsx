@@ -8,22 +8,22 @@ const faqs = [
   {
     question: 'A correção substitui um professor?',
     answer:
-      'Não. A Kelly é um treino: ela te dá retorno imediato e consistente entre uma redação e outra. A correção é uma estimativa feita por IA e pode diferir da nota de um corretor humano.',
+      'Não. A Kelly é um treino: retorno imediato e consistente entre uma redação e outra. A nota é uma estimativa feita por IA e pode diferir da de um corretor humano.',
   },
   {
     question: 'Como a nota é calculada?',
     answer:
-      'Seguindo as cinco competências do ENEM, cada uma de 0 a 200 pontos. A nota final é a soma das cinco, e cada ponto perdido vem com o trecho e a explicação.',
+      'Pelas cinco competências do ENEM, de 0 a 200 cada. Cada ponto perdido vem com o trecho e a explicação.',
   },
   {
     question: 'Posso enviar uma redação escrita à mão?',
     answer:
-      'Sim. Tire uma foto da folha e a Kelly transcreve o texto. Você revisa a transcrição antes de mandar para a correção.',
+      'Sim. Tire uma foto e a Kelly transcreve; você revisa antes de corrigir.',
   },
   {
     question: 'Quantas correções posso fazer por dia?',
     answer:
-      'No plano grátis, 3 correções por dia. O plano Pro, com mais correções, chega em breve.',
+      'No plano grátis, 3 por dia. O Pro, com mais correções, chega em breve.',
   },
 ] as const;
 

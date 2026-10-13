@@ -76,7 +76,7 @@ export function RepertorioSection() {
               decorar.
             </>
           }
-          description="Pensadores, artigos da Constituição, dados oficiais e obras culturais — curados por eixo temático, com a ideia central, como encaixar no argumento e o erro que derruba a sua C2."
+          description="Pensadores, leis, dados e obras curados por eixo do ENEM — com a ideia central e o erro que derruba sua C2."
           align="center"
           eyebrowVariant="pill"
           className="mx-auto max-w-[900px]"
@@ -146,7 +146,7 @@ export function RepertorioSection() {
             to="/criar-conta"
             className="focus-ring bg-accent hover:bg-accent-hover rounded-pill text-body inline-flex min-h-14 items-center gap-2.5 px-7 font-semibold text-white transition hover:-translate-y-px active:translate-y-0 motion-reduce:transition-none"
           >
-            Explorar o repertório
+            Explorar os 63 repertórios
             <ArrowRight size={18} strokeWidth={2.2} aria-hidden="true" />
           </Link>
         </div>

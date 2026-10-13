@@ -75,7 +75,7 @@ export function Hero() {
             NOVO
           </span>
           <TextShimmer className="truncate">
-            Repertório curado por eixo temático do ENEM
+            Repertório por eixo do ENEM
           </TextShimmer>
           <svg
             width="14"
@@ -131,9 +131,8 @@ export function Hero() {
           variants={isMobile ? mobileFadeUp : fadeUp}
           className="text-text-2 desk:text-xl mt-6 max-w-[640px] text-lg leading-[1.55] text-pretty"
         >
-          A Kelly Academy corrige sua redação do ENEM competência por
-          competência, mostra o trecho exato que segurou a nota e diz o que
-          treinar para subir na próxima.
+          Correção competência por competência, com o trecho exato que segurou
+          sua nota e o que treinar a seguir.
         </motion.p>
 
         <motion.div
@@ -144,7 +143,7 @@ export function Hero() {
             to="/criar-conta"
             className="focus-ring bg-accent hover:bg-accent-hover rounded-pill text-body inline-flex min-h-14 items-center gap-2.5 px-7 font-semibold text-white transition hover:-translate-y-px active:translate-y-0 motion-reduce:transition-none"
           >
-            Corrigir minha redação
+            Corrigir minha redação grátis
             <svg
               width="18"
               height="18"
@@ -171,7 +170,7 @@ export function Hero() {
           variants={isMobile ? mobileFadeUp : fadeUp}
           className="text-text-3 text-small mt-[18px] font-mono"
         >
-          3 correções grátis por dia · sem cartão de crédito
+          3 correções grátis por dia · sem cartão
         </motion.p>
 
         <motion.div

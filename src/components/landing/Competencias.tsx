@@ -31,7 +31,7 @@ export function Competencias() {
           <SectionHeader
             eyebrow="As 5 competências"
             title="A mesma régua do ENEM."
-            description="Cada competência vale até 200 pontos. A Kelly avalia as cinco separadamente, para você saber exatamente onde focar."
+            description="Até 200 pontos cada. Escolha uma para ver o que a Kelly avalia."
             className="mb-7"
           />
 

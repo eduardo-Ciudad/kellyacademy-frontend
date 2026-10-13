@@ -17,12 +17,12 @@ import { competencias } from '@/lib/competencias';
 const comments = [
   {
     code: 'C1',
-    excerpt: 'as salas de cinema se concentra',
+    excerpt: 'se concentra',
     tip: 'Concordância: “se concentram”.',
   },
   {
     code: 'C3',
-    excerpt: 'existem outros motivos também',
+    excerpt: 'outros motivos também',
     tip: 'Argumento anunciado, mas não desenvolvido.',
   },
   {
@@ -59,7 +59,7 @@ export function Recursos() {
       <div className="mx-auto max-w-[1200px]">
         <SectionHeader
           eyebrow="Recursos"
-          title="Tudo o que a redação pede, num lugar só."
+          title="Tudo o que a redação pede."
           description="Da folha escrita à mão até o repertório certo para o tema — sem trocar de aplicativo."
           layout="split"
         />
@@ -92,8 +92,7 @@ function CorrectionCard() {
       <div className="max-w-[460px]">
         <h3 className="text-text text-h3">Correção por competência</h3>
         <p className="text-text-2 text-body mt-2.5">
-          Nota de 0 a 200 em cada uma das cinco competências, com o trecho
-          marcado e a explicação do que faltou.
+          Nota de 0 a 200 em cada uma, com o trecho marcado.
         </p>
       </div>
       <div className="mt-auto flex flex-col gap-2.5">
@@ -150,8 +149,7 @@ function PhotoCard() {
       <div>
         <h3 className="text-text text-h3">Foto da redação</h3>
         <p className="text-text-2 text-body mt-2.5">
-          Escreveu à mão, como no dia da prova? Tire uma foto e a Kelly
-          transcreve para corrigir.
+          Escreveu à mão? Tire uma foto e a Kelly transcreve.
         </p>
       </div>
       <div
@@ -383,11 +381,9 @@ function JuliaCard() {
       </span>
 
       <div className="min-w-[260px] flex-1 basis-[360px]">
-        <h3 className="text-text text-h3">Conheça a Julia, sua assistente.</h3>
+        <h3 className="text-text text-h3">Julia, sua assistente</h3>
         <p className="text-text-body text-body mt-2.5 max-w-[620px]">
-          Ficou com dúvida sobre a correção? A Julia explica, em linguagem
-          simples, por que uma competência perdeu pontos e como o sistema
-          funciona.
+          Explica, em linguagem simples, por que uma competência perdeu pontos.
         </p>
       </div>
 

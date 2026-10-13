@@ -148,17 +148,16 @@ export const REPERTORIO_PILARES = [
   {
     titulo: 'Organizado por eixo e problema',
     descricao:
-      'Do macroeixo ao problema social: você encontra o repertório pelo assunto do tema, não pelo nome que já precisa saber.',
+      'Encontre pelo assunto do tema, não pelo nome que você já precisa saber.',
   },
   {
     titulo: 'Com o erro comum de cada um',
-    descricao:
-      'Cada ficha mostra como o repertório costuma ser mal usado — o que separa um repertório produtivo de uma citação decorada.',
+    descricao: 'O que separa um repertório produtivo de uma citação decorada.',
   },
   {
     titulo: 'Ligado ao seu tema',
     descricao:
-      'Ao escolher um tema, a Kelly sugere os repertórios do eixo certo para você treinar.',
+      'Ao escolher um tema, a Kelly sugere os repertórios do eixo certo.',
     emBreve: true,
   },
 ] as const;

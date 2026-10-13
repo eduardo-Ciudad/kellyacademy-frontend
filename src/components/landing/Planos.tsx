@@ -26,7 +26,7 @@ export function Planos() {
       <div className="mx-auto max-w-[1000px]">
         <SectionHeader
           eyebrow="Planos"
-          title="Comece de graça. Evolua quando quiser."
+          title="Comece de graça."
           align="center"
           className="max-w-[640px]"
         />

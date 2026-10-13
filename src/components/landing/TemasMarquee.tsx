@@ -10,7 +10,7 @@ export function TemasMarquee() {
     <section aria-label="Temas" className="overflow-hidden pt-14 pb-6">
       <Reveal>
         <p className="text-text-3 text-eyebrow mx-auto mb-[22px] max-w-[760px] px-5 text-center font-mono uppercase sm:px-6">
-          TREINE COM TEMAS DE EDIÇÕES ANTERIORES E POSSÍVEIS TEMAS DO ENEM 2026
+          TREINE COM TEMAS REAIS DO ENEM
         </p>
         <div
           className="flex flex-col gap-3"
