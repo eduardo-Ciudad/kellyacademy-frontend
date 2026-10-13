@@ -75,14 +75,18 @@ export function LandingNav() {
     >
       <nav
         aria-label="Principal"
-        className="mx-auto flex min-h-[72px] max-w-[1200px] items-center justify-between gap-4 px-5 sm:px-6"
+        className="desk:min-h-[72px] desk:px-6 mx-auto flex min-h-[60px] max-w-[1200px] items-center justify-between gap-4 px-4"
       >
         <a
           href="#topo"
           aria-label="Kelly Academy — início"
           className="focus-ring rounded-inner shrink-0"
         >
-          <img src={logo} alt="Kelly Academy" className="h-10 w-auto" />
+          <img
+            src={logo}
+            alt="Kelly Academy"
+            className="desk:h-10 h-[34px] w-auto"
+          />
         </a>
 
         <div className="desk:flex hidden items-center gap-1">
@@ -117,13 +121,13 @@ export function LandingNav() {
         <div className="flex shrink-0 items-center gap-2 sm:gap-4">
           <Link
             to="/entrar"
-            className="focus-ring text-text-2 hover:text-text hidden rounded-md px-1 py-2 text-sm font-semibold transition-colors motion-reduce:transition-none sm:inline-flex"
+            className="focus-ring text-text hover:text-text desk:text-text-2 desk:text-sm inline-flex min-h-11 items-center rounded-md px-1 text-[15px] font-semibold transition-colors motion-reduce:transition-none"
           >
             Entrar
           </Link>
           <Link
             to="/criar-conta"
-            className="focus-ring bg-accent hover:bg-accent-hover rounded-pill inline-flex min-h-11 items-center px-4 text-sm font-semibold text-white transition-colors motion-reduce:transition-none sm:px-5"
+            className="focus-ring bg-accent hover:bg-accent-hover rounded-pill desk:inline-flex hidden min-h-11 items-center px-5 text-sm font-semibold text-white transition-colors motion-reduce:transition-none"
           >
             Começar grátis
           </Link>

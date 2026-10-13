@@ -19,6 +19,7 @@ import {
 import { TextShimmer } from '@/components/landing/fx/TextShimmer';
 import { useIsMobileLanding } from '@/components/landing/fx/useIsMobileLanding';
 import { HeroMock } from '@/components/landing/HeroMock';
+import { HeroResultadoCompacto } from '@/components/landing/HeroResultadoCompacto';
 
 const headline = 'Descubra onde sua redação perde pontos.';
 const headlineWords = ['Descubra', 'onde', 'sua', 'redação'] as const;
@@ -57,11 +58,11 @@ export function Hero() {
     <section
       ref={heroRef}
       id="topo"
-      className="relative scroll-mt-20 px-5 pt-20 pb-10 sm:px-6 sm:pt-24"
+      className="desk:px-6 desk:pt-24 relative scroll-mt-20 px-4 pt-5 pb-10"
     >
       <GridBackground />
       <motion.div
-        className="relative mx-auto flex max-w-[1200px] flex-col items-center text-center"
+        className="desk:items-center desk:text-center relative mx-auto flex max-w-[1200px] flex-col items-start text-left"
         variants={isMobile ? mobileStagger : stagger}
         initial={reduceMotion ? 'visible' : 'hidden'}
         animate="visible"
@@ -95,7 +96,7 @@ export function Hero() {
         <motion.h1
           aria-label={headline}
           variants={wordStagger}
-          className="text-text text-display mt-7 max-w-[920px] text-balance"
+          className="text-text desk:mt-7 desk:text-display mt-[22px] max-w-[920px] text-[40px] leading-[1.04] font-bold tracking-[-0.035em] text-balance"
         >
           <span aria-hidden="true">
             {headlineWords.map((headlineWord) => (
@@ -129,7 +130,7 @@ export function Hero() {
 
         <motion.p
           variants={isMobile ? mobileFadeUp : fadeUp}
-          className="text-text-2 desk:text-xl mt-6 max-w-[640px] text-lg leading-[1.55] text-pretty"
+          className="text-text-2 desk:mt-6 desk:text-xl mt-4 max-w-[640px] text-[16.5px] leading-[1.55] text-pretty"
         >
           Correção competência por competência, com o trecho exato que segurou
           sua nota e o que treinar a seguir.
@@ -137,11 +138,12 @@ export function Hero() {
 
         <motion.div
           variants={isMobile ? mobileFadeUp : fadeUp}
-          className="mt-9 flex flex-wrap justify-center gap-3"
+          className="desk:mt-9 desk:w-auto mt-6 flex w-full flex-wrap justify-center gap-3"
         >
           <Link
             to="/criar-conta"
-            className="focus-ring bg-accent hover:bg-accent-hover rounded-pill text-body inline-flex min-h-14 items-center gap-2.5 px-7 font-semibold text-white transition hover:-translate-y-px active:translate-y-0 motion-reduce:transition-none"
+            id="hero-primary-cta"
+            className="focus-ring bg-accent hover:bg-accent-hover rounded-pill desk:min-h-14 desk:w-auto desk:text-body inline-flex h-[54px] w-full items-center justify-center gap-2.5 px-7 text-[16.5px] font-semibold text-white transition hover:-translate-y-px active:translate-y-0 motion-reduce:transition-none"
           >
             Corrigir minha redação grátis
             <svg
@@ -160,7 +162,7 @@ export function Hero() {
           </Link>
           <a
             href="#como-funciona"
-            className="focus-ring border-control text-text hover:bg-surface-2 rounded-pill text-body inline-flex min-h-14 items-center border px-[26px] font-semibold transition hover:-translate-y-px active:translate-y-0 motion-reduce:transition-none"
+            className="focus-ring border-control text-text hover:bg-surface-2 rounded-pill text-body desk:inline-flex hidden min-h-14 items-center border px-[26px] font-semibold transition hover:-translate-y-px active:translate-y-0 motion-reduce:transition-none"
           >
             Ver como funciona
           </a>
@@ -168,7 +170,7 @@ export function Hero() {
 
         <motion.p
           variants={isMobile ? mobileFadeUp : fadeUp}
-          className="text-text-3 text-small mt-[18px] font-mono"
+          className="text-text-3 desk:mt-[18px] desk:w-auto desk:text-small mt-3 w-full text-center font-mono text-xs"
         >
           3 correções grátis por dia · sem cartão
         </motion.p>
@@ -176,9 +178,11 @@ export function Hero() {
         <motion.div
           variants={isMobile ? mobileFadeUp : fadeUp}
           className="flex w-full justify-center"
-          style={{ perspective: 1200 }}
+          style={isMobile ? undefined : { perspective: 1200 }}
         >
-          {isMobile || reduceMotion ? (
+          {isMobile ? (
+            <HeroResultadoCompacto />
+          ) : reduceMotion ? (
             <div className="flex w-full justify-center">
               <HeroMock />
             </div>

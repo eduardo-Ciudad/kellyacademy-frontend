@@ -9,11 +9,16 @@ export function TemasMarquee() {
   return (
     <section aria-label="Temas" className="overflow-hidden pt-14 pb-6">
       <Reveal>
-        <p className="text-text-3 text-eyebrow mx-auto mb-[22px] max-w-[760px] px-5 text-center font-mono uppercase sm:px-6">
+        <p className="text-text-3 text-eyebrow desk:px-6 desk:text-center mx-auto mb-[22px] max-w-[760px] px-4 text-left font-mono uppercase">
           TREINE COM TEMAS REAIS DO ENEM
         </p>
+        <div className="no-scrollbar desk:hidden flex snap-x snap-mandatory scroll-px-4 gap-2.5 overflow-x-auto px-4">
+          {temasEnem.map((tema) => (
+            <ThemeCard key={tema.ano} {...tema} />
+          ))}
+        </div>
         <div
-          className="flex flex-col gap-3"
+          className="desk:flex hidden flex-col gap-3"
           style={{
             maskImage:
               'linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent)',
@@ -34,6 +39,17 @@ export function TemasMarquee() {
         </div>
       </Reveal>
     </section>
+  );
+}
+
+function ThemeCard({ ano, nome }: (typeof temasEnem)[number]) {
+  return (
+    <article className="border-border-subtle bg-surface rounded-inner flex w-[236px] shrink-0 snap-start flex-col gap-2 border p-3.5">
+      <span className="text-accent-text font-mono text-xs">ENEM {ano}</span>
+      <span className="text-text line-clamp-3 text-[15px] leading-[1.35] font-semibold">
+        {nome}
+      </span>
+    </article>
   );
 }
 

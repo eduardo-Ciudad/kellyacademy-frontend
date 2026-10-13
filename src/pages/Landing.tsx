@@ -6,6 +6,7 @@ import { Faq } from '@/components/landing/Faq';
 import { Hero } from '@/components/landing/Hero';
 import { LandingFooter } from '@/components/landing/LandingFooter';
 import { LandingNav } from '@/components/landing/LandingNav';
+import { MobileStickyCta } from '@/components/landing/MobileStickyCta';
 import { Planos } from '@/components/landing/Planos';
 import { RepertorioSection } from '@/components/landing/RepertorioSection';
 import { Recursos } from '@/components/landing/Recursos';
@@ -23,7 +24,7 @@ export default function Landing() {
   return (
     <div className="bg-bg text-text min-h-screen overflow-x-clip font-sans">
       <LandingNav />
-      <main>
+      <main className="desk:pb-0 pb-[calc(78px+env(safe-area-inset-bottom))]">
         <Hero />
         <TemasMarquee />
         <RepertorioSection />
@@ -35,6 +36,7 @@ export default function Landing() {
         <CtaFinal />
       </main>
       <LandingFooter />
+      <MobileStickyCta />
     </div>
   );
 }
