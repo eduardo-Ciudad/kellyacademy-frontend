@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom';
 import logo from '@/assets/kelly-logo-escuro.svg';
+import { useIsMobileLanding } from '@/components/landing/fx/useIsMobileLanding';
+import { LandingFooterMobile } from '@/components/landing/LandingFooterMobile';
 
 const productLinks = [
   ['Recursos', '#recursos'],
@@ -8,6 +10,12 @@ const productLinks = [
 ] as const;
 
 export function LandingFooter() {
+  const isMobile = useIsMobileLanding();
+
+  return isMobile ? <LandingFooterMobile /> : <LandingFooterDesktop />;
+}
+
+function LandingFooterDesktop() {
   return (
     <footer className="border-border-subtle border-t px-5 pt-14 pb-10 sm:px-6">
       <div className="mx-auto grid max-w-[1200px] grid-cols-2 gap-10 sm:grid-cols-[minmax(0,2fr)_minmax(0,1fr)_minmax(0,1fr)]">

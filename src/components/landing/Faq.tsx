@@ -1,33 +1,19 @@
 import { useState } from 'react';
 import { motion, useReducedMotion } from 'motion/react';
+import { FAQS } from '@/components/landing/data/faqs';
+import { FaqMobile } from '@/components/landing/FaqMobile';
 import { DUR, EASE_OUT } from '@/components/landing/fx/motion';
 import { RevealGroup, RevealItem } from '@/components/landing/fx/Reveal';
+import { useIsMobileLanding } from '@/components/landing/fx/useIsMobileLanding';
 import { SectionHeader } from '@/components/landing/ui/SectionHeader';
 
-const faqs = [
-  {
-    question: 'A correção substitui um professor?',
-    answer:
-      'Não. A Kelly é um treino: retorno imediato e consistente entre uma redação e outra. A nota é uma estimativa feita por IA e pode diferir da de um corretor humano.',
-  },
-  {
-    question: 'Como a nota é calculada?',
-    answer:
-      'Pelas cinco competências do ENEM, de 0 a 200 cada. Cada ponto perdido vem com o trecho e a explicação.',
-  },
-  {
-    question: 'Posso enviar uma redação escrita à mão?',
-    answer:
-      'Sim. Tire uma foto e a Kelly transcreve; você revisa antes de corrigir.',
-  },
-  {
-    question: 'Quantas correções posso fazer por dia?',
-    answer:
-      'No plano grátis, 3 por dia. O Pro, com mais correções, chega em breve.',
-  },
-] as const;
-
 export function Faq() {
+  const isMobile = useIsMobileLanding();
+
+  return isMobile ? <FaqMobile /> : <FaqDesktop />;
+}
+
+function FaqDesktop() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
   const reduceMotion = useReducedMotion();
 
@@ -40,7 +26,7 @@ export function Faq() {
           className="mb-9"
         />
         <RevealGroup className="flex flex-col gap-2.5">
-          {faqs.map((faq, index) => {
+          {FAQS.map((faq, index) => {
             const open = openIndex === index;
             const contentId = `faq-content-${index}`;
             const buttonId = `faq-button-${index}`;

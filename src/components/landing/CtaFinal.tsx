@@ -1,8 +1,16 @@
 import { Link } from 'react-router-dom';
+import { CtaFinalMobile } from '@/components/landing/CtaFinalMobile';
 import { GridBackground } from '@/components/landing/fx/GridBackground';
 import { Reveal } from '@/components/landing/fx/Reveal';
+import { useIsMobileLanding } from '@/components/landing/fx/useIsMobileLanding';
 
 export function CtaFinal() {
+  const isMobile = useIsMobileLanding();
+
+  return isMobile ? <CtaFinalMobile /> : <CtaFinalDesktop />;
+}
+
+function CtaFinalDesktop() {
   return (
     <section id="comecar" className="scroll-mt-20 px-5 py-[120px] sm:px-6">
       <Reveal className="mx-auto max-w-[1200px]">

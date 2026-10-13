@@ -1,7 +1,9 @@
 import { Check } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { PlanosMobile } from '@/components/landing/PlanosMobile';
 import { BorderBeam } from '@/components/landing/fx/BorderBeam';
 import { RevealGroup, RevealItem } from '@/components/landing/fx/Reveal';
+import { useIsMobileLanding } from '@/components/landing/fx/useIsMobileLanding';
 import { LandingCard } from '@/components/landing/ui/LandingCard';
 import { SectionHeader } from '@/components/landing/ui/SectionHeader';
 
@@ -21,6 +23,12 @@ const proFeatures = [
 ] as const;
 
 export function Planos() {
+  const isMobile = useIsMobileLanding();
+
+  return isMobile ? <PlanosMobile /> : <PlanosDesktop />;
+}
+
+function PlanosDesktop() {
   return (
     <section id="planos" className="scroll-mt-20 px-5 pt-[120px] pb-10 sm:px-6">
       <div className="mx-auto max-w-[1000px]">

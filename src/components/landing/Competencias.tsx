@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { competenciasLanding } from '@/components/landing/data/competenciasLanding';
+import { CompetenciasMobile } from '@/components/landing/CompetenciasMobile';
 import { BorderBeam } from '@/components/landing/fx/BorderBeam';
 import { DUR, EASE_OUT } from '@/components/landing/fx/motion';
 import { Reveal } from '@/components/landing/fx/Reveal';
+import { useIsMobileLanding } from '@/components/landing/fx/useIsMobileLanding';
 import { SectionHeader } from '@/components/landing/ui/SectionHeader';
 import { useRovingTabs } from '@/components/landing/useRovingTabs';
 import { competencias } from '@/lib/competencias';
@@ -13,6 +15,12 @@ const landingByCode = new Map(
 );
 
 export function Competencias() {
+  const isMobile = useIsMobileLanding();
+
+  return isMobile ? <CompetenciasMobile /> : <CompetenciasDesktop />;
+}
+
+function CompetenciasDesktop() {
   const [activeIndex, setActiveIndex] = useState(2);
   const { tabRefs, onKeyDown } = useRovingTabs({
     count: competencias.length,
