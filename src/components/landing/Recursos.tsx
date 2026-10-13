@@ -6,6 +6,7 @@ import {
   useReducedMotion,
 } from 'motion/react';
 import { JuliaAvatar } from '@/components/landing/JuliaAvatar';
+import { RecursosMobile } from '@/components/landing/RecursosMobile';
 import { TEMA_POSSIVEL_DESTAQUE } from '@/components/landing/data/temasEnem';
 import { RevealGroup, RevealItem } from '@/components/landing/fx/Reveal';
 import { DUR, EASE_OUT } from '@/components/landing/fx/motion';
@@ -51,6 +52,12 @@ const chartPoints = [
 ] as const;
 
 export function Recursos() {
+  const isMobile = useIsMobileLanding();
+
+  return isMobile ? <RecursosMobile /> : <RecursosDesktop />;
+}
+
+function RecursosDesktop() {
   return (
     <section
       id="recursos"

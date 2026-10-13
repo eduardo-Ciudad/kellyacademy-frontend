@@ -6,37 +6,21 @@ import {
   useScroll,
   type MotionValue,
 } from 'motion/react';
+import { COMO_FUNCIONA_STEPS } from '@/components/landing/data/comoFunciona';
 import { DUR, EASE_OUT } from '@/components/landing/fx/motion';
+import { useIsMobileLanding } from '@/components/landing/fx/useIsMobileLanding';
 import { RevealGroup, RevealItem } from '@/components/landing/fx/Reveal';
+import { ComoFuncionaMobile } from '@/components/landing/ComoFuncionaMobile';
 import { LandingCard } from '@/components/landing/ui/LandingCard';
 import { SectionHeader } from '@/components/landing/ui/SectionHeader';
 
-const steps = [
-  {
-    number: '01',
-    title: 'Diagnóstico',
-    description:
-      'Escreva ou fotografe a redação. A Kelly acha seu ponto mais fraco.',
-  },
-  {
-    number: '02',
-    title: 'Estudo',
-    description:
-      'Repertório e explicações focados na competência que mais tira pontos.',
-  },
-  {
-    number: '03',
-    title: 'Prática',
-    description: 'Temas de edições anteriores e possíveis temas de 2026.',
-  },
-  {
-    number: '04',
-    title: 'Nova avaliação',
-    description: 'Escreva de novo e compare a evolução de cada competência.',
-  },
-] as const;
-
 export function ComoFunciona() {
+  const isMobile = useIsMobileLanding();
+
+  return isMobile ? <ComoFuncionaMobile /> : <ComoFuncionaDesktop />;
+}
+
+function ComoFuncionaDesktop() {
   const flowRef = useRef<HTMLDivElement>(null);
   const reduceMotion = useReducedMotion();
   const { scrollYProgress } = useScroll({
@@ -71,7 +55,7 @@ export function ComoFunciona() {
             as="ol"
             className="desk:grid-cols-4 relative grid list-none grid-cols-1 gap-5 p-0 sm:grid-cols-2"
           >
-            {steps.map((step, index) => (
+            {COMO_FUNCIONA_STEPS.map((step, index) => (
               <RevealItem
                 key={step.number}
                 as="li"
@@ -79,7 +63,7 @@ export function ComoFunciona() {
               >
                 <StepCircle
                   number={step.number}
-                  threshold={index / (steps.length - 1)}
+                  threshold={index / (COMO_FUNCIONA_STEPS.length - 1)}
                   progress={scrollYProgress}
                   reduceMotion={Boolean(reduceMotion)}
                 />
