@@ -1,24 +1,33 @@
 import { Link } from 'react-router-dom';
+import { BrandWatermark } from '@/components/brand/BrandWatermark';
 import { Reveal } from '@/components/landing/fx/Reveal';
 
 export function CtaFinalMobile() {
   return (
-    <section id="comecar" className="scroll-mt-20 px-4 pt-12 pb-0">
-      <Reveal>
-        <div className="bg-accent rounded-card flex flex-col items-center px-[22px] py-8 text-center">
-          <h2 className="text-[30px] leading-[1.08] font-bold tracking-[-0.03em] text-balance text-white">
-            Sua próxima redação pode ser a melhor.
-          </h2>
-          <p className="mt-3 text-[16px] leading-6 text-[#e6efff]">
-            Descubra em minutos o que separa você da nota que quer.
-          </p>
-          <Link
-            to="/criar-conta"
-            className="focus-ring rounded-pill mt-[22px] flex min-h-[54px] w-full items-center justify-center bg-white px-4 text-center text-[16.5px] font-bold text-[#0a3a8c] transition-colors hover:bg-[#f1f6ff] motion-reduce:transition-none"
-          >
-            Corrigir minha primeira redação
-          </Link>
-        </div>
+    <section
+      id="comecar"
+      className="border-surface-2 bg-bg relative scroll-mt-20 overflow-hidden border-t px-4 py-28"
+    >
+      <BrandWatermark
+        width={560}
+        className="right-[-140px] bottom-[-80px]"
+      />
+      <Reveal className="relative z-10 text-center">
+        <h2 className="font-display mx-auto max-w-[440px] text-balance text-[40px] leading-[1.03] font-light tracking-[-0.035em] text-text">
+          Sua próxima redação <span className="text-[#8a8d91]">pode ser a melhor.</span>
+        </h2>
+        <p className="text-text-2 mx-auto mt-[26px] max-w-[480px] text-[18px] leading-relaxed">
+          Descubra em minutos o que separa você da nota que quer.
+        </p>
+        <Link
+          to="/criar-conta"
+          className="focus-ring bg-accent hover:bg-accent-hover rounded-pill mt-[38px] flex h-14 w-full items-center justify-center px-4 text-center text-base font-semibold text-white transition-colors motion-reduce:transition-none"
+        >
+          Corrigir minha primeira redação →
+        </Link>
+        <p className="font-mono text-text-3 mt-[18px] text-xs">
+          3 correções por dia · sem cartão
+        </p>
       </Reveal>
     </section>
   );
