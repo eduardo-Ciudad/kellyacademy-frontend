@@ -14,6 +14,56 @@ import {
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 ScrollTrigger.config({ ignoreMobileResize: true });
 
+const PAPER_TRAVEL = 680;
+const PAPER_WIDTH = 520;
+const PANEL_CLEARANCE = 24;
+const PANEL_EXIT_DURATION = 0.04;
+const PANEL_ENTER_DURATION = 0.05;
+const GEOMETRY_SAMPLES = 1000;
+
+type PanelTiming = { enter: number; exit: number };
+
+function calculatePanelTimings(): PanelTiming[] {
+  const paperEase = gsap.parseEase('sine.inOut');
+  const safeRanges = redacaoSteps.map((step) => {
+    const panelRight = step.panelLeft + step.panelWidth;
+    const isRightPanel = step.panelLeft >= PAPER_WIDTH;
+    let firstSafe = 0;
+    let lastSafe = 1;
+    let foundSafe = false;
+
+    for (let sample = 0; sample <= GEOMETRY_SAMPLES; sample += 1) {
+      const time = sample / GEOMETRY_SAMPLES;
+      const paperLeft = PAPER_TRAVEL * paperEase(time);
+      const paperRight = paperLeft + PAPER_WIDTH;
+      const isSafe = isRightPanel
+        ? paperRight <= step.panelLeft - PANEL_CLEARANCE
+        : paperLeft >= panelRight + PANEL_CLEARANCE;
+
+      if (isSafe) {
+        if (!foundSafe) firstSafe = time;
+        lastSafe = time;
+        foundSafe = true;
+      }
+    }
+
+    return { firstSafe, lastSafe, isRightPanel };
+  });
+
+  return safeRanges.map((range, index) => ({
+    enter: range.isRightPanel
+      ? index === 0
+        ? 0
+        : safeRanges[index - 1].lastSafe + PANEL_EXIT_DURATION
+      : range.firstSafe,
+    exit: range.isRightPanel
+      ? range.lastSafe
+      : index === safeRanges.length - 1
+        ? 1
+        : safeRanges[index + 1].firstSafe - PANEL_ENTER_DURATION,
+  }));
+}
+
 function CompetenciaBadge({ competencia }: { competencia: Competencia }) {
   const style = competenciaStyles[competencia];
   return (
@@ -187,7 +237,7 @@ function PanelContent({
 
 function DesktopPaper() {
   return (
-    <div className="redacao-paper border-paper-line bg-paper absolute top-[110px] left-0 h-[680px] w-[520px] overflow-hidden rounded-md border shadow-[0_1px_2px_rgba(16,24,40,0.05)]">
+    <div className="redacao-paper border-paper-line bg-paper absolute top-[110px] left-0 z-[2] h-[680px] w-[520px] overflow-hidden rounded-md border shadow-[0_1px_2px_rgba(16,24,40,0.05)]">
       <div
         aria-hidden="true"
         className="bg-paper-margin absolute top-0 bottom-0 left-14 w-px"
@@ -386,6 +436,8 @@ export function RedacaoScroll() {
           );
           if (!stage || !paper || !content) return;
 
+          const panelTimings = calculatePanelTimings();
+
           const setScale = () => {
             const heightScale = Math.max(0.75, window.innerHeight / 900);
             const widthScale = (window.innerWidth - 48) / 1200;
@@ -407,7 +459,7 @@ export function RedacaoScroll() {
             force3D: true,
             willChange: 'transform',
           });
-          gsap.set(panels.slice(1), { autoAlpha: 0, y: 40 });
+          gsap.set(panels.slice(1), { autoAlpha: 0, y: -24 });
           gsap.set(paragraphs.slice(1), { opacity: 0.55 });
           gsap.set(progressFills, {
             scaleX: 0,
@@ -503,19 +555,32 @@ export function RedacaoScroll() {
             }
           }
 
-          for (let index = 1; index < panels.length; index += 1) {
-            const boundary = index * 0.25;
-            timeline
-              .to(
-                panels[index - 1],
-                { y: -40, autoAlpha: 0, duration: 0.03, ease: 'power1.inOut' },
-                boundary - 0.03,
-              )
-              .to(
+          for (let index = 0; index < panels.length; index += 1) {
+            const timing = panelTimings[index];
+            if (index > 0) {
+              timeline.to(
                 panels[index],
-                { y: 0, autoAlpha: 1, duration: 0.03, ease: 'power1.inOut' },
-                boundary,
+                {
+                  y: 0,
+                  autoAlpha: 1,
+                  duration: PANEL_ENTER_DURATION,
+                  ease: 'power1.inOut',
+                },
+                timing.enter,
               );
+            }
+            if (index < panels.length - 1) {
+              timeline.to(
+                panels[index],
+                {
+                  y: -24,
+                  autoAlpha: 0,
+                  duration: PANEL_EXIT_DURATION,
+                  ease: 'power1.inOut',
+                },
+                timing.exit - PANEL_EXIT_DURATION,
+              );
+            }
           }
 
           void document.fonts.ready.then(
