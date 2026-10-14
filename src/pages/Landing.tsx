@@ -10,9 +10,13 @@ import { MobileStickyCta } from '@/components/landing/MobileStickyCta';
 import { Planos } from '@/components/landing/Planos';
 import { RepertorioSection } from '@/components/landing/RepertorioSection';
 import { Recursos } from '@/components/landing/Recursos';
+import { RedacaoScroll } from '@/components/landing/RedacaoScroll';
 import { TemasMarquee } from '@/components/landing/TemasMarquee';
+import { useLenis } from '@/hooks/useLenis';
 
 export default function Landing() {
+  useLenis();
+
   const [mobileRepertorioSheetOpen, setMobileRepertorioSheetOpen] =
     useState(false);
 
@@ -29,6 +33,7 @@ export default function Landing() {
       <LandingNav />
       <main className="desk:pb-0 pb-[calc(78px+env(safe-area-inset-bottom))]">
         <Hero />
+        <RedacaoScroll />
         <TemasMarquee />
         <RepertorioSection
           onMobileSheetOpenChange={setMobileRepertorioSheetOpen}
