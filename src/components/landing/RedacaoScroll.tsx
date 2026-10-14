@@ -295,7 +295,7 @@ function MobilePanelContent({
 function MobilePaperCard({ index }: { index: number }) {
   return (
     <article
-      className="redacao-mobile-card border-paper-line bg-paper relative top-1/2 w-full rounded-md border px-5 pt-5 pb-[22px] pl-[56px] shadow-[0_1px_2px_rgba(16,24,40,0.05)]"
+      className="redacao-mobile-card border-paper-line bg-paper absolute inset-x-0 top-1/2 w-full rounded-md border px-5 pt-5 pb-[22px] pl-[56px] shadow-[0_1px_2px_rgba(16,24,40,0.05)]"
       data-mobile-card={index}
     >
       <div
