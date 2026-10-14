@@ -82,7 +82,7 @@ function CicloSelector({
     <div
       role="radiogroup"
       aria-label={textosPlanos.seletor.rotulo}
-      className="flex rounded-full border border-[#2f3031] bg-[#1d1e1f] p-1"
+      className="border-surface-2 bg-photo-drop flex rounded-full border p-1"
     >
       {ciclos.map((item, index) => {
         const ativo = ciclo === item;
@@ -98,7 +98,7 @@ function CicloSelector({
             tabIndex={ativo ? 0 : -1}
             onClick={() => onChange(item)}
             onKeyDown={(event) => onKeyDown(event, index)}
-            className={`focus-ring min-h-9 rounded-full px-4 text-sm font-medium transition-colors motion-reduce:transition-none ${ativo ? 'text-text bg-[#2f3031]' : 'text-text-3'}`}
+            className={`focus-ring min-h-9 rounded-full px-4 text-sm font-medium transition-colors motion-reduce:transition-none ${ativo ? 'bg-surface-2 text-text' : 'text-text-3'}`}
           >
             {item === 'mensal'
               ? textosPlanos.seletor.mensal
@@ -120,7 +120,7 @@ function PlanoCard({ tipo, ciclo }: { tipo: 'gratis' | 'pro'; ciclo: Ciclo }) {
   const pro = tipo === 'pro';
   return (
     <article
-      className={`flex min-h-[540px] flex-col rounded-[20px] border p-9 ${pro ? 'border-[#0866ff] bg-[linear-gradient(180deg,rgba(8,102,255,.06),transparent_55%)]' : 'border-[#2f3031]'}`}
+      className={`flex min-h-[540px] flex-col rounded-[20px] border p-9 ${pro ? 'border-accent bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-accent)_6%,transparent),transparent_55%)]' : 'border-surface-2'}`}
     >
       <div className="flex min-h-16 items-start justify-between gap-5">
         <div>
@@ -234,7 +234,7 @@ function Comparativo() {
             </th>
             <th
               scope="col"
-              className="text-accent-text w-1/4 bg-[rgba(8,102,255,.05)] px-5 py-4 text-center font-semibold"
+              className="text-accent-text bg-accent/[.05] w-1/4 px-5 py-4 text-center font-semibold"
             >
               {textosPlanos.comparativo.pro}
             </th>
@@ -252,7 +252,7 @@ function Comparativo() {
               <td className="text-text-2 px-5 py-[18px] text-center">
                 <Valor valor={linha.gratis} />
               </td>
-              <td className="text-text-2 bg-[rgba(8,102,255,.05)] px-5 py-[18px] text-center">
+              <td className="text-text-2 bg-accent/[.05] px-5 py-[18px] text-center">
                 <Valor valor={linha.pro} />
               </td>
             </tr>

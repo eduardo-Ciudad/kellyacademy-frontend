@@ -21,19 +21,18 @@ const navLinks = [
 export function LandingNav() {
   const reduceMotion = useReducedMotion();
   const { scrollY } = useScroll();
-  const [scrolled, setScrolled] = useState(Boolean(reduceMotion));
-  const scrolledRef = useRef(Boolean(reduceMotion));
+  const [scrolled, setScrolled] = useState(false);
+  const scrolledRef = useRef(false);
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const visibleSections = useRef(new Set<string>());
 
   useEffect(() => {
-    const nextScrolled = reduceMotion ? true : scrollY.get() > 8;
+    const nextScrolled = scrollY.get() > 8;
     scrolledRef.current = nextScrolled;
     setScrolled(nextScrolled);
-  }, [reduceMotion, scrollY]);
+  }, [scrollY]);
 
   useMotionValueEvent(scrollY, 'change', (latest) => {
-    if (reduceMotion) return;
     const nextScrolled = latest > 8;
     if (scrolledRef.current === nextScrolled) return;
     scrolledRef.current = nextScrolled;
@@ -71,7 +70,7 @@ export function LandingNav() {
         scrolled
           ? 'border-border-subtle bg-bg/80 border-b backdrop-blur-md'
           : 'border-transparent bg-transparent'
-      } sticky top-0 z-20 transition-[background-color,border-color,backdrop-filter] ${reduceMotion ? 'duration-0' : 'duration-200'}`}
+      } fixed inset-x-0 top-0 z-20 transition-[background-color,border-color,backdrop-filter] ${reduceMotion ? 'duration-0' : 'duration-200'}`}
     >
       <nav
         aria-label="Principal"
@@ -83,7 +82,7 @@ export function LandingNav() {
           className="focus-ring rounded-inner shrink-0"
         >
           <KellyLogo size={26} className="desk:hidden" />
-          <KellyLogo size={30} className="hidden desk:inline-flex" />
+          <KellyLogo size={30} className="desk:inline-flex hidden" />
         </a>
 
         <div className="desk:flex hidden items-center gap-1">

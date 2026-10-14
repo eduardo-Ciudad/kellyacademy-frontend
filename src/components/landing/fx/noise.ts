@@ -1,0 +1,10 @@
+const noiseSvg = `
+  <svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 180 180">
+    <filter id="noise">
+      <feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="3" stitchTiles="stitch" />
+    </filter>
+    <rect width="100%" height="100%" filter="url(#noise)" opacity="1" />
+  </svg>
+`;
+
+export const noiseDataUri = `data:image/svg+xml,${encodeURIComponent(noiseSvg)}`;

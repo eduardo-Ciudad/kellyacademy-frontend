@@ -1,11 +1,11 @@
 // Keep these values in sync with the matching tokens in index.css.
 export const chartTheme = {
-  accent: '#0866FF',
+  accent: '#2F5BFF',
   danger: '#F3727F',
-  grid: '#2F3031',
-  surface: '#242526',
-  surface2: '#2F3031',
-  text: '#E4E6EB',
-  text2: '#B0B3B8',
-  text3: '#8A8D91',
+  grid: '#1F2130',
+  surface: '#12131B',
+  surface2: '#1F2130',
+  text: '#E6E8EF',
+  text2: '#B4B8C8',
+  text3: '#8B8FA3',
 } as const;

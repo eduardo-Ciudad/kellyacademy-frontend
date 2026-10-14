@@ -46,26 +46,26 @@
   --text-eyebrow--line-height: 1;
   --text-eyebrow--letter-spacing: 0.14em;
 
-  --color-bg: #18191a;
-  --color-surface: #242526;
-  --color-surface-2: #2f3031;
-  --color-photo-drop: #1d1e1f;
-  --color-photo-view: #0f1011;
-  --color-photo-pill: #18191a;
-  --color-control: #3a3b3c;
-  --color-border-subtle: #2f3031;
+  --color-bg: #0b0c12;
+  --color-surface: #12131b;
+  --color-surface-2: #1f2130;
+  --color-photo-drop: #12131b;
+  --color-photo-view: #07080d;
+  --color-photo-pill: #0b0c12;
+  --color-control: #2c2f42;
+  --color-border-subtle: #1f2130;
   --color-border-hover: #3e5a85;
-  --color-text: #e4e6eb;
-  --color-text-2: #b0b3b8;
-  --color-text-3: #8a8d91;
-  --color-text-body: #cfd2d7;
-  --color-accent: #0866ff;
-  --color-accent-hover: #075ce5;
-  --color-accent-text: #4599ff;
-  --color-accent-text-hover: #6aaeff;
-  --color-accent-tint: #213247;
-  --color-accent-ring: #0866ff33;
-  --color-nav-active: #2a3a52;
+  --color-text: #e6e8ef;
+  --color-text-2: #b4b8c8;
+  --color-text-3: #8b8fa3;
+  --color-text-body: #cfd2dd;
+  --color-accent: #2f5bff;
+  --color-accent-hover: #2549e6;
+  --color-accent-text: #7f9bff;
+  --color-accent-text-hover: #a3b6ff;
+  --color-accent-tint: #1a1f3d;
+  --color-accent-ring: #2f5bff33;
+  --color-nav-active: #1d2240;
   --color-success: #5dd39e;
   --color-success-bg: #1e3b2c;
   --color-danger: #f3727f;
@@ -84,8 +84,8 @@
   --color-c4-bg: #3d3120;
   --color-c5: #f58db0;
   --color-c5-bg: #412834;
-  --color-possivel: #9cc3ff;
-  --color-possivel-border: #4a6385;
+  --color-possivel: #a9b8ff;
+  --color-possivel-border: #3b4470;
   --color-paper-bg: #f3f4f6;
   --color-paper: #ffffff;
   --color-paper-ink: #1c1e21;
@@ -139,6 +139,24 @@ html {
 }
 
 @layer components {
+  .hero-shader-blob {
+    will-change: transform;
+  }
+
+  @media (min-width: 60rem) and (prefers-reduced-motion: no-preference) {
+    .hero-shader-blob-blue {
+      animation: hero-blob-blue 22s ease-in-out infinite alternate;
+    }
+
+    .hero-shader-blob-violet {
+      animation: hero-blob-violet 26s ease-in-out infinite alternate;
+    }
+
+    .hero-shader-blob-teal {
+      animation: hero-blob-teal 18s ease-in-out infinite alternate;
+    }
+  }
+
   .landing-card {
     box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.04);
   }
@@ -177,6 +195,31 @@ html {
       opacity: 0;
       transition: none;
     }
+  }
+}
+
+@keyframes hero-blob-blue {
+  to {
+    transform: translate3d(38px, -24px, 0) scale(1.04);
+  }
+}
+
+@keyframes hero-blob-violet {
+  to {
+    transform: translate3d(-36px, -30px, 0) scale(0.97);
+  }
+}
+
+@keyframes hero-blob-teal {
+  to {
+    transform: translate3d(-28px, 38px, 0) scale(1.03);
+  }
+}
+
+@media (max-width: 59.999rem), (prefers-reduced-motion: reduce) {
+  .hero-shader-blob {
+    animation: none;
+    will-change: auto;
   }
 }
 
