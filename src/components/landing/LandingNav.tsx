@@ -6,7 +6,7 @@ import {
   useScroll,
 } from 'motion/react';
 import { Link } from 'react-router-dom';
-import logo from '@/assets/kelly-logo-escuro.svg';
+import { KellyLogo } from '@/components/brand/KellyLogo';
 import { DUR, EASE_OUT } from '@/components/landing/fx/motion';
 
 const navLinks = [
@@ -20,7 +20,7 @@ const navLinks = [
 
 export function LandingNav() {
   const reduceMotion = useReducedMotion();
-  const { scrollY, scrollYProgress } = useScroll();
+  const { scrollY } = useScroll();
   const [scrolled, setScrolled] = useState(Boolean(reduceMotion));
   const scrolledRef = useRef(Boolean(reduceMotion));
   const [activeSection, setActiveSection] = useState<string | null>(null);
@@ -82,11 +82,8 @@ export function LandingNav() {
           aria-label="Kelly Academy — início"
           className="focus-ring rounded-inner shrink-0"
         >
-          <img
-            src={logo}
-            alt="Kelly Academy"
-            className="desk:h-10 h-[34px] w-auto"
-          />
+          <KellyLogo size={26} className="desk:hidden" />
+          <KellyLogo size={30} className="hidden desk:inline-flex" />
         </a>
 
         <div className="desk:flex hidden items-center gap-1">
@@ -133,13 +130,6 @@ export function LandingNav() {
           </Link>
         </div>
       </nav>
-      {scrolled && !reduceMotion ? (
-        <motion.div
-          aria-hidden="true"
-          className="bg-accent absolute right-0 bottom-0 left-0 h-0.5 origin-left"
-          style={{ scaleX: scrollYProgress }}
-        />
-      ) : null}
     </header>
   );
 }
