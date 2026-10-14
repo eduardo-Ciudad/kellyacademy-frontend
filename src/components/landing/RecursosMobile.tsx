@@ -5,7 +5,6 @@ import { TEMA_POSSIVEL_DESTAQUE } from '@/components/landing/data/temasEnem';
 import { DUR, EASE_OUT } from '@/components/landing/fx/motion';
 import { Reveal } from '@/components/landing/fx/Reveal';
 import { LandingCard } from '@/components/landing/ui/LandingCard';
-import { SectionHeader } from '@/components/landing/ui/SectionHeader';
 import { competencias } from '@/lib/competencias';
 
 const COMMENTS = [
@@ -79,16 +78,15 @@ export function RecursosMobile() {
   ];
 
   return (
-    <section id="recursos" className="scroll-mt-20 pt-14 pb-10">
+    <section id="recursos" className="landing-section scroll-mt-20">
       <div className="px-4">
-        <SectionHeader
-          eyebrow="Recursos"
-          title={
-            <span className="block text-[32px] leading-[1.08] tracking-[-0.03em]">
-              Tudo o que a redação pede.
-            </span>
-          }
-        />
+        <h2 className="font-display text-text text-[36px] leading-[1.08] font-light tracking-[-0.03em] text-balance">
+          Tudo o que a redação pede.{' '}
+          <span className="text-text-3">Sem trocar de aplicativo.</span>
+        </h2>
+        <p className="text-text-3 mt-4 text-base leading-[1.6]">
+          Da folha escrita à mão até o tema que pode cair em 2026.
+        </p>
       </div>
 
       <Reveal>

@@ -15,10 +15,10 @@ export function Recursos() {
 
 function RecursosDesktop() {
   return (
-    <section id="recursos" className="scroll-mt-20 px-6 pt-[160px]">
+    <section id="recursos" className="landing-section scroll-mt-20 px-6">
       <div className="mx-auto max-w-[1200px]">
         <header className="flex items-end justify-between gap-8">
-      <h2 className="text-text max-w-[700px] text-[clamp(36px,3.8vw,52px)] leading-[1.06] font-light tracking-[-0.035em] text-balance">
+          <h2 className="text-text max-w-[700px] text-[clamp(36px,3.8vw,52px)] leading-[1.06] font-light tracking-[-0.035em] text-balance">
             Tudo o que a redação pede.{' '}
             <span className="text-text-3">Sem trocar de aplicativo.</span>
           </h2>
@@ -28,16 +28,32 @@ function RecursosDesktop() {
         </header>
 
         <div className="border-surface-2 mt-[72px] grid grid-cols-2 border-y">
-          <ResourceItem title="Foto da redação" description="Escreveu à mão? Tire uma foto e a Kelly transcreve. Você revisa antes de corrigir.">
+          <ResourceItem
+            title="Foto da redação"
+            description="Escreveu à mão? Tire uma foto e a Kelly transcreve. Você revisa antes de corrigir."
+          >
             <ScannerScene />
           </ResourceItem>
-          <ResourceItem title="Possíveis temas 2026" description="Uma lista pesquisada de temas prováveis, com mini-análise e sugestão de argumentos." right>
+          <ResourceItem
+            title="Possíveis temas 2026"
+            description="Uma lista pesquisada de temas prováveis, com mini-análise e sugestão de argumentos."
+            right
+          >
             <ThemesScene />
           </ResourceItem>
-          <ResourceItem title="Julia, sua assistente" description="Explica, em linguagem simples, por que uma competência perdeu pontos." bottom>
+          <ResourceItem
+            title="Julia, sua assistente"
+            description="Explica, em linguagem simples, por que uma competência perdeu pontos."
+            bottom
+          >
             <JuliaScene />
           </ResourceItem>
-          <ResourceItem title="Evolução visível" description="Sua nota e cada competência ao longo das redações." right bottom>
+          <ResourceItem
+            title="Evolução visível"
+            description="Sua nota e cada competência ao longo das redações."
+            right
+            bottom
+          >
             <EvolutionScene />
           </ResourceItem>
         </div>
@@ -78,7 +94,7 @@ function Scene({ children }: { children: ReactNode }) {
   return (
     <div
       aria-hidden="true"
-      className="border-[#2a2b2c] bg-photo-drop relative flex h-[220px] overflow-hidden rounded-[14px] border"
+      className="bg-photo-drop relative flex h-[220px] overflow-hidden rounded-[14px] border border-[#2a2b2c]"
     >
       {children}
     </div>
@@ -93,14 +109,22 @@ function ScannerScene() {
       <div className="bg-photo-view absolute inset-0 flex items-center justify-center">
         <div className="flex h-44 w-[62%] -rotate-3 flex-col gap-[11px] rounded-sm bg-[#f3f1ea] px-5 py-[18px]">
           {PAPER_LINE_WIDTHS.map((width, index) => (
-            <span key={`${width}-${index}`} className="h-0.5 bg-[#9aa0aa]" style={{ width }} />
+            <span
+              key={`${width}-${index}`}
+              className="h-0.5 bg-[#9aa0aa]"
+              style={{ width }}
+            />
           ))}
         </div>
         <motion.span
           className="bg-accent absolute right-[14%] left-[14%] h-0.5"
           initial={false}
           animate={reduceMotion ? { y: 0 } : { y: [-58, 58, -58] }}
-          transition={reduceMotion ? { duration: 0 } : { duration: 3.6, ease: 'easeInOut', repeat: Infinity }}
+          transition={
+            reduceMotion
+              ? { duration: 0 }
+              : { duration: 3.6, ease: 'easeInOut', repeat: Infinity }
+          }
         />
         <span className="border-accent-text absolute top-4 left-4 size-[22px] rounded-tl-sm border-t-2 border-l-2" />
         <span className="border-accent-text absolute right-4 bottom-4 size-[22px] rounded-br-sm border-r-2 border-b-2" />
@@ -113,14 +137,24 @@ function ThemesScene() {
   return (
     <Scene>
       <div className="flex w-full flex-col gap-3 px-6 py-[22px]">
-        <p className="text-possivel font-mono text-[11px] tracking-[0.14em]">POSSÍVEIS TEMAS 2026</p>
+        <p className="text-possivel font-mono text-[11px] tracking-[0.14em]">
+          POSSÍVEIS TEMAS 2026
+        </p>
         {TEMAS_POSSIVEIS_PREVIEW.map((tema, index) => (
           <div
             key={`${tema.nome}-${index}`}
             className={`${index === 0 ? 'bg-[#2a2b2d]' : 'border-surface-2 border'} ${index === 2 ? 'opacity-60' : ''} flex min-h-11 items-center justify-between gap-3 rounded-[10px] px-3.5 py-2.5`}
           >
-            <span className={`${index === 0 ? 'text-text font-semibold' : 'text-text-2'} truncate text-[15px]`}>{tema.nome}</span>
-            <span className={`${index === 0 ? 'text-accent-text' : 'text-text-3'} shrink-0 text-[13px]`}>{tema.eixo}</span>
+            <span
+              className={`${index === 0 ? 'text-text font-semibold' : 'text-text-2'} truncate text-[15px]`}
+            >
+              {tema.nome}
+            </span>
+            <span
+              className={`${index === 0 ? 'text-accent-text' : 'text-text-3'} shrink-0 text-[13px]`}
+            >
+              {tema.eixo}
+            </span>
           </div>
         ))}
       </div>
@@ -137,8 +171,9 @@ function JuliaScene() {
         </div>
         <div className="flex max-w-[88%] items-end gap-2.5">
           <JuliaAvatar size={30} />
-          <div className="bg-[#2a2b2d] text-text-body rounded-[14px_14px_14px_4px] px-3.5 py-2.5 text-sm leading-[1.45]">
-            Seu 2º argumento foi anunciado, mas não explicado. Quer ver repertórios sobre o tema?
+          <div className="text-text-body rounded-[14px_14px_14px_4px] bg-[#2a2b2d] px-3.5 py-2.5 text-sm leading-[1.45]">
+            Seu 2º argumento foi anunciado, mas não explicado. Quer ver
+            repertórios sobre o tema?
           </div>
         </div>
       </div>
@@ -156,12 +191,29 @@ function EvolutionScene() {
     <Scene>
       <div className="flex w-full flex-col gap-2.5 px-6 py-[22px]">
         <div className="flex items-baseline justify-between gap-4">
-          <span className="text-text text-[32px] font-semibold tracking-[-0.03em]">880</span>
-          <span className="text-success text-[13px]">+320 desde a 1ª redação</span>
+          <span className="text-text text-[32px] font-semibold tracking-[-0.03em]">
+            880
+          </span>
+          <span className="text-success text-[13px]">
+            +320 desde a 1ª redação
+          </span>
         </div>
-        <svg ref={chartRef} viewBox="0 0 300 120" preserveAspectRatio="none" className="min-h-0 w-full flex-1">
+        <svg
+          ref={chartRef}
+          viewBox="0 0 300 120"
+          preserveAspectRatio="none"
+          className="min-h-0 w-full flex-1"
+        >
           {[110, 60, 10].map((y) => (
-            <line key={y} x1="0" y1={y} x2="300" y2={y} stroke="var(--color-surface-2)" strokeWidth="1" />
+            <line
+              key={y}
+              x1="0"
+              y1={y}
+              x2="300"
+              y2={y}
+              stroke="var(--color-surface-2)"
+              strokeWidth="1"
+            />
           ))}
           <motion.polyline
             points="6,104 62,86 118,92 174,58 230,40 294,14"
@@ -183,7 +235,10 @@ function EvolutionScene() {
             fill="var(--color-accent-text)"
             initial={reduceMotion ? false : { opacity: 0 }}
             animate={{ opacity: visible ? 1 : 0 }}
-            transition={{ duration: reduceMotion ? 0 : 0.2, delay: reduceMotion ? 0 : 1 }}
+            transition={{
+              duration: reduceMotion ? 0 : 0.2,
+              delay: reduceMotion ? 0 : 1,
+            }}
           />
         </svg>
       </div>

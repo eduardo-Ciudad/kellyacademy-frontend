@@ -32,7 +32,7 @@ function CompetenciasDesktop() {
   return (
     <section
       id="competencias"
-      className="scroll-mt-20 px-5 pt-[120px] pb-10 sm:px-6"
+      className="landing-section scroll-mt-20 px-5 sm:px-6"
     >
       <div className="desk:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] mx-auto grid max-w-[1200px] gap-10">
         <div>

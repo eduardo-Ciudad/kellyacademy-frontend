@@ -33,7 +33,7 @@ function PlanosDesktop({
   onCicloChange: (ciclo: Ciclo) => void;
 }) {
   return (
-    <section id="planos" className="scroll-mt-20 px-6 pt-[120px] pb-10">
+    <section id="planos" className="landing-section scroll-mt-20 px-6">
       <header className="mx-auto max-w-[760px] text-center">
         <h2 className="font-display text-text text-[56px] leading-[1.04] font-light tracking-[-0.04em]">
           {textosPlanos.tituloInicio}{' '}

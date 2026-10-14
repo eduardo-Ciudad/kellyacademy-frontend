@@ -18,7 +18,7 @@ function FaqDesktop() {
   const reduceMotion = useReducedMotion();
 
   return (
-    <section id="faq" className="scroll-mt-20 px-5 pt-[120px] pb-10 sm:px-6">
+    <section id="faq" className="landing-section scroll-mt-20 px-5 sm:px-6">
       <div className="mx-auto max-w-[820px]">
         <SectionHeader
           title="Dúvidas frequentes"

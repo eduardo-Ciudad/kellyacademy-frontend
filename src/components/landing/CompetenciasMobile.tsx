@@ -4,7 +4,6 @@ import { competenciasLanding } from '@/components/landing/data/competenciasLandi
 import { DUR, EASE_OUT } from '@/components/landing/fx/motion';
 import { Reveal } from '@/components/landing/fx/Reveal';
 import { LandingCard } from '@/components/landing/ui/LandingCard';
-import { SectionHeader } from '@/components/landing/ui/SectionHeader';
 import { useRovingTabs } from '@/components/landing/useRovingTabs';
 import { competencias } from '@/lib/competencias';
 
@@ -24,16 +23,13 @@ export function CompetenciasMobile() {
   const activeContent = landingByCode.get(activeCompetencia.codigo)!;
 
   return (
-    <section id="competencias" className="scroll-mt-20 px-4 pt-24 pb-4">
-      <SectionHeader
-        eyebrow="As 5 competências"
-        title={
-          <span className="block text-[32px] leading-[1.08] tracking-[-0.03em]">
-            A mesma régua do ENEM.
-          </span>
-        }
-        description="Até 200 pontos cada. Toque para ver o que a Kelly avalia."
-      />
+    <section id="competencias" className="landing-section scroll-mt-20 px-4">
+      <h2 className="font-display text-text text-[36px] leading-[1.08] font-light tracking-[-0.03em] text-balance">
+        A mesma régua do ENEM.
+      </h2>
+      <p className="text-text-3 mt-4 text-base leading-[1.6]">
+        Até 200 pontos cada. Escolha uma para ver o que a Kelly avalia.
+      </p>
 
       <div
         role="tablist"

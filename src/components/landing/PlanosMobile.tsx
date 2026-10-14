@@ -22,13 +22,13 @@ export function PlanosMobile({
 }) {
   const [aberto, setAberto] = useState(false);
   return (
-    <section id="planos" className="scroll-mt-20 px-4 pt-20 pb-6">
-      <header className="mx-auto max-w-[520px] text-center">
-        <h2 className="font-display text-text text-[36px] leading-[1.06] font-light tracking-[-0.04em]">
+    <section id="planos" className="landing-section scroll-mt-20 px-4">
+      <header className="mx-auto max-w-[520px] text-left">
+        <h2 className="font-display text-text text-[36px] leading-[1.08] font-light tracking-[-0.03em] text-balance">
           {textosPlanos.tituloInicio}{' '}
           <span className="text-text-3">{textosPlanos.tituloFim}</span>
         </h2>
-        <p className="text-text-2 mt-4 text-[15px] leading-[1.55]">
+        <p className="text-text-3 mt-4 text-base leading-[1.6]">
           {textosPlanos.descricao}
         </p>
       </header>

@@ -33,9 +33,9 @@ export function ComoFunciona() {
 
 function ComoFuncionaDesktop() {
   return (
-    <section id="como-funciona" className="scroll-mt-20 px-6 pt-[200px]">
+    <section id="como-funciona" className="landing-section scroll-mt-20 px-6">
       <div className="mx-auto max-w-[1200px]">
-      <h2 className="text-text max-w-[700px] text-[clamp(36px,3.8vw,52px)] leading-[1.06] font-light tracking-[-0.035em] text-balance">
+        <h2 className="text-text max-w-[700px] text-[clamp(36px,3.8vw,52px)] leading-[1.06] font-light tracking-[-0.035em] text-balance">
           Um ciclo que aprende com você.{' '}
           <span className="text-text-3">Treine onde mais perde.</span>
         </h2>
@@ -63,7 +63,10 @@ function ComoFuncionaDesktop() {
           ))}
         </ol>
 
-        <div aria-hidden="true" className="hidden justify-center pt-[160px] desk:flex">
+        <div
+          aria-hidden="true"
+          className="desk:flex hidden justify-center pt-[160px]"
+        >
           <span className="bg-control size-1 rounded-full" />
         </div>
       </div>

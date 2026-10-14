@@ -1,13 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
-import {
-  ArrowRight,
-  BookOpen,
-  Link2,
-  ListFilter,
-  TriangleAlert,
-  X,
-} from 'lucide-react';
+import { ArrowRight, Link2, ListFilter, TriangleAlert, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import {
   EIXOS,
@@ -17,14 +10,16 @@ import {
   type FichaRepertorio,
 } from '@/components/landing/data/repertorioDestaque';
 import { GridBackground } from '@/components/landing/fx/GridBackground';
-import { NumberTicker } from '@/components/landing/fx/NumberTicker';
 import { Reveal } from '@/components/landing/fx/Reveal';
-import { TextShimmer } from '@/components/landing/fx/TextShimmer';
 import { LandingCard } from '@/components/landing/ui/LandingCard';
-import { SectionHeader } from '@/components/landing/ui/SectionHeader';
 import { FUNCAO_ARGUMENTATIVA_LABELS } from '@/lib/repertorio';
 
-const MOBILE_STAT_LABELS = ['repertórios', 'eixos', 'problemas', 'artigos CF'];
+const MOBILE_STAT_LABELS = [
+  'REPERTÓRIOS',
+  'EIXOS',
+  'PROBLEMAS',
+  'ARTIGOS DA CF',
+] as const;
 
 const TYPE_STYLES: Record<
   FichaRepertorio['tipo'],
@@ -108,51 +103,35 @@ export function RepertorioMobile({ onSheetOpenChange }: RepertorioMobileProps) {
   };
 
   return (
-    <section id="repertorio" className="relative scroll-mt-20 pt-24 pb-12">
+    <section id="repertorio" className="landing-section relative scroll-mt-20">
       <GridBackground className="opacity-80" />
       <div className="relative">
         <div className="px-4">
-          <SectionHeader
-            eyebrow={
-              <>
-                <BookOpen size={14} strokeWidth={2} aria-hidden="true" />O
-                DIFERENCIAL DA KELLY
-              </>
-            }
-            title={
-              <span className="block text-[32px] leading-[1.08] tracking-[-0.03em]">
-                Repertório que você sabe <TextShimmer>usar</TextShimmer>, não só
-                decorar.
-              </span>
-            }
-            description="Pensadores, leis, dados e obras curados por eixo do ENEM — com a ideia central e o erro que derruba sua C2."
-            eyebrowVariant="pill"
-          />
+          <h2 className="font-display text-text text-[36px] leading-[1.08] font-light tracking-[-0.03em] text-balance">
+            Repertório que você sabe usar.{' '}
+            <span className="text-text-3">Não só decorar.</span>
+          </h2>
+          <p className="text-text-3 mt-4 text-base leading-[1.6]">
+            Pensadores, leis, dados e obras curados por eixo do ENEM — com a
+            ideia central e o erro que derruba sua C2.
+          </p>
         </div>
 
-        <Reveal className="mx-4 mt-8">
-          <div className="border-border-subtle bg-photo-drop rounded-inner grid grid-cols-4 overflow-hidden border">
+        <Reveal className="mx-4 mt-7">
+          <p className="text-text-3 overflow-x-auto font-mono text-xs leading-[1.6] tracking-[0.06em] whitespace-nowrap">
             {REPERTORIO_STATS.map((stat, index) => (
-              <div
-                key={stat.label}
-                className={`min-w-0 px-1.5 py-3.5 text-center ${index < REPERTORIO_STATS.length - 1 ? 'border-border-subtle border-r' : ''}`}
-              >
-                <NumberTicker
-                  value={stat.value}
-                  className="text-text block text-[22px] leading-none font-extrabold"
-                />
-                <p className="text-text-3 mt-1.5 truncate text-[11.5px] leading-tight">
-                  {MOBILE_STAT_LABELS[index]}
-                </p>
-              </div>
+              <span key={stat.label}>
+                {index > 0 ? ' · ' : ''}
+                {stat.value} {MOBILE_STAT_LABELS[index]}
+              </span>
             ))}
-          </div>
+          </p>
         </Reveal>
 
         <div
           role="tablist"
           aria-label="Filtrar repertórios por eixo"
-          className="no-scrollbar mt-5 flex snap-x snap-mandatory scroll-px-4 gap-2 overflow-x-auto px-4"
+          className="no-scrollbar mt-5 flex snap-x snap-mandatory scroll-px-4 gap-2 overflow-x-auto [mask-image:linear-gradient(to_right,transparent,black_16px,black_calc(100%-16px),transparent)] px-4"
         >
           {['Todos', ...EIXOS].map((axis) => {
             const selected = activeAxis === axis;

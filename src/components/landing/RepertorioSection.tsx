@@ -7,13 +7,7 @@ import {
   useMotionValue,
   useReducedMotion,
 } from 'motion/react';
-import {
-  ArrowRight,
-  Lightbulb,
-  Pause,
-  Play,
-  Search,
-} from 'lucide-react';
+import { ArrowRight, Lightbulb, Pause, Play, Search } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import {
   FICHAS,
@@ -60,13 +54,10 @@ export function RepertorioSection({
 
 function RepertorioDesktop() {
   return (
-    <section
-      id="repertorio"
-      className="scroll-mt-20 px-6 pt-[200px]"
-    >
+    <section id="repertorio" className="landing-section scroll-mt-20 px-6">
       <div className="mx-auto max-w-[1200px]">
         <header className="flex items-end justify-between gap-8">
-      <h2 className="text-text max-w-[700px] text-[clamp(36px,3.8vw,52px)] leading-[1.06] font-light tracking-[-0.035em] text-balance">
+          <h2 className="text-text max-w-[700px] text-[clamp(36px,3.8vw,52px)] leading-[1.06] font-light tracking-[-0.035em] text-balance">
             Repertório que você sabe usar.{' '}
             <span className="text-text-3">Não só decorar.</span>
           </h2>

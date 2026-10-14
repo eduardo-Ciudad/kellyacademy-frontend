@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { KellyLogo } from '@/components/brand/KellyLogo';
+import { scrollToLandingAnchor } from '@/components/landing/scrollToLandingAnchor';
 
 const LINKS = [
   ['Recursos', '#recursos'],
@@ -12,6 +13,7 @@ export function LandingFooterMobile() {
     <footer className="border-border-subtle mt-12 flex flex-col gap-[22px] border-t px-4 pt-7 pb-8">
       <a
         href="#topo"
+        onClick={(event) => scrollToLandingAnchor(event, '#topo')}
         aria-label="Kelly Academy — início"
         className="focus-ring rounded-inner inline-flex self-start"
       >
@@ -26,6 +28,7 @@ export function LandingFooterMobile() {
           <a
             key={href}
             href={href}
+            onClick={(event) => scrollToLandingAnchor(event, href)}
             className="focus-ring hover:text-text flex min-h-11 items-center rounded-sm transition-colors motion-reduce:transition-none"
           >
             {label}

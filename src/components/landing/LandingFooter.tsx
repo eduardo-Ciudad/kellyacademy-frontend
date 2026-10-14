@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { KellyLogo } from '@/components/brand/KellyLogo';
 import { useIsMobileLanding } from '@/components/landing/fx/useIsMobileLanding';
 import { LandingFooterMobile } from '@/components/landing/LandingFooterMobile';
+import { scrollToLandingAnchor } from '@/components/landing/scrollToLandingAnchor';
 
 const productLinks = [
   ['Recursos', '#recursos'],
@@ -22,6 +23,7 @@ function LandingFooterDesktop() {
         <div className="col-span-2 sm:col-span-1">
           <a
             href="#topo"
+            onClick={(event) => scrollToLandingAnchor(event, '#topo')}
             aria-label="Kelly Academy — início"
             className="focus-ring rounded-inner inline-flex"
           >
@@ -34,7 +36,12 @@ function LandingFooterDesktop() {
 
         <FooterColumn title="Produto">
           {productLinks.map(([label, href]) => (
-            <a key={href} href={href} className="focus-ring rounded-sm">
+            <a
+              key={href}
+              href={href}
+              onClick={(event) => scrollToLandingAnchor(event, href)}
+              className="focus-ring rounded-sm"
+            >
               {label}
             </a>
           ))}

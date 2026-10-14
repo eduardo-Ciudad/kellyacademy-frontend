@@ -9,26 +9,29 @@ export function FaqMobile() {
   const reduceMotion = useReducedMotion();
 
   return (
-    <section id="faq" className="scroll-mt-20 px-4 pt-20 pb-4">
+    <section id="faq" className="landing-section scroll-mt-20 px-4">
       <Reveal>
-      <h2 className="text-text text-[28px] leading-[1.1] font-normal tracking-[-0.03em]">
+        <h2 className="font-display text-text text-[36px] leading-[1.08] font-light tracking-[-0.03em] text-balance">
           Dúvidas frequentes
         </h2>
+        <p className="text-text-3 mt-4 text-base leading-[1.6]">
+          Respostas diretas sobre correção, notas e como começar.
+        </p>
       </Reveal>
-      <div className="border-border-subtle mt-[18px] border-t">
+      <div className="border-surface-2 mt-8 border-t">
         {FAQS.map((faq, index) => {
           const open = openIndex === index;
           const contentId = `faq-mobile-content-${index}`;
           const buttonId = `faq-mobile-button-${index}`;
           return (
-            <div key={faq.question} className="border-border-subtle border-b">
+            <div key={faq.question} className="border-surface-2 border-b">
               <button
                 id={buttonId}
                 type="button"
                 aria-expanded={open}
                 aria-controls={contentId}
                 onClick={() => setOpenIndex(open ? null : index)}
-                className="focus-ring text-text flex min-h-[58px] w-full items-center justify-between gap-3.5 py-3.5 text-left text-[16px] font-semibold"
+                className="focus-ring text-text flex min-h-[64px] w-full items-center justify-between gap-3.5 py-4 text-left text-base font-medium"
               >
                 <span>{faq.question}</span>
                 <motion.span
@@ -53,7 +56,7 @@ export function FaqMobile() {
                 }}
                 className="overflow-hidden"
               >
-                <p className="text-text-2 mb-4 text-[15px] leading-[1.6]">
+                <p className="text-text-3 mb-5 text-[15px] leading-[1.6]">
                   {faq.answer}
                 </p>
               </motion.div>

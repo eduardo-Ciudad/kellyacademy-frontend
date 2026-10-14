@@ -9,7 +9,6 @@ import {
 import { COMO_FUNCIONA_STEPS } from '@/components/landing/data/comoFunciona';
 import { DUR, EASE_OUT } from '@/components/landing/fx/motion';
 import { Reveal } from '@/components/landing/fx/Reveal';
-import { SectionHeader } from '@/components/landing/ui/SectionHeader';
 
 export function ComoFuncionaMobile() {
   const timelineRef = useRef<HTMLOListElement>(null);
@@ -20,18 +19,20 @@ export function ComoFuncionaMobile() {
   });
 
   return (
-    <section id="como-funciona" className="scroll-mt-20 px-4 pt-24 pb-4">
-      <SectionHeader
-        eyebrow="Como funciona"
-        title={
-          <span className="block text-[32px] leading-[1.08] tracking-[-0.03em]">
-            Um ciclo que aprende com cada redação.
-          </span>
-        }
-      />
+    <section id="como-funciona" className="landing-section scroll-mt-20 px-4">
+      <h2 className="font-display text-text text-[36px] leading-[1.08] font-light tracking-[-0.03em] text-balance">
+        Um ciclo que aprende com você.{' '}
+        <span className="text-text-3">Treine onde mais perde.</span>
+      </h2>
+      <p className="text-text-3 mt-4 text-base leading-[1.6]">
+        Do diagnóstico à nova avaliação, cada etapa orienta o próximo treino.
+      </p>
 
       <Reveal>
-        <ol ref={timelineRef} className="mt-[26px] list-none p-0">
+        <ol
+          ref={timelineRef}
+          className="border-surface-2 mt-8 list-none border-t p-0"
+        >
           {COMO_FUNCIONA_STEPS.map((step, index) => (
             <TimelineItem
               key={step.number}
@@ -83,42 +84,24 @@ function TimelineItem({
   } as const;
 
   return (
-    <li className="grid grid-cols-[36px_minmax(0,1fr)] gap-3.5">
-      <div className="flex flex-col items-center">
+    <li className="border-surface-2 grid grid-cols-[32px_minmax(0,1fr)] gap-4 border-b py-5">
+      <div className="flex items-start">
         <motion.span
-          className="tabular flex size-9 shrink-0 items-center justify-center rounded-full border-2 font-mono text-[13px]"
+          className="tabular pt-1 font-mono text-xs"
           initial={false}
           animate={{
-            borderColor: active
-              ? 'var(--color-accent)'
-              : 'var(--color-control)',
             color: active ? 'var(--color-accent-text)' : 'var(--color-text-3)',
           }}
           transition={transition}
         >
           {step.number}
         </motion.span>
-        {index < COMO_FUNCIONA_STEPS.length - 1 ? (
-          <motion.span
-            aria-hidden="true"
-            className="mt-1 min-h-5 w-0.5 grow"
-            initial={false}
-            animate={{
-              backgroundColor: active
-                ? 'var(--color-accent)'
-                : 'var(--color-control)',
-            }}
-            transition={transition}
-          />
-        ) : null}
       </div>
-      <div
-        className={index < COMO_FUNCIONA_STEPS.length - 1 ? 'pb-[22px]' : ''}
-      >
-        <h3 className="text-text mt-1.5 text-[18px] leading-tight font-semibold">
+      <div>
+        <h3 className="text-text text-[17px] leading-tight font-medium">
           {step.title}
         </h3>
-        <p className="text-text-2 mt-1 text-[15px] leading-6">
+        <p className="text-text-3 mt-1.5 text-[15px] leading-6">
           {step.description}
         </p>
       </div>

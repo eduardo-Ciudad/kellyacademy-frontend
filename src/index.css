@@ -246,12 +246,6 @@ body {
     font-family: var(--font-display);
   }
 
-  @media (prefers-reduced-motion: no-preference) {
-    html {
-      scroll-behavior: smooth;
-    }
-  }
-
   body {
     min-width: 320px;
     min-height: 100vh;
@@ -273,6 +267,16 @@ body {
 }
 
 @layer utilities {
+  .landing-section {
+    padding-block: 7rem;
+  }
+
+  @media (min-width: 60rem) {
+    .landing-section {
+      padding-block: 12.5rem;
+    }
+  }
+
   .focus-ring {
     outline: none;
   }

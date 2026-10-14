@@ -8,6 +8,7 @@ import {
 import { Link } from 'react-router-dom';
 import { KellyLogo } from '@/components/brand/KellyLogo';
 import { DUR, EASE_OUT } from '@/components/landing/fx/motion';
+import { scrollToLandingAnchor } from '@/components/landing/scrollToLandingAnchor';
 
 const navLinks = [
   ['Repertório', '#repertorio'],
@@ -78,11 +79,16 @@ export function LandingNav() {
       >
         <a
           href="#topo"
+          onClick={(event) => scrollToLandingAnchor(event, '#topo')}
           aria-label="Kelly Academy — início"
           className="focus-ring rounded-inner shrink-0"
         >
-          <KellyLogo size={26} className="desk:hidden" />
-          <KellyLogo size={30} className="desk:inline-flex hidden" />
+          <span className="desk:hidden">
+            <KellyLogo size={26} />
+          </span>
+          <span className="desk:block hidden">
+            <KellyLogo size={30} />
+          </span>
         </a>
 
         <div className="desk:flex hidden items-center gap-1">
@@ -93,7 +99,10 @@ export function LandingNav() {
               <a
                 key={href}
                 href={href}
-                onClick={() => setActiveSection(href.slice(1))}
+                onClick={(event) => {
+                  setActiveSection(href.slice(1));
+                  scrollToLandingAnchor(event, href);
+                }}
                 className={`${active ? 'text-text' : 'text-text-2 hover:text-text'} focus-ring relative isolate rounded-md px-3 py-2 text-sm font-medium transition-colors motion-reduce:transition-none`}
               >
                 {active ? (
