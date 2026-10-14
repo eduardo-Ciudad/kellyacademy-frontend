@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import logo from '@/assets/kelly-logo-escuro.svg';
+import { KellyLogo } from '@/components/brand/KellyLogo';
 import { useIsMobileLanding } from '@/components/landing/fx/useIsMobileLanding';
 import { LandingFooterMobile } from '@/components/landing/LandingFooterMobile';
 
@@ -25,7 +25,7 @@ function LandingFooterDesktop() {
             aria-label="Kelly Academy — início"
             className="focus-ring rounded-inner inline-flex"
           >
-            <img src={logo} alt="Kelly Academy" className="h-9 w-auto" />
+            <KellyLogo size={28} />
           </a>
           <p className="text-text-3 mt-3.5 max-w-[300px] text-sm leading-6">
             Treino adaptativo para a redação do ENEM.
@@ -66,7 +66,7 @@ function FooterColumn({
 }) {
   return (
     <div>
-      <h2 className="text-text text-sm font-semibold">{title}</h2>
+      <h2 className="text-text text-sm font-normal">{title}</h2>
       <div className="text-text-3 hover:[&_a]:text-text mt-4 flex flex-col items-start gap-3 text-sm [&_a]:transition-colors motion-reduce:[&_a]:transition-none">
         {children}
       </div>

@@ -72,7 +72,7 @@ function PanelContent({ step, index, progress = false }: { step: RedacaoStep; in
       <span className="font-mono text-[13px] text-[#6b6f76]">
         {String(index + 1).padStart(2, '0')} / 04 · {step.label}
       </span>
-      <h2 className={`${step.panelWidth === 600 ? 'desk:text-[44px]' : 'desk:text-[40px]'} m-0 text-[32px] font-semibold leading-[1.1] tracking-[-0.03em] text-paper-ink`}>
+        <h2 className={`${step.panelWidth === 600 ? 'desk:text-[44px]' : 'desk:text-[40px]'} m-0 text-[32px] font-light leading-[1.1] tracking-[-0.03em] text-paper-ink`}>
         {step.title} <span className="text-paper-muted">{step.titleMuted}</span>
       </h2>
       {step.supportingText && <p className="m-0 max-w-[520px] text-[17px] leading-[1.6] text-paper-soft">{step.supportingText}</p>}

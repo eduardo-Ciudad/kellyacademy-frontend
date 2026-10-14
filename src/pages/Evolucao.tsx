@@ -145,7 +145,7 @@ function PageHeader() {
   return (
     <header className="flex items-end justify-between">
       <div>
-        <h1 className="text-text text-[24px] font-bold tracking-[-0.02em] lg:text-[28px]">
+        <h1 className="text-text text-[24px] font-normal tracking-[-0.02em] lg:text-[28px]">
           Sua evolução
         </h1>
         <p className="text-text-2 mt-1.5 text-sm lg:text-[15px]">
@@ -271,7 +271,7 @@ function FocusCard({
           <span className="text-accent-text block text-[13px] font-semibold">
             Seu foco agora
           </span>
-          <h2 className="text-text mt-1 text-lg font-bold tracking-[-0.01em] lg:text-xl">
+              <h2 className="text-text mt-1 text-lg font-normal tracking-[-0.01em] lg:text-xl">
             {competency.nomeCurto}: média {value} de 200
           </h2>
           <p className="text-text-body mt-1 text-sm leading-5 lg:leading-[1.5]">
@@ -311,7 +311,7 @@ function ChartCard({
   return (
     <section className="bg-surface lg:rounded-card rounded-[18px] p-4 lg:px-6 lg:py-[22px]">
       <div className="flex items-center justify-between gap-4">
-        <h2 className="text-text text-base font-bold lg:text-lg">
+      <h2 className="text-text text-base font-normal lg:text-lg">
           {isDesktop ? 'Notas por redação' : 'Nota total'}
         </h2>
         {isDesktop ? (
@@ -652,7 +652,7 @@ function CompetencyAverages({
   return (
     <section className="bg-surface lg:rounded-card rounded-[18px] px-1.5 pt-3.5 pb-1.5 lg:px-2.5 lg:pt-[18px] lg:pb-2.5">
       <div className="px-3 pb-1.5 lg:px-3.5 lg:pb-2">
-        <h2 className="text-text text-base font-bold lg:text-lg">
+      <h2 className="text-text text-base font-normal lg:text-lg">
           Média por competência
         </h2>
         <span className="text-text-3 mt-0.5 block text-xs">
@@ -726,7 +726,7 @@ function EmptyState() {
           <span className="bg-accent-tint rounded-inner flex size-14 items-center justify-center">
             <BarChart3 className="text-accent-text" size={28} />
           </span>
-          <h2 className="text-text text-[22px] font-bold tracking-[-0.01em]">
+      <h2 className="text-text text-[22px] font-normal tracking-[-0.01em]">
             Sua evolução aparece aqui
           </h2>
           <p className="text-text-2 text-[15px] leading-6">
@@ -750,7 +750,7 @@ function ErrorState({ onRetry }: { onRetry: () => void }) {
     <div className="px-5 pt-5 lg:px-0 lg:pt-0">
       <PageHeader />
       <section className="bg-surface rounded-card mt-6 p-8 text-center">
-        <h2 className="text-text text-lg font-bold">
+      <h2 className="text-text text-lg font-normal">
           Não foi possível carregar sua evolução
         </h2>
         <p className="text-text-2 mt-2 text-sm">

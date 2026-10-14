@@ -1,6 +1,6 @@
 import type { PropsWithChildren } from 'react';
 import { Check } from 'lucide-react';
-import logo from '@/assets/kelly-logo-escuro.svg';
+import { KellyLogo } from '@/components/brand/KellyLogo';
 import { ScoreRing } from '@/components/ui/ScoreRing';
 import { SparkIcon } from '@/components/ui/SparkIcon';
 
@@ -13,7 +13,7 @@ export function AuthLayout({ children, variant }: AuthLayoutProps) {
         <Brand />
 
         <div className="mt-10 lg:hidden">
-          <h1 className="text-text text-[30px] leading-[1.15] font-bold tracking-[-0.02em]">
+          <h1 className="text-text text-[30px] leading-[1.15] font-normal tracking-[-0.02em]">
             {variant === 'login'
               ? 'Entenda o que falta para a sua nota subir'
               : 'Crie sua conta'}
@@ -40,7 +40,7 @@ export function AuthLayout({ children, variant }: AuthLayoutProps) {
 }
 
 function Brand() {
-  return <img src={logo} alt="Kelly Academy" className="h-11 w-auto" />;
+  return <KellyLogo size={32} />;
 }
 
 function LoginPanel() {
@@ -58,7 +58,7 @@ function LoginPanel() {
         <span className="bg-accent-tint text-accent-text-hover rounded-pill flex items-center gap-1.5 self-start px-3 py-1.5 text-[13px] font-semibold">
           <SparkIcon size={14} double={false} /> Correção com IA
         </span>
-        <h2 className="text-text text-[40px] leading-[1.15] font-bold tracking-[-0.025em]">
+        <h2 className="text-text text-[40px] leading-[1.15] font-light tracking-[-0.025em]">
           Entenda o que falta para a sua nota subir
         </h2>
         <p className="text-text-2 text-[17px] leading-[1.6]">
@@ -134,7 +134,7 @@ function CadastroPanel() {
         <span className="bg-accent-tint text-accent-text-hover rounded-pill flex items-center gap-1.5 self-start px-3 py-1.5 text-[13px] font-semibold">
           <SparkIcon size={14} double={false} /> Como funciona
         </span>
-        <h2 className="text-text text-[40px] leading-[1.15] font-bold tracking-[-0.025em]">
+        <h2 className="text-text text-[40px] leading-[1.15] font-light tracking-[-0.025em]">
           Escreva, receba a correção e saiba o que treinar
         </h2>
       </div>

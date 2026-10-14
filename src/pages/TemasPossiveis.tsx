@@ -40,7 +40,7 @@ export function TemasPossiveis() {
 
       <header className="mt-4 flex items-end justify-between gap-6 lg:mt-3">
         <div>
-          <h1 className="text-text text-[24px] leading-tight font-bold tracking-[-0.02em] lg:text-[28px]">
+        <h1 className="text-text text-[24px] leading-tight font-normal tracking-[-0.02em] lg:text-[28px]">
             Possíveis temas do ENEM 2026
           </h1>
           <p className="text-text-2 mt-2 max-w-[680px] text-sm leading-[1.55] lg:text-[15px]">
@@ -83,7 +83,7 @@ export function TemasPossiveis() {
         <TemasPossiveisSkeleton />
       ) : query.isError ? (
         <div className="bg-surface rounded-card mt-6 p-8 text-center">
-          <h2 className="text-text text-lg font-bold">
+        <h2 className="text-text text-lg font-normal">
             Não foi possível carregar os temas possíveis
           </h2>
           <Button
@@ -106,7 +106,7 @@ export function TemasPossiveis() {
                 <section key={grupo.forca} className="flex flex-col gap-3">
                   <div className="flex items-center gap-2.5">
                     <SinalForca acesas={grupo.barras} />
-                    <h2 className="text-text text-lg font-bold tracking-[-0.01em]">
+        <h2 className="text-text text-lg font-normal tracking-[-0.01em]">
                       {grupo.titulo}
                     </h2>
                     <span className="text-text-3 text-[13px]">

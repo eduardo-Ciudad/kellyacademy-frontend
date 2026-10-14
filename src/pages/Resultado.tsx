@@ -297,7 +297,7 @@ function ResultadoAvaliado({
       <PageTop redacao={redacao} badge />
       <div className="px-1 lg:hidden">
         <HeaderMeta redacao={redacao} mobile />
-        <h1 className="text-text mt-1.5 text-2xl leading-tight font-bold tracking-[-0.015em]">
+        <h1 className="text-text mt-1.5 text-2xl leading-tight font-normal tracking-[-0.015em]">
           {title}
         </h1>
       </div>
@@ -313,7 +313,7 @@ function ResultadoAvaliado({
         <div className="w-full min-w-0 flex-1">
           <div className="hidden lg:block">
             <HeaderMeta redacao={redacao} />
-            <h1 className="text-text mt-3 text-[28px] leading-tight font-bold tracking-[-0.015em]">
+      <h1 className="text-text mt-3 text-[28px] leading-tight font-normal tracking-[-0.015em]">
               {title}
             </h1>
           </div>
@@ -328,7 +328,7 @@ function ResultadoAvaliado({
               <SparkIcon size={20} />
             </span>
             <div>
-              <h2 className="text-text flex items-center gap-2 text-base font-bold">
+        <h2 className="text-text flex items-center gap-2 text-base font-normal">
                 <SparkIcon
                   className="text-accent-text-hover lg:hidden"
                   size={18}
@@ -343,7 +343,7 @@ function ResultadoAvaliado({
 
           <section>
             <div className="mb-2 flex items-baseline justify-between px-1 lg:px-[18px]">
-              <h2 className="text-text text-lg font-bold">
+          <h2 className="text-text text-lg font-normal">
                 Análise por competência
               </h2>
               <span className="text-text-3 hidden text-[13px] lg:block">
@@ -519,7 +519,7 @@ function PointList({
 }) {
   return (
     <section className="bg-surface rounded-card p-5 lg:px-6 lg:py-[22px]">
-      <h2 className="flex items-center gap-2 text-base font-bold">
+      <h2 className="flex items-center gap-2 text-base font-normal">
         <span
           className={cn(
             'flex size-6 items-center justify-center rounded-full',
@@ -596,7 +596,7 @@ function Anulada({
       <PageTop redacao={redacao} singleAction />
       <div>
         <HeaderMeta redacao={redacao} />
-        <h1 className="text-text mt-2.5 text-2xl leading-tight font-bold tracking-[-0.015em] lg:text-[28px]">
+        <h1 className="text-text mt-2.5 text-2xl leading-tight font-normal tracking-[-0.015em] lg:text-[28px]">
           {title}
         </h1>
       </div>
@@ -608,7 +608,7 @@ function Anulada({
           <span className="text-danger text-[13px] font-bold">
             Redação anulada · nota 0
           </span>
-          <h2 className="mt-1.5 text-[22px] font-bold">
+        <h2 className="mt-1.5 text-[22px] font-normal">
             {avaliacao.motivoAnulacao ?? 'Redação anulada'}
           </h2>
           <p className="text-danger-text mt-2 text-base leading-[1.6] whitespace-pre-wrap">
@@ -650,7 +650,7 @@ function Anulada({
 function InfoCard({ title, children }: { title: string; children: ReactNode }) {
   return (
     <section className="bg-surface rounded-card p-5 lg:px-6 lg:py-[22px]">
-      <h2 className="text-base font-bold">{title}</h2>
+      <h2 className="text-base font-normal">{title}</h2>
       <div className="text-text-body mt-3 text-[15px] leading-[1.65]">
         {children}
       </div>
@@ -670,7 +670,7 @@ function CenteredState({
   return (
     <div className="flex min-h-[60vh] items-center justify-center px-1 text-center">
       <div className="bg-surface rounded-card max-w-xl px-7 py-10">
-        <h1 className="text-text text-2xl font-bold tracking-[-0.02em]">
+      <h1 className="text-text text-2xl font-normal tracking-[-0.02em]">
           {title}
         </h1>
         <p className="text-text-2 mx-auto mt-2 max-w-md text-[15px] leading-6">

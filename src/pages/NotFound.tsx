@@ -5,7 +5,7 @@ export function NotFound() {
     <main className="flex min-h-screen items-center justify-center px-5 text-center">
       <div>
         <p className="tabular text-accent-text text-sm font-semibold">404</p>
-        <h1 className="text-text mt-2 text-[28px] font-bold">
+      <h1 className="text-text mt-2 text-[28px] font-normal">
           Página não encontrada
         </h1>
         <Link

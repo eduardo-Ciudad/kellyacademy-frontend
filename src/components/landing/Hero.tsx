@@ -96,7 +96,7 @@ export function Hero() {
         <motion.h1
           aria-label={headline}
           variants={wordStagger}
-          className="text-text desk:mt-7 desk:text-display mt-[22px] max-w-[920px] text-[40px] leading-[1.04] font-bold tracking-[-0.035em] text-balance"
+        className="text-text desk:mt-7 desk:text-display mt-[22px] max-w-[920px] text-[40px] leading-[1.04] font-light tracking-[-0.035em] text-balance"
         >
           <span aria-hidden="true">
             {headlineWords.map((headlineWord) => (

@@ -89,7 +89,7 @@ export function EtapasProgresso({
           </span>
         </div>
         <div className="text-center">
-          <h1 className="text-text text-2xl font-bold tracking-[-0.02em] lg:text-[26px]">
+          <h1 className="text-text text-2xl font-normal tracking-[-0.02em] lg:text-[26px]">
             {titulo}
           </h1>
           <p className="text-text-2 mt-2 text-[15px] leading-[1.55]">

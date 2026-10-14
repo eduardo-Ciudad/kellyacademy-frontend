@@ -74,7 +74,7 @@ export function Temas() {
             <ArrowLeft size={18} />
           </Link>
           <div>
-            <h1 className="text-text text-[22px] font-bold tracking-[-0.02em] lg:text-[28px]">
+          <h1 className="text-text text-[22px] font-normal tracking-[-0.02em] lg:text-[28px]">
               Escolha um tema
             </h1>
             <p className="text-text-2 mt-1.5 hidden text-[15px] lg:block">
@@ -166,7 +166,7 @@ export function Temas() {
         <TemasSkeleton />
       ) : hasError ? (
         <div className="bg-surface rounded-card mx-5 mt-4 p-8 text-center lg:mx-0 lg:mt-6">
-          <h2 className="text-text text-lg font-bold">
+        <h2 className="text-text text-lg font-normal">
             Não foi possível carregar os temas
           </h2>
           <Button onClick={refetch} variant="secondary" className="mt-5">

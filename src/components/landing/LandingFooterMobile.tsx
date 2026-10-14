@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import logo from '@/assets/kelly-logo-escuro.svg';
+import { KellyLogo } from '@/components/brand/KellyLogo';
 
 const LINKS = [
   ['Recursos', '#recursos'],
@@ -15,7 +15,7 @@ export function LandingFooterMobile() {
         aria-label="Kelly Academy — início"
         className="focus-ring rounded-inner inline-flex self-start"
       >
-        <img src={logo} alt="Kelly Academy" className="h-7 w-auto" />
+        <KellyLogo size={24} />
       </a>
 
       <nav

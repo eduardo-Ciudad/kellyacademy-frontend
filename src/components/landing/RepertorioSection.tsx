@@ -9,7 +9,6 @@ import {
 } from 'motion/react';
 import {
   ArrowRight,
-  BookOpen,
   Lightbulb,
   Pause,
   Play,
@@ -17,27 +16,15 @@ import {
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import {
-  EIXOS,
   FICHAS,
-  REPERTORIO_PILARES,
   REPERTORIO_STATS,
   type FichaRepertorio,
 } from '@/components/landing/data/repertorioDestaque';
-import { BorderBeam } from '@/components/landing/fx/BorderBeam';
-import { GridBackground } from '@/components/landing/fx/GridBackground';
-import { Marquee } from '@/components/landing/fx/Marquee';
 import { DUR, EASE_OUT } from '@/components/landing/fx/motion';
 import { NumberTicker } from '@/components/landing/fx/NumberTicker';
-import {
-  Reveal,
-  RevealGroup,
-  RevealItem,
-} from '@/components/landing/fx/Reveal';
-import { TextShimmer } from '@/components/landing/fx/TextShimmer';
+import { Reveal } from '@/components/landing/fx/Reveal';
 import { useIsMobileLanding } from '@/components/landing/fx/useIsMobileLanding';
 import { RepertorioMobile } from '@/components/landing/RepertorioMobile';
-import { LandingCard } from '@/components/landing/ui/LandingCard';
-import { SectionHeader } from '@/components/landing/ui/SectionHeader';
 import { useRovingTabs } from '@/components/landing/useRovingTabs';
 import {
   FUNCAO_ARGUMENTATIVA_LABELS,
@@ -75,95 +62,50 @@ function RepertorioDesktop() {
   return (
     <section
       id="repertorio"
-      className="relative scroll-mt-20 px-5 pt-[130px] pb-[60px] sm:px-6"
+      className="scroll-mt-20 px-6 pt-[200px]"
     >
-      <GridBackground className="opacity-80" />
-      <div className="relative mx-auto max-w-[1200px]">
-        <SectionHeader
-          eyebrow={
-            <>
-              <BookOpen size={14} strokeWidth={2} aria-hidden="true" />O
-              DIFERENCIAL DA KELLY
-            </>
-          }
-          title={
-            <>
-              Repertório que você sabe <TextShimmer>usar</TextShimmer>, não só
-              decorar.
-            </>
-          }
-          description="Pensadores, leis, dados e obras curados por eixo do ENEM — com a ideia central e o erro que derruba sua C2."
-          align="center"
-          eyebrowVariant="pill"
-          className="mx-auto max-w-[900px]"
-        />
+      <div className="mx-auto max-w-[1200px]">
+        <header className="flex items-end justify-between gap-8">
+      <h2 className="text-text max-w-[700px] text-[clamp(36px,3.8vw,52px)] leading-[1.06] font-light tracking-[-0.035em] text-balance">
+            Repertório que você sabe usar.{' '}
+            <span className="text-text-3">Não só decorar.</span>
+          </h2>
+          <p className="text-text-3 max-w-[360px] text-[17px] leading-[1.6] text-pretty">
+            Pensadores, leis, dados e obras curados por eixo do ENEM — com a
+            ideia central e o erro que derruba sua C2.
+          </p>
+        </header>
 
-        <RevealGroup className="desk:grid-cols-4 desk:gap-4 mt-[52px] grid grid-cols-2 gap-3">
-          {REPERTORIO_STATS.map((stat) => (
-            <RevealItem key={stat.label}>
-              <LandingCard as="div" className="desk:px-[22px] px-4 py-5">
-                <NumberTicker
-                  value={stat.value}
-                  className="text-text block text-[2.5rem] leading-none font-extrabold"
-                />
-                <p className="text-text-2 text-small mt-2">{stat.label}</p>
-              </LandingCard>
-            </RevealItem>
+        <div className="mt-16 grid grid-cols-4">
+          {REPERTORIO_STATS.map((stat, index) => (
+            <div
+              key={stat.label}
+              className={
+                index === 0 ? 'pr-6' : 'border-surface-2 border-l px-6'
+              }
+            >
+              <NumberTicker
+                value={stat.value}
+                className="text-text block text-[56px] leading-none font-medium tracking-[-0.03em]"
+              />
+              <p className="text-text-3 mt-2 text-[15px] leading-[1.4]">
+                {stat.label}
+              </p>
+            </div>
           ))}
-        </RevealGroup>
-
-        <div
-          className="mt-[22px] overflow-hidden"
-          style={{
-            maskImage:
-              'linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent)',
-            WebkitMaskImage:
-              'linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent)',
-          }}
-        >
-          <Marquee speed={45}>
-            {EIXOS.map((eixo) => (
-              <span
-                key={eixo}
-                className="border-possivel-border text-possivel rounded-pill shrink-0 border px-3.5 py-[7px] text-sm whitespace-nowrap"
-              >
-                {eixo}
-              </span>
-            ))}
-          </Marquee>
         </div>
 
         <Reveal>
           <RepertorioExplorer />
         </Reveal>
 
-        <RevealGroup className="desk:grid-cols-3 mt-5 grid gap-5">
-          {REPERTORIO_PILARES.map((pilar) => (
-            <RevealItem key={pilar.titulo}>
-              <LandingCard className="p-6">
-                <div className="flex items-center justify-between gap-2">
-                  <h3 className="text-text text-h3">{pilar.titulo}</h3>
-                  {'emBreve' in pilar && pilar.emBreve ? (
-                    <span className="bg-warning-bg text-warning text-eyebrow rounded-pill shrink-0 px-2 py-1 font-semibold">
-                      EM BREVE
-                    </span>
-                  ) : null}
-                </div>
-                <p className="text-text-2 text-body mt-2.5">
-                  {pilar.descricao}
-                </p>
-              </LandingCard>
-            </RevealItem>
-          ))}
-        </RevealGroup>
-
-        <div className="mt-10 flex justify-center">
+        <div className="mt-10">
           <Link
             to="/criar-conta"
-            className="focus-ring bg-accent hover:bg-accent-hover rounded-pill text-body inline-flex min-h-14 items-center gap-2.5 px-7 font-semibold text-white transition hover:-translate-y-px active:translate-y-0 motion-reduce:transition-none"
+            className="focus-ring text-text hover:text-accent-text inline-flex min-h-11 items-center gap-2 rounded-md text-[15px] font-semibold transition-colors motion-reduce:transition-none"
           >
             Explorar os 63 repertórios
-            <ArrowRight size={18} strokeWidth={2.2} aria-hidden="true" />
+            <ArrowRight size={16} strokeWidth={2.2} aria-hidden="true" />
           </Link>
         </div>
       </div>
@@ -222,10 +164,8 @@ function RepertorioExplorer() {
   return (
     <div
       ref={explorerRef}
-      className="border-control bg-surface rounded-panel shadow-raised relative mt-10 overflow-hidden border"
+      className="border-surface-2 bg-photo-drop relative mt-[72px] overflow-hidden rounded-[20px] border"
     >
-      <BorderBeam />
-      <BorderBeam bottom />
       <div className="desk:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)] grid grid-cols-1">
         <div className="border-border-subtle desk:border-r desk:border-b-0 flex min-w-0 flex-col gap-2.5 border-b p-4 sm:p-6">
           <Link

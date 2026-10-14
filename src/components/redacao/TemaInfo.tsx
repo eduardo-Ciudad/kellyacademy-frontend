@@ -19,7 +19,7 @@ export function TemaInfo({ tema }: { tema: Tema }) {
       </section>
 
       <section className="bg-surface rounded-card px-[22px] py-5">
-        <h2 className="text-text text-[15px] font-bold">
+      <h2 className="text-text text-[15px] font-normal">
           O que a IA vai avaliar
         </h2>
         <div className="mt-3.5 flex flex-col gap-3">

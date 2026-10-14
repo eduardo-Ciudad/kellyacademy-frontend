@@ -1,6 +1,12 @@
 // TODO: trocar pelo tema real escolhido pelo Eduardo
 export const TEMA_POSSIVEL_DESTAQUE = 'Seu próximo tema de treino';
 
+export const TEMAS_POSSIVEIS_PREVIEW = [
+  { nome: '[TEMA DA SUA PESQUISA]', eixo: '+ Adicionar' },
+  { nome: '[OUTRO TEMA PROVÁVEL]', eixo: 'Tecnologia' },
+  { nome: '[OUTRO TEMA PROVÁVEL]', eixo: 'Cidadania' },
+] as const;
+
 export const temasEnem = [
   {
     ano: '2024',

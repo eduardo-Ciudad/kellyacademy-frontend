@@ -246,7 +246,7 @@ export function Transcricao() {
     return (
       <main className="bg-bg flex min-h-screen items-center justify-center px-5 text-center">
         <div>
-          <h1 className="text-text text-[28px] font-bold">
+          <h1 className="text-text text-[28px] font-normal">
             Não foi possível carregar o tema
           </h1>
           <p className="text-text-2 mt-2">
@@ -267,7 +267,7 @@ export function Transcricao() {
     return (
       <main className="bg-bg flex min-h-screen items-center justify-center px-5 text-center">
         <div>
-          <h1 className="text-text text-[28px] font-bold">
+          <h1 className="text-text text-[28px] font-normal">
             Tema não encontrado
           </h1>
           <Link

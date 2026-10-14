@@ -11,7 +11,7 @@ export function FaqMobile() {
   return (
     <section id="faq" className="scroll-mt-20 px-4 pt-20 pb-4">
       <Reveal>
-        <h2 className="text-text text-[28px] leading-[1.1] font-bold tracking-[-0.03em]">
+      <h2 className="text-text text-[28px] leading-[1.1] font-normal tracking-[-0.03em]">
           Dúvidas frequentes
         </h2>
       </Reveal>

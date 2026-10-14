@@ -49,7 +49,7 @@ export function RepertorioCard({
           </span>
         )}
       </div>
-      <h2 className="text-text mt-2 text-base leading-snug font-semibold">
+      <h2 className="text-text mt-2 text-base leading-snug font-normal">
         {repertorio.nome}
       </h2>
       {repertorio.subtitulo && (

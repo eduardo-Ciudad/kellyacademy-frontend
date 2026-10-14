@@ -143,7 +143,7 @@ export function CapturaFoto(props: Props) {
             </div>
           ))}
         <div className="text-center">
-          <h1 className="text-text text-2xl font-bold tracking-[-0.02em] lg:text-[30px]">
+      <h1 className="text-text text-2xl font-normal tracking-[-0.02em] lg:text-[30px]">
             {fotos.length ? (
               `${fotos.length} ${fotos.length === 1 ? 'foto pronta' : 'fotos prontas'}`
             ) : (

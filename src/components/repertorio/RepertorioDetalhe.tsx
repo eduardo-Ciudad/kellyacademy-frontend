@@ -34,7 +34,7 @@ export function RepertorioDetalhe({ repertorio }: { repertorio: Repertorio }) {
         <p className="text-text-3 text-xs font-semibold tracking-[0.05em] uppercase">
           {repertorio.tipoDescricao ?? TIPO_ENTIDADE_LABELS[repertorio.tipo]}
         </p>
-        <h2 className="text-text mt-2 text-2xl leading-tight font-bold">
+        <h2 className="text-text mt-2 text-2xl leading-tight font-normal">
           {repertorio.nome}
         </h2>
         {repertorio.subtitulo && (

@@ -2,7 +2,7 @@ import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { Plus, RotateCcw } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import icon from '@/assets/kelly-icon.svg';
+import icon from '@/assets/brand/kelly-marca-fundo-escuro.svg';
 import { AccountButton } from '@/components/layout/AccountButton';
 import { CorrecoesHojeCard } from '@/components/redacao/CorrecoesHojeCard';
 import { Button } from '@/components/ui/Button';
@@ -52,8 +52,8 @@ export function Historico() {
     <div className="pb-[72px] lg:pb-0">
       <header className="flex items-center justify-between px-5 pt-5 pb-3 lg:hidden">
         <div className="flex items-center gap-2.5">
-          <img src={icon} alt="" className="size-8" />
-          <h1 className="text-text text-[22px] font-bold tracking-[-0.02em]">
+          <img src={icon} alt="" className="h-8 w-auto" />
+          <h1 className="text-text text-[22px] font-normal tracking-[-0.02em]">
             Suas redações
           </h1>
         </div>
@@ -62,7 +62,7 @@ export function Historico() {
 
       <div className="hidden items-end justify-between lg:flex">
         <div>
-          <h1 className="text-text text-[28px] font-bold tracking-[-0.02em]">
+          <h1 className="text-text text-[28px] font-normal tracking-[-0.02em]">
             Suas redações
           </h1>
           <p className="text-text-2 mt-1.5 text-[15px]">
@@ -248,8 +248,8 @@ function StatusChip({ status }: { status: ResumoRedacao['status'] }) {
 function EmptyState() {
   return (
     <div className="bg-surface rounded-card mx-5 mt-2 flex flex-col items-center px-6 py-12 text-center lg:mx-0 lg:mt-6">
-      <img src={icon} alt="" className="size-12" />
-      <h2 className="text-text mt-5 text-lg font-bold">
+      <img src={icon} alt="" className="h-12 w-auto" />
+      <h2 className="text-text mt-5 text-lg font-normal">
         Escreva sua primeira redação
       </h2>
       <p className="text-text-2 mt-2 max-w-md text-sm leading-6">
@@ -269,7 +269,7 @@ function EmptyState() {
 function ErrorState({ onRetry }: { onRetry: () => void }) {
   return (
     <div className="bg-surface rounded-card mx-5 mt-4 p-8 text-center lg:mx-0 lg:mt-6">
-      <h2 className="text-text text-lg font-bold">
+      <h2 className="text-text text-lg font-normal">
         Não foi possível carregar suas redações
       </h2>
       <p className="text-text-2 mt-2 text-sm">

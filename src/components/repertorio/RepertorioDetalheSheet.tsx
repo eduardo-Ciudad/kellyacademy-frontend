@@ -89,7 +89,7 @@ function EstadoErro({
 }) {
   return (
     <div className="py-10 text-center">
-      <h2 className="text-text text-lg font-bold">
+          <h2 className="text-text text-lg font-normal">
         {notFound
           ? 'Repertório não encontrado.'
           : 'Não foi possível carregar o repertório.'}

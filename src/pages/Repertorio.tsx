@@ -82,7 +82,7 @@ export function Repertorio() {
       <header>
         <div className="flex items-start gap-3">
           <div className="min-w-0 flex-1">
-            <h1 className="text-text text-[22px] font-bold tracking-[-0.02em] lg:text-[28px]">
+          <h1 className="text-text text-[22px] font-normal tracking-[-0.02em] lg:text-[28px]">
               Repertório
             </h1>
             <p className="text-text-2 mt-1.5 text-sm leading-relaxed lg:max-w-3xl lg:text-[15px]">
@@ -153,7 +153,7 @@ export function Repertorio() {
             <RepertorioSkeleton />
           ) : repertoriosQuery.isError && itens.length === 0 ? (
             <div className="bg-surface rounded-card mt-5 p-8 text-center">
-              <h2 className="text-text text-lg font-bold">
+        <h2 className="text-text text-lg font-normal">
                 Não foi possível carregar os repertórios
               </h2>
               <Button

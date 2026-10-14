@@ -123,7 +123,7 @@ export function CriarConta() {
         className="mt-6 flex flex-1 flex-col lg:my-auto lg:w-[400px] lg:flex-none"
       >
         <div className="hidden flex-col gap-2 lg:flex">
-          <h1 className="text-text text-[32px] font-bold tracking-[-0.02em]">
+        <h1 className="text-text text-[32px] font-normal tracking-[-0.02em]">
             Crie sua conta
           </h1>
           <p className="text-text-2 text-base leading-[1.5]">

@@ -1,71 +1,260 @@
-import { Check } from 'lucide-react';
+import { useRef, useState, type KeyboardEvent } from 'react';
+import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
+import { Check, ChevronDown, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { Reveal } from '@/components/landing/fx/Reveal';
-import { LandingCard } from '@/components/landing/ui/LandingCard';
-import { SectionHeader } from '@/components/landing/ui/SectionHeader';
+import {
+  formatarPreco,
+  linhasComparativo,
+  planos,
+  PRECO_PRO_ANUAL,
+  PRECO_PRO_MENSAL,
+  textosPlanos,
+  type Ciclo,
+  type ValorComparativo,
+} from '@/components/landing/data/planos';
 
-const FREE_FEATURES = [
-  '3 correções por dia',
-  'Temas e possíveis temas 2026',
-  'Evolução por competência e Julia',
-] as const;
-
-export function PlanosMobile() {
+export function PlanosMobile({
+  ciclo,
+  onCicloChange,
+}: {
+  ciclo: Ciclo;
+  onCicloChange: (ciclo: Ciclo) => void;
+}) {
+  const [aberto, setAberto] = useState(false);
   return (
-    <section id="planos" className="scroll-mt-20 px-4 pt-14 pb-4">
-      <SectionHeader
-        eyebrow="Planos"
-        title={
-          <span className="block text-[32px] leading-[1.08] tracking-[-0.03em]">
-            Comece de graça.
-          </span>
-        }
-      />
-
-      <Reveal className="mt-5">
-        <LandingCard className="flex flex-col gap-3.5 p-5">
-          <div className="flex items-baseline justify-between gap-4">
-            <h3 className="text-text text-[20px] font-semibold">Grátis</h3>
-            <p className="text-text text-[30px] leading-none font-extrabold tracking-[-0.02em] tabular-nums">
-              R$ 0
-            </p>
-          </div>
-          <ul className="text-text-body flex list-none flex-col gap-[9px] p-0 text-[15px]">
-            {FREE_FEATURES.map((feature) => (
-              <li key={feature} className="flex gap-2.5">
-                <Check
-                  size={18}
-                  strokeWidth={2.4}
-                  aria-hidden="true"
-                  className="text-success mt-0.5 shrink-0"
-                />
-                {feature}
-              </li>
-            ))}
-          </ul>
-          <Link
-            to="/criar-conta"
-            className="focus-ring bg-accent hover:bg-accent-hover rounded-pill flex min-h-[50px] items-center justify-center px-5 text-center text-base font-semibold text-white transition-colors motion-reduce:transition-none"
+    <section id="planos" className="scroll-mt-20 px-4 pt-20 pb-6">
+      <header className="mx-auto max-w-[520px] text-center">
+        <h2 className="font-display text-text text-[36px] leading-[1.06] font-light tracking-[-0.04em]">
+          {textosPlanos.tituloInicio}{' '}
+          <span className="text-text-3">{textosPlanos.tituloFim}</span>
+        </h2>
+        <p className="text-text-2 mt-4 text-[15px] leading-[1.55]">
+          {textosPlanos.descricao}
+        </p>
+      </header>
+      <div className="mt-7 flex justify-center">
+        <CicloSelector ciclo={ciclo} onChange={onCicloChange} />
+      </div>
+      <div className="mx-auto mt-8 flex max-w-[560px] flex-col gap-4">
+        <PlanoCard tipo="pro" ciclo={ciclo} />
+        <PlanoCard tipo="gratis" ciclo={ciclo} />
+        <div className="mt-7 border-y border-[#2a2b2c]">
+          <button
+            type="button"
+            aria-expanded={aberto}
+            aria-controls="comparativo-planos-mobile"
+            onClick={() => setAberto((valor) => !valor)}
+            className="focus-ring text-text flex min-h-14 w-full items-center justify-between py-3 text-left text-[15px] font-medium"
           >
-            Criar conta grátis
-          </Link>
-        </LandingCard>
-      </Reveal>
-
-      <Reveal className="mt-3">
-        <article className="border-possivel-border rounded-card flex flex-col gap-2 border border-dashed px-[18px] py-4">
-          <div className="flex items-center justify-between gap-3">
-            <h3 className="text-text text-[17px] font-semibold">Pro</h3>
-            <span className="bg-warning-bg text-warning rounded-pill px-[9px] py-1 font-mono text-[10.5px] tracking-[0.1em]">
-              EM BREVE
-            </span>
-          </div>
-          <p className="text-text-2 text-[14.5px] leading-[1.5]">
-            Mais correções, transcrição por foto, repertório completo e plano de
-            estudo.
-          </p>
-        </article>
-      </Reveal>
+            {textosPlanos.comparativo.titulo}
+            <ChevronDown
+              size={18}
+              aria-hidden="true"
+              className={`text-text-3 transition-transform motion-reduce:transition-none ${aberto ? 'rotate-180' : ''}`}
+            />
+          </button>
+          {aberto && (
+            <div id="comparativo-planos-mobile" className="pb-3">
+              {linhasComparativo.map((linha) => (
+                <div
+                  key={linha.nome}
+                  className="border-t border-[#2a2b2c] py-4"
+                >
+                  <p className="text-text-body text-[14px] leading-[1.45]">
+                    {linha.nome}
+                  </p>
+                  <p className="text-text-3 mt-2 flex flex-wrap items-center gap-x-2 text-[13px]">
+                    <span>{textosPlanos.comparativo.gratis}:</span>
+                    <Valor valor={linha.gratis} />
+                    <span aria-hidden="true">·</span>
+                    <span>{textosPlanos.comparativo.pro}:</span>
+                    <Valor valor={linha.pro} />
+                  </p>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
     </section>
+  );
+}
+
+function CicloSelector({
+  ciclo,
+  onChange,
+}: {
+  ciclo: Ciclo;
+  onChange: (ciclo: Ciclo) => void;
+}) {
+  const ciclos: Ciclo[] = ['mensal', 'anual'];
+  const refs = useRef<Array<HTMLButtonElement | null>>([]);
+  const onKeyDown = (
+    event: KeyboardEvent<HTMLButtonElement>,
+    index: number,
+  ) => {
+    if (
+      !['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(event.key)
+    )
+      return;
+    event.preventDefault();
+    const delta = event.key === 'ArrowLeft' || event.key === 'ArrowUp' ? -1 : 1;
+    const next = (index + delta + ciclos.length) % ciclos.length;
+    onChange(ciclos[next]);
+    refs.current[next]?.focus();
+  };
+  return (
+    <div
+      role="radiogroup"
+      aria-label={textosPlanos.seletor.rotulo}
+      className="flex rounded-full border border-[#2f3031] bg-[#1d1e1f] p-1"
+    >
+      {ciclos.map((item, index) => {
+        const ativo = ciclo === item;
+        return (
+          <button
+            key={item}
+            ref={(el) => {
+              refs.current[index] = el;
+            }}
+            type="button"
+            role="radio"
+            aria-checked={ativo}
+            tabIndex={ativo ? 0 : -1}
+            onClick={() => onChange(item)}
+            onKeyDown={(event) => onKeyDown(event, index)}
+            className={`focus-ring min-h-9 rounded-full px-3.5 text-[13px] font-medium transition-colors motion-reduce:transition-none ${ativo ? 'text-text bg-[#2f3031]' : 'text-text-3'}`}
+          >
+            {item === 'mensal'
+              ? textosPlanos.seletor.mensal
+              : textosPlanos.seletor.anual}
+            {item === 'anual' && (
+              <span className="text-accent-text ml-0.5">
+                {' '}
+                {textosPlanos.seletor.desconto}
+              </span>
+            )}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+function PlanoCard({ tipo, ciclo }: { tipo: 'gratis' | 'pro'; ciclo: Ciclo }) {
+  const plano = planos[tipo];
+  const pro = tipo === 'pro';
+  return (
+    <article
+      className={`flex flex-col rounded-[20px] border p-6 ${pro ? 'border-[#0866ff] bg-[linear-gradient(180deg,rgba(8,102,255,.06),transparent_55%)]' : 'border-[#2f3031]'}`}
+    >
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <h3 className="text-text text-[22px] font-semibold">{plano.nome}</h3>
+          <p className="text-text-2 mt-1.5 text-[14px] leading-[1.5]">
+            {plano.descricao}
+          </p>
+        </div>
+        {pro && (
+          <span className="border-accent/40 bg-accent/10 text-accent-text mt-0.5 shrink-0 rounded-full border px-2 py-1 font-mono text-[9px] font-semibold tracking-[0.09em]">
+            {planos.pro.selo}
+          </span>
+        )}
+      </div>
+      <div className="mt-7">
+        {pro ? <PrecoPro ciclo={ciclo} /> : <PrecoGratis />}
+      </div>
+      <ul className="text-text-body mt-6 flex flex-col gap-2.5 border-t border-[#2a2b2c] pt-5 text-[14px] leading-[1.45]">
+        {plano.itens.map((item) => (
+          <li key={item} className="flex gap-2.5">
+            <Check
+              size={17}
+              strokeWidth={2}
+              aria-hidden="true"
+              className={`mt-0.5 shrink-0 ${pro ? 'text-accent-text' : 'text-text-3'}`}
+            />
+            {item}
+          </li>
+        ))}
+      </ul>
+      <Link
+        to={plano.destino}
+        className={`focus-ring mt-7 flex min-h-12 items-center justify-center rounded-full border px-4 text-center text-[14px] font-semibold transition-colors motion-reduce:transition-none ${pro ? 'border-accent bg-accent active:bg-accent-hover text-white' : 'text-text active:bg-surface-2 border-[#3a3b3c]'}`}
+      >
+        {plano.botao}
+      </Link>
+    </article>
+  );
+}
+
+function PrecoGratis() {
+  return (
+    <>
+      <p className="font-display text-text flex items-end gap-2 text-[46px] leading-none font-light tracking-[-0.04em] tabular-nums">
+        {formatarPreco(planos.gratis.preco)}
+        <span className="text-text-3 pb-1 font-sans text-[14px] font-normal tracking-normal">
+          {planos.gratis.sufixo}
+        </span>
+      </p>
+      <div className="mt-2 h-6" aria-hidden="true" />
+    </>
+  );
+}
+
+function PrecoPro({ ciclo }: { ciclo: Ciclo }) {
+  const reduceMotion = useReducedMotion();
+  const anual = ciclo === 'anual';
+  const preco = anual ? PRECO_PRO_ANUAL.mensalComDesconto : PRECO_PRO_MENSAL;
+  return (
+    <AnimatePresence mode="wait" initial={false}>
+      <motion.div
+        key={ciclo}
+        initial={reduceMotion ? false : { opacity: 0, y: 5 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={reduceMotion ? undefined : { opacity: 0, y: -5 }}
+        transition={{ duration: reduceMotion ? 0 : 0.18, ease: 'easeOut' }}
+      >
+        <p className="font-display text-text flex items-end gap-2 text-[46px] leading-none font-light tracking-[-0.04em] tabular-nums">
+          {formatarPreco(preco)}
+          <span className="text-text-3 pb-1 font-sans text-[14px] font-normal tracking-normal">
+            {planos.pro.sufixo}
+          </span>
+        </p>
+        <p className="text-text-3 mt-2 h-6 text-[11px] leading-6 whitespace-nowrap">
+          {anual ? (
+            <>
+              {planos.pro.detalheAnual} ·{' '}
+              {formatarPreco(PRECO_PRO_ANUAL.totalAnual)}/ano ·{' '}
+              <span className="line-through">
+                {formatarPreco(PRECO_PRO_MENSAL)}
+              </span>
+            </>
+          ) : (
+            planos.pro.detalheMensal
+          )}
+        </p>
+      </motion.div>
+    </AnimatePresence>
+  );
+}
+
+function Valor({ valor }: { valor: ValorComparativo }) {
+  if (typeof valor === 'string')
+    return <span className="text-text-2">{valor}</span>;
+  const Icon = valor ? Check : X;
+  return (
+    <span className="inline-flex items-center">
+      <Icon
+        size={16}
+        strokeWidth={2}
+        aria-hidden="true"
+        className={valor ? 'text-accent-text' : 'text-[#4a4b4d]'}
+      />
+      <span className="sr-only">
+        {valor
+          ? textosPlanos.comparativo.incluido
+          : textosPlanos.comparativo.naoIncluido}
+      </span>
+    </span>
   );
 }
