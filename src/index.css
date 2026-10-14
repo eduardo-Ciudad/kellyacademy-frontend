@@ -277,6 +277,13 @@ body {
     }
   }
 
+  @media (max-height: 760px) {
+    .redacao-mobile-card .redacao-paragraph {
+      font-size: 14px;
+      line-height: 24px;
+    }
+  }
+
   .focus-ring {
     outline: none;
   }

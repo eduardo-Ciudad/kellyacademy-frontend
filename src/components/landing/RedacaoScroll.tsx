@@ -292,47 +292,38 @@ function MobilePanelContent({
   );
 }
 
+function MobilePaperCard({ index }: { index: number }) {
+  return (
+    <article
+      className="redacao-mobile-card border-paper-line bg-paper relative top-1/2 w-full rounded-md border px-5 pt-5 pb-[22px] pl-[56px] shadow-[0_1px_2px_rgba(16,24,40,0.05)]"
+      data-mobile-card={index}
+    >
+      <div
+        aria-hidden="true"
+        className="bg-paper-margin absolute inset-y-0 left-10 w-px"
+      />
+      <div className="text-paper-muted flex justify-between border-b border-[#eef0f2] pb-2.5 font-mono text-[9px]">
+        <span className="tracking-[0.1em]">TEMA · ENEM 2019</span>
+        <span>Redação 4 de 6</span>
+      </div>
+      <p className="text-paper-ink mt-3 mb-4 text-[15px] leading-[1.25] font-semibold">
+        Democratização do acesso ao cinema no Brasil
+      </p>
+      <Paragraph index={index} active animated />
+    </article>
+  );
+}
+
 function MobileAnimatedVersion() {
   return (
     <div className="redacao-mobile desk:hidden flex h-[100svh] min-h-[620px] flex-col overflow-hidden motion-reduce:hidden">
-      <div className="h-[56%] min-h-0 shrink-0 px-4 pt-[68px] pb-3">
-        <div className="redacao-mobile-paper border-paper-line bg-paper relative h-full overflow-hidden rounded-md border">
-          <div
-            aria-hidden="true"
-            className="bg-paper-margin absolute inset-y-0 left-10 z-20 w-px"
-          />
-          <div className="redacao-mobile-paper-content absolute inset-x-0 top-0 px-5 py-5 pl-[58px]">
-            <div className="text-paper-muted flex justify-between border-b border-[#eef0f2] pb-2.5 font-mono text-[9px]">
-              <span className="tracking-[0.1em]">TEMA · ENEM 2019</span>
-              <span>Redação 4 de 6</span>
-            </div>
-            <p className="text-paper-ink mt-3 mb-4 text-[15px] leading-[1.25] font-semibold">
-              Democratização do acesso ao cinema no Brasil
-            </p>
-            <div className="text-paper-body flex flex-col gap-[18px] text-sm leading-6">
-              {redacaoParagraphs.map((_, index) => (
-                <Paragraph
-                  key={index}
-                  index={index}
-                  active={index === 0}
-                  animated
-                />
-              ))}
-            </div>
-          </div>
-          <div
-            aria-hidden="true"
-            className="from-paper pointer-events-none absolute inset-x-0 top-0 z-10 h-14 bg-gradient-to-b to-transparent"
-          />
-          <div
-            aria-hidden="true"
-            className="to-paper pointer-events-none absolute inset-x-0 bottom-0 z-10 h-16 bg-gradient-to-b from-transparent"
-          />
+      <div className="redacao-mobile-stage relative flex min-h-0 flex-1 flex-col justify-center gap-4 px-4 pt-16 pb-[calc(44px+env(safe-area-inset-bottom))]">
+        <div className="redacao-mobile-card-track relative h-px w-full">
+          {redacaoParagraphs.map((_, index) => (
+            <MobilePaperCard key={index} index={index} />
+          ))}
         </div>
-      </div>
-
-      <div className="relative min-h-0 flex-1 px-4 pt-4 pb-[calc(30px+env(safe-area-inset-bottom))]">
-        <div className="relative h-full">
+        <div className="redacao-mobile-panel-track relative h-px w-full">
           {redacaoSteps.map((step, index) => (
             <div
               key={step.label}
@@ -545,18 +536,18 @@ export function RedacaoScroll() {
       mm.add(
         '(max-width: 959px) and (prefers-reduced-motion: no-preference)',
         () => {
-          const paper = section.querySelector<HTMLElement>(
-            '.redacao-mobile-paper',
+          const cardTrack = section.querySelector<HTMLElement>(
+            '.redacao-mobile-card-track',
           );
-          const content = section.querySelector<HTMLElement>(
-            '.redacao-mobile-paper-content',
+          const panelTrack = section.querySelector<HTMLElement>(
+            '.redacao-mobile-panel-track',
+          );
+          const cards = gsap.utils.toArray<HTMLElement>(
+            '.redacao-mobile-card',
+            section,
           );
           const panels = gsap.utils.toArray<HTMLElement>(
             '.redacao-mobile-panel',
-            section,
-          );
-          const paragraphs = gsap.utils.toArray<HTMLElement>(
-            '.redacao-mobile .redacao-paragraph',
             section,
           );
           const progressFills = gsap.utils.toArray<HTMLElement>(
@@ -564,162 +555,125 @@ export function RedacaoScroll() {
             section,
           );
           if (
-            !paper ||
-            !content ||
-            panels.length !== redacaoSteps.length ||
-            paragraphs.length !== redacaoParagraphs.length
+            !cardTrack ||
+            !panelTrack ||
+            cards.length !== redacaoParagraphs.length ||
+            panels.length !== redacaoSteps.length
           )
             return;
 
-          const contentTargets = new Array<number>(
-            redacaoParagraphs.length,
-          ).fill(0);
-          const labelProgress = new Array<number>(redacaoSteps.length).fill(0);
-          const measureContentTargets = () => {
-            const paperHeight = paper.clientHeight;
-            const focusY = paperHeight * 0.3;
-            content.style.paddingBottom = `${Math.round(paperHeight * 0.6)}px`;
-            paragraphs.forEach((paragraph, index) => {
-              contentTargets[index] = focusY - paragraph.offsetTop;
-            });
-            const travel = contentTargets[0] - contentTargets.at(-1)!;
-            contentTargets.forEach((target, index) => {
-              labelProgress[index] =
-                travel === 0
-                  ? index / (contentTargets.length - 1)
-                  : (contentTargets[0] - target) / travel;
-            });
+          const measureTracks = () => {
+            const cardHeight = Math.max(
+              ...cards.map((card) => card.offsetHeight),
+            );
+            const panelHeight = Math.max(
+              ...panels.map((panel) => panel.offsetHeight),
+            );
+            cardTrack.style.height = `${cardHeight}px`;
+            panelTrack.style.height = `${panelHeight}px`;
           };
+          measureTracks();
 
-          measureContentTargets();
-          gsap.set([content, ...panels], {
+          const labels = redacaoSteps.map((_, index) => `p${index + 1}`);
+          const stopDurations = [0.5, 0.5, 0.5, 0.35];
+          const transitionStarts = [0.5, 1.5, 2.5];
+          const labelTimes = [0, 1, 2, 3];
+
+          gsap.set(cards, {
+            autoAlpha: 0,
+            y: 56,
+            yPercent: -50,
+            scale: 0.97,
             force3D: true,
-            willChange: 'transform,opacity',
           });
-          gsap.set(content, { y: contentTargets[0] });
-          gsap.set(panels, { autoAlpha: 0, y: 12 });
+          gsap.set(cards[0], { autoAlpha: 1, y: 0, scale: 1 });
+          gsap.set(panels, { autoAlpha: 0, y: 32, force3D: true });
           gsap.set(panels[0], { autoAlpha: 1, y: 0 });
-          gsap.set(paragraphs, { opacity: 0.55 });
-          gsap.set(paragraphs[0], { opacity: 1 });
           gsap.set(progressFills, {
             scaleX: 0,
             transformOrigin: 'left center',
           });
 
-          paragraphs.forEach((paragraph, index) => {
-            const active = index === 0;
-            gsap.set(
-              paragraph.querySelectorAll<HTMLElement>(
-                '.redacao-highlight-bg, .redacao-section-mark-active',
-              ),
-              { opacity: active ? 1 : 0 },
+          const setWillChange = (active: boolean) => {
+            gsap.set([...cards, ...panels], {
+              willChange: active ? 'transform, opacity' : 'auto',
+            });
+          };
+          setWillChange(false);
+
+          const timeline = gsap.timeline({ paused: true });
+          labels.forEach((label, index) => {
+            timeline.addLabel(label, labelTimes[index]);
+            timeline.to(
+              progressFills[index],
+              { scaleX: 1, duration: stopDurations[index], ease: 'none' },
+              labelTimes[index],
             );
           });
 
-          const timeline = gsap.timeline({ paused: true });
-          const buildTimeline = () => {
-            timeline.clear();
-            measureContentTargets();
-            timeline.fromTo(
-              content,
-              { y: () => contentTargets[0] },
+          for (let index = 1; index < cards.length; index += 1) {
+            const transitionStart = transitionStarts[index - 1];
+            timeline.to(
+              cards[index - 1],
               {
-                y: () => contentTargets.at(-1)!,
-                duration: 1,
-                ease: 'none',
-                immediateRender: false,
+                autoAlpha: 0,
+                y: -56,
+                scale: 0.97,
+                duration: 0.3,
+                ease: 'sine.inOut',
               },
-              0,
+              transitionStart,
             );
+            timeline.to(
+              cards[index],
+              {
+                autoAlpha: 1,
+                y: 0,
+                scale: 1,
+                duration: 0.32,
+                ease: 'sine.inOut',
+              },
+              transitionStart + 0.18,
+            );
+            timeline.to(
+              panels[index - 1],
+              {
+                autoAlpha: 0,
+                y: -32,
+                duration: 0.3,
+                ease: 'sine.inOut',
+              },
+              transitionStart + 0.04,
+            );
+            timeline.to(
+              panels[index],
+              {
+                autoAlpha: 1,
+                y: 0,
+                duration: 0.32,
+                ease: 'sine.inOut',
+              },
+              transitionStart + 0.18,
+            );
+          }
 
-            redacaoSteps.forEach((_, index) => {
-              const label = `p${index + 1}`;
-              const labelTime = labelProgress[index];
-              timeline.addLabel(label, labelTime);
-              if (index === 0) return;
-
-              const previousParagraph = paragraphs[index - 1];
-              const currentParagraph = paragraphs[index];
-              const previousMarks = previousParagraph.querySelectorAll(
-                '.redacao-highlight-bg, .redacao-section-mark-active',
-              );
-              const currentMarks = currentParagraph.querySelectorAll(
-                '.redacao-highlight-bg, .redacao-section-mark-active',
-              );
-              const transitionStart = Math.max(
-                0,
-                Math.min(0.88, labelTime - 0.06),
-              );
-              timeline
-                .to(
-                  panels[index - 1],
-                  {
-                    autoAlpha: 0,
-                    y: -10,
-                    duration: 0.12,
-                    ease: 'power1.inOut',
-                  },
-                  transitionStart,
-                )
-                .to(
-                  panels[index],
-                  {
-                    autoAlpha: 1,
-                    y: 0,
-                    duration: 0.12,
-                    ease: 'power1.inOut',
-                  },
-                  transitionStart,
-                )
-                .to(
-                  previousParagraph,
-                  {
-                    opacity: 0.55,
-                    duration: 0.12,
-                    ease: 'power1.inOut',
-                  },
-                  transitionStart,
-                )
-                .to(
-                  previousMarks,
-                  { opacity: 0, duration: 0.12, ease: 'power1.inOut' },
-                  transitionStart,
-                )
-                .to(
-                  currentParagraph,
-                  { opacity: 1, duration: 0.12, ease: 'power1.inOut' },
-                  transitionStart,
-                )
-                .to(
-                  currentMarks,
-                  { opacity: 1, duration: 0.12, ease: 'power1.inOut' },
-                  transitionStart,
-                );
-            });
-
-            progressFills.forEach((fill, index) => {
-              const start = index / progressFills.length;
-              const end = (index + 1) / progressFills.length;
-              timeline.fromTo(
-                fill,
-                { scaleX: 0 },
-                { scaleX: 1, duration: end - start, ease: 'none' },
-                start,
-              );
-            });
-          };
-
-          buildTimeline();
           const trigger = ScrollTrigger.create({
             trigger: section,
             animation: timeline,
             pin: true,
             start: 'top top',
-            end: '+=240%',
-            scrub: 0.6,
+            end: '+=320%',
+            scrub: 0.9,
             anticipatePin: 1,
             invalidateOnRefresh: true,
-            onRefreshInit: buildTimeline,
+            snap: {
+              snapTo: 'labelsDirectional',
+              duration: { min: 0.4, max: 0.8 },
+              delay: 0.12,
+              ease: 'power3.inOut',
+            },
+            onRefreshInit: measureTracks,
+            onToggle: ({ isActive }) => setWillChange(isActive),
           });
 
           void document.fonts.ready.then(
@@ -730,8 +684,7 @@ export function RedacaoScroll() {
           return () => {
             trigger.kill();
             timeline.kill();
-            content.style.removeProperty('padding-bottom');
-            gsap.set([content, ...panels], { clearProps: 'willChange' });
+            gsap.set([...cards, ...panels], { clearProps: 'willChange' });
           };
         },
       );
@@ -756,7 +709,7 @@ export function RedacaoScroll() {
           {redacaoSteps.map((step, index) => (
             <div
               key={step.label}
-              className="redacao-panel absolute top-0 flex h-[900px] flex-col justify-center gap-7"
+              className="redacao-panel absolute top-0 z-[1] flex h-[900px] flex-col justify-center gap-7"
               data-panel={index}
               style={{ left: step.panelLeft, width: step.panelWidth }}
             >
