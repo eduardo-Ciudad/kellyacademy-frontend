@@ -12,6 +12,7 @@ import {
 } from './data/redacaoScroll';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
+ScrollTrigger.config({ ignoreMobileResize: true });
 
 function CompetenciaBadge({ competencia }: { competencia: Competencia }) {
   const style = competenciaStyles[competencia];
@@ -224,7 +225,7 @@ function DesktopPaper() {
 
 function StaticVersion() {
   return (
-    <div className="desk:hidden motion-reduce:desk:block px-4 py-16">
+    <div className="hidden px-4 py-16 motion-reduce:block">
       <div className="mx-auto flex max-w-2xl flex-col gap-16">
         {redacaoSteps.map((step, index) => (
           <article key={step.label} className="flex flex-col gap-7">
@@ -242,6 +243,122 @@ function StaticVersion() {
             </div>
           </article>
         ))}
+      </div>
+    </div>
+  );
+}
+
+function MobilePanelContent({
+  step,
+  index,
+}: {
+  step: RedacaoStep;
+  index: number;
+}) {
+  return (
+    <>
+      <span className="text-paper-muted font-mono text-[11px] tracking-[0.08em]">
+        {String(index + 1).padStart(2, '0')} / 04 · {step.label}
+      </span>
+      <h2 className="text-paper-ink font-display m-0 mt-3 text-2xl leading-[1.08] font-light tracking-[-0.03em]">
+        {step.title} <span className="text-paper-muted">{step.titleMuted}</span>
+      </h2>
+      {index < 3 && step.notes ? (
+        <ul className="border-paper-line m-0 mt-4 list-none border-t p-0">
+          {step.notes.slice(0, 2).map((note) => (
+            <li
+              key={`${note.competencia}-${note.lead}`}
+              className="border-paper-line flex gap-3 border-b py-3"
+            >
+              <CompetenciaBadge competencia={note.competencia} />
+              <p className="text-paper-body m-0 text-[13px] leading-[1.45]">
+                <strong className="text-paper-ink">{note.lead}</strong>{' '}
+                {note.text}
+              </p>
+            </li>
+          ))}
+        </ul>
+      ) : null}
+      {index === 3 ? (
+        <div className="mt-5 flex items-center gap-3">
+          <JuliaAvatar size={36} />
+          <p className="text-paper-body m-0 text-sm leading-[1.45]">
+            <strong className="text-paper-ink">Nota estimada: 880.</strong>{' '}
+            Treine C3 e C5 primeiro.
+          </p>
+        </div>
+      ) : null}
+    </>
+  );
+}
+
+function MobileAnimatedVersion() {
+  return (
+    <div className="redacao-mobile desk:hidden flex h-[100svh] min-h-[620px] flex-col overflow-hidden motion-reduce:hidden">
+      <div className="h-[56%] min-h-0 shrink-0 px-4 pt-[68px] pb-3">
+        <div className="redacao-mobile-paper border-paper-line bg-paper relative h-full overflow-hidden rounded-md border">
+          <div
+            aria-hidden="true"
+            className="bg-paper-margin absolute inset-y-0 left-10 z-20 w-px"
+          />
+          <div className="redacao-mobile-paper-content absolute inset-x-0 top-0 px-5 py-5 pl-[58px]">
+            <div className="text-paper-muted flex justify-between border-b border-[#eef0f2] pb-2.5 font-mono text-[9px]">
+              <span className="tracking-[0.1em]">TEMA · ENEM 2019</span>
+              <span>Redação 4 de 6</span>
+            </div>
+            <p className="text-paper-ink mt-3 mb-4 text-[15px] leading-[1.25] font-semibold">
+              Democratização do acesso ao cinema no Brasil
+            </p>
+            <div className="text-paper-body flex flex-col gap-[18px] text-sm leading-6">
+              {redacaoParagraphs.map((_, index) => (
+                <Paragraph
+                  key={index}
+                  index={index}
+                  active={index === 0}
+                  animated
+                />
+              ))}
+            </div>
+          </div>
+          <div
+            aria-hidden="true"
+            className="from-paper pointer-events-none absolute inset-x-0 top-0 z-10 h-14 bg-gradient-to-b to-transparent"
+          />
+          <div
+            aria-hidden="true"
+            className="to-paper pointer-events-none absolute inset-x-0 bottom-0 z-10 h-16 bg-gradient-to-b from-transparent"
+          />
+        </div>
+      </div>
+
+      <div className="relative min-h-0 flex-1 px-4 pt-4 pb-[calc(30px+env(safe-area-inset-bottom))]">
+        <div className="relative h-full">
+          {redacaoSteps.map((step, index) => (
+            <div
+              key={step.label}
+              className="redacao-mobile-panel absolute inset-x-0 top-0"
+              data-mobile-panel={index}
+            >
+              <MobilePanelContent step={step} index={index} />
+            </div>
+          ))}
+        </div>
+        <div
+          aria-hidden="true"
+          className="absolute right-4 bottom-[calc(14px+env(safe-area-inset-bottom))] left-4 flex gap-1.5"
+        >
+          {redacaoSteps.map((_, index) => (
+            <span
+              key={index}
+              className="h-[3px] flex-1 overflow-hidden rounded-sm bg-[#dfe2e6]"
+            >
+              <span
+                className="redacao-mobile-progress-fill bg-accent block h-full origin-left scale-x-0"
+                data-mobile-progress={index}
+              />
+            </span>
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -425,6 +542,200 @@ export function RedacaoScroll() {
         },
       );
 
+      mm.add(
+        '(max-width: 959px) and (prefers-reduced-motion: no-preference)',
+        () => {
+          const paper = section.querySelector<HTMLElement>(
+            '.redacao-mobile-paper',
+          );
+          const content = section.querySelector<HTMLElement>(
+            '.redacao-mobile-paper-content',
+          );
+          const panels = gsap.utils.toArray<HTMLElement>(
+            '.redacao-mobile-panel',
+            section,
+          );
+          const paragraphs = gsap.utils.toArray<HTMLElement>(
+            '.redacao-mobile .redacao-paragraph',
+            section,
+          );
+          const progressFills = gsap.utils.toArray<HTMLElement>(
+            '.redacao-mobile-progress-fill',
+            section,
+          );
+          if (
+            !paper ||
+            !content ||
+            panels.length !== redacaoSteps.length ||
+            paragraphs.length !== redacaoParagraphs.length
+          )
+            return;
+
+          const contentTargets = new Array<number>(
+            redacaoParagraphs.length,
+          ).fill(0);
+          const labelProgress = new Array<number>(redacaoSteps.length).fill(0);
+          const measureContentTargets = () => {
+            const paperHeight = paper.clientHeight;
+            const focusY = paperHeight * 0.3;
+            content.style.paddingBottom = `${Math.round(paperHeight * 0.6)}px`;
+            paragraphs.forEach((paragraph, index) => {
+              contentTargets[index] = focusY - paragraph.offsetTop;
+            });
+            const travel = contentTargets[0] - contentTargets.at(-1)!;
+            contentTargets.forEach((target, index) => {
+              labelProgress[index] =
+                travel === 0
+                  ? index / (contentTargets.length - 1)
+                  : (contentTargets[0] - target) / travel;
+            });
+          };
+
+          measureContentTargets();
+          gsap.set([content, ...panels], {
+            force3D: true,
+            willChange: 'transform,opacity',
+          });
+          gsap.set(content, { y: contentTargets[0] });
+          gsap.set(panels, { autoAlpha: 0, y: 12 });
+          gsap.set(panels[0], { autoAlpha: 1, y: 0 });
+          gsap.set(paragraphs, { opacity: 0.55 });
+          gsap.set(paragraphs[0], { opacity: 1 });
+          gsap.set(progressFills, {
+            scaleX: 0,
+            transformOrigin: 'left center',
+          });
+
+          paragraphs.forEach((paragraph, index) => {
+            const active = index === 0;
+            gsap.set(
+              paragraph.querySelectorAll<HTMLElement>(
+                '.redacao-highlight-bg, .redacao-section-mark-active',
+              ),
+              { opacity: active ? 1 : 0 },
+            );
+          });
+
+          const timeline = gsap.timeline({ paused: true });
+          const buildTimeline = () => {
+            timeline.clear();
+            measureContentTargets();
+            timeline.fromTo(
+              content,
+              { y: () => contentTargets[0] },
+              {
+                y: () => contentTargets.at(-1)!,
+                duration: 1,
+                ease: 'none',
+                immediateRender: false,
+              },
+              0,
+            );
+
+            redacaoSteps.forEach((_, index) => {
+              const label = `p${index + 1}`;
+              const labelTime = labelProgress[index];
+              timeline.addLabel(label, labelTime);
+              if (index === 0) return;
+
+              const previousParagraph = paragraphs[index - 1];
+              const currentParagraph = paragraphs[index];
+              const previousMarks = previousParagraph.querySelectorAll(
+                '.redacao-highlight-bg, .redacao-section-mark-active',
+              );
+              const currentMarks = currentParagraph.querySelectorAll(
+                '.redacao-highlight-bg, .redacao-section-mark-active',
+              );
+              const transitionStart = Math.max(
+                0,
+                Math.min(0.88, labelTime - 0.06),
+              );
+              timeline
+                .to(
+                  panels[index - 1],
+                  {
+                    autoAlpha: 0,
+                    y: -10,
+                    duration: 0.12,
+                    ease: 'power1.inOut',
+                  },
+                  transitionStart,
+                )
+                .to(
+                  panels[index],
+                  {
+                    autoAlpha: 1,
+                    y: 0,
+                    duration: 0.12,
+                    ease: 'power1.inOut',
+                  },
+                  transitionStart,
+                )
+                .to(
+                  previousParagraph,
+                  {
+                    opacity: 0.55,
+                    duration: 0.12,
+                    ease: 'power1.inOut',
+                  },
+                  transitionStart,
+                )
+                .to(
+                  previousMarks,
+                  { opacity: 0, duration: 0.12, ease: 'power1.inOut' },
+                  transitionStart,
+                )
+                .to(
+                  currentParagraph,
+                  { opacity: 1, duration: 0.12, ease: 'power1.inOut' },
+                  transitionStart,
+                )
+                .to(
+                  currentMarks,
+                  { opacity: 1, duration: 0.12, ease: 'power1.inOut' },
+                  transitionStart,
+                );
+            });
+
+            progressFills.forEach((fill, index) => {
+              const start = index / progressFills.length;
+              const end = (index + 1) / progressFills.length;
+              timeline.fromTo(
+                fill,
+                { scaleX: 0 },
+                { scaleX: 1, duration: end - start, ease: 'none' },
+                start,
+              );
+            });
+          };
+
+          buildTimeline();
+          const trigger = ScrollTrigger.create({
+            trigger: section,
+            animation: timeline,
+            pin: true,
+            start: 'top top',
+            end: '+=240%',
+            scrub: 0.6,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+            onRefreshInit: buildTimeline,
+          });
+
+          void document.fonts.ready.then(
+            () => ScrollTrigger.refresh(),
+            () => undefined,
+          );
+
+          return () => {
+            trigger.kill();
+            timeline.kill();
+            content.style.removeProperty('padding-bottom');
+            gsap.set([content, ...panels], { clearProps: 'willChange' });
+          };
+        },
+      );
+
       return () => mm.revert();
     },
     { scope: sectionRef },
@@ -438,6 +749,7 @@ export function RedacaoScroll() {
       className="bg-paper-bg text-paper-ink relative"
     >
       <StaticVersion />
+      <MobileAnimatedVersion />
       <div className="redacao-desktop desk:flex desk:items-center desk:justify-center motion-reduce:desk:hidden hidden h-screen min-h-[675px] overflow-hidden">
         <div className="redacao-stage relative h-[900px] w-[1200px] shrink-0">
           <DesktopPaper />
