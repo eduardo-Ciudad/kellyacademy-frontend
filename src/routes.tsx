@@ -15,6 +15,14 @@ const CriarConta = lazy(() =>
 const Entrar = lazy(() =>
   import('@/pages/Entrar').then((module) => ({ default: module.Entrar })),
 );
+const Privacidade = lazy(() =>
+  import('@/pages/Privacidade').then((module) => ({
+    default: module.Privacidade,
+  })),
+);
+const Termos = lazy(() =>
+  import('@/pages/Termos').then((module) => ({ default: module.Termos })),
+);
 const Editor = lazy(() =>
   import('@/pages/Editor').then((module) => ({ default: module.Editor })),
 );
@@ -64,6 +72,22 @@ export const router = createBrowserRouter([
         ),
       },
     ],
+  },
+  {
+    path: '/privacidade',
+    element: (
+      <LazyRoute>
+        <Privacidade />
+      </LazyRoute>
+    ),
+  },
+  {
+    path: '/termos',
+    element: (
+      <LazyRoute>
+        <Termos />
+      </LazyRoute>
+    ),
   },
   {
     element: <PublicOnlyRoute />,
