@@ -22,24 +22,50 @@ export function LandingFooterMobile() {
 
       <nav
         aria-label="Rodapé"
-        className="text-text-2 flex flex-wrap gap-x-5 gap-y-1 text-[15px]"
+        className="text-text-2 flex flex-col gap-4 text-[15px]"
       >
-        {LINKS.map(([label, href]) => (
-          <a
-            key={href}
-            href={href}
-            onClick={(event) => scrollToLandingAnchor(event, href)}
-            className="focus-ring hover:text-text flex min-h-11 items-center rounded-sm transition-colors motion-reduce:transition-none"
-          >
-            {label}
-          </a>
-        ))}
-        <Link
-          to="/entrar"
-          className="focus-ring hover:text-text flex min-h-11 items-center rounded-sm transition-colors motion-reduce:transition-none"
-        >
-          Entrar
-        </Link>
+        <div>
+          <p className="text-text mb-1 text-xs font-semibold tracking-[0.08em] uppercase">
+            Produto
+          </p>
+          <div className="flex flex-wrap gap-x-5 gap-y-1">
+            {LINKS.map(([label, href]) => (
+              <a
+                key={href}
+                href={href}
+                onClick={(event) => scrollToLandingAnchor(event, href)}
+                className="focus-ring hover:text-text flex min-h-11 items-center rounded-sm transition-colors motion-reduce:transition-none"
+              >
+                {label}
+              </a>
+            ))}
+            <Link
+              to="/entrar"
+              className="focus-ring hover:text-text flex min-h-11 items-center rounded-sm transition-colors motion-reduce:transition-none"
+            >
+              Entrar
+            </Link>
+          </div>
+        </div>
+        <div>
+          <p className="text-text mb-1 text-xs font-semibold tracking-[0.08em] uppercase">
+            Legal
+          </p>
+          <div className="flex flex-wrap gap-x-5 gap-y-1">
+            <Link
+              to="/privacidade"
+              className="focus-ring hover:text-text flex min-h-11 items-center rounded-sm transition-colors motion-reduce:transition-none"
+            >
+              Privacidade
+            </Link>
+            <Link
+              to="/termos"
+              className="focus-ring hover:text-text flex min-h-11 items-center rounded-sm transition-colors motion-reduce:transition-none"
+            >
+              Termos
+            </Link>
+          </div>
+        </div>
       </nav>
 
       <p className="text-text-3 font-mono text-[11.5px] leading-[1.6]">
