@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { api, ApiError } from '@/lib/api';
 import { useAuth } from '@/lib/auth';
+import { usePageMeta } from '@/lib/usePageMeta';
 import type { LoginRequest, LoginResponse } from '@/types/api';
 
 const loginSchema = z.object({
@@ -30,6 +31,12 @@ type LoginLocationState = {
 };
 
 export function Entrar() {
+  usePageMeta({
+    title: 'Entrar — Kelly Academy',
+    description:
+      'Entre na Kelly Academy e continue seu treino de redação do ENEM.',
+    path: '/entrar',
+  });
   const location = useLocation();
   const navigate = useNavigate();
   const { login } = useAuth();
@@ -83,7 +90,7 @@ export function Entrar() {
         className="mt-8 flex flex-1 flex-col lg:my-auto lg:w-[400px] lg:flex-none"
       >
         <div className="hidden flex-col gap-2 lg:flex">
-        <h1 className="text-text text-[32px] font-normal tracking-[-0.02em]">
+          <h1 className="text-text text-[32px] font-normal tracking-[-0.02em]">
             Entre na sua conta
           </h1>
           <p className="text-text-2 text-base leading-[1.5]">
