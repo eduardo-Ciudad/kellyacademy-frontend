@@ -12,7 +12,10 @@ export function Privacidade() {
   return (
     <LegalPage
       doc={privacidade}
-      related={{ label: 'Termos de Uso', to: '/termos' }}
+      relatedDocuments={[
+        { label: 'Termos de Uso', to: '/termos' },
+        { label: 'Política de Cookies', to: '/cookies' },
+      ]}
     />
   );
 }

@@ -37,7 +37,7 @@ export const privacidade: LegalDoc = {
       paragraphs: [
         'Para manter você conectado, guardamos no armazenamento local do navegador (localStorage) o seu token de acesso, e-mail e nome. Também salvamos ali os rascunhos das redações que você está escrevendo, para não perder o texto se a página fechar.',
         'Esses dados ficam só no seu dispositivo e são apagados quando você sai da conta (os rascunhos podem ser apagados limpando os dados do site no navegador).',
-        'Hoje a Kelly Academy não usa cookies de publicidade nem de rastreamento. Se isso mudar, você será avisado e poderá escolher antes de qualquer coleta.',
+        'Também guardamos ali a sua escolha sobre cookies. Cookies de análise (Google Analytics) só são ativados se você aceitar no aviso de cookies, e você pode mudar essa escolha quando quiser. Não usamos cookies de publicidade. Veja os detalhes na Política de Cookies.',
       ],
     },
     {
@@ -50,6 +50,7 @@ export const privacidade: LegalDoc = {
         'Aplicar limites de uso, prevenir abusos e proteger a plataforma (legítimo interesse — art. 7º, IX).',
         'Guardar registros de acesso exigidos pelo Marco Civil da Internet (cumprimento de obrigação legal — art. 7º, II).',
         'Enviar comunicações importantes sobre a sua conta, como avisos de segurança ou mudanças nestes documentos (execução de contrato).',
+        'Medir, de forma estatística, como o site é usado para melhorar a plataforma, com o Google Analytics — somente se você aceitar (consentimento — art. 7º, I).',
       ],
       closing: [
         'Não vendemos seus dados e não usamos suas redações para publicidade.',
@@ -74,6 +75,7 @@ export const privacidade: LegalDoc = {
         'Google (API Gemini): processamento das correções e transcrições.',
         'Vercel: hospedagem do site.',
         'Provedor de servidor (VPS): hospedagem do sistema e do banco de dados.',
+        'Google (Google Analytics): estatísticas de uso do site, somente com o seu consentimento.',
       ],
       closing: [
         'Também podemos compartilhar dados quando houver obrigação legal ou ordem de autoridade competente.',

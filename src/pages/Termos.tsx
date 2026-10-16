@@ -12,7 +12,10 @@ export function Termos() {
   return (
     <LegalPage
       doc={termos}
-      related={{ label: 'Política de Privacidade', to: '/privacidade' }}
+      relatedDocuments={[
+        { label: 'Política de Privacidade', to: '/privacidade' },
+        { label: 'Política de Cookies', to: '/cookies' },
+      ]}
     />
   );
 }

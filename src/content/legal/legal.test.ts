@@ -1,10 +1,11 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { cookies } from '@/content/legal/cookies';
 import { privacidade } from '@/content/legal/privacidade';
 import { termos } from '@/content/legal/termos';
 
-const documents = [privacidade, termos];
+const documents = [privacidade, termos, cookies];
 const kebabCaseWithoutAccents = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const isoDate = /^\d{4}-\d{2}-\d{2}$/;
 
@@ -68,7 +69,7 @@ describe.each(documents)('$title', (document) => {
 });
 
 describe('sitemap', () => {
-  it('contém a home e as duas páginas legais', () => {
+  it('contém a home e as três páginas legais', () => {
     const sitemap = readFileSync(
       resolve(process.cwd(), 'public/sitemap.xml'),
       'utf8',
@@ -79,5 +80,6 @@ describe('sitemap', () => {
       '<loc>https://kellyacademy.com.br/privacidade</loc>',
     );
     expect(sitemap).toContain('<loc>https://kellyacademy.com.br/termos</loc>');
+    expect(sitemap).toContain('<loc>https://kellyacademy.com.br/cookies</loc>');
   });
 });

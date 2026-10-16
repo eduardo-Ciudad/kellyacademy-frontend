@@ -1,16 +1,19 @@
 import { format, parseISO } from 'date-fns';
+import type { ReactNode } from 'react';
 import { ptBR } from 'date-fns/locale';
 import { Link } from 'react-router-dom';
 import { KellyLogo } from '@/components/brand/KellyLogo';
 import type { LegalDoc } from '@/content/legal/types';
+import { openCookiePreferences } from '@/lib/consent';
 import { CONTACT_EMAIL, splitEmailLinks } from '@/lib/splitEmailLinks';
 
 type LegalPageProps = {
   doc: LegalDoc;
-  related: {
+  relatedDocuments: {
     label: string;
     to: string;
-  };
+  }[];
+  sectionActions?: Record<string, ReactNode>;
 };
 
 function LinkedText({ children }: { children: string }) {
@@ -29,7 +32,11 @@ function LinkedText({ children }: { children: string }) {
   );
 }
 
-export function LegalPage({ doc, related }: LegalPageProps) {
+export function LegalPage({
+  doc,
+  relatedDocuments,
+  sectionActions,
+}: LegalPageProps) {
   const formattedDate = format(
     parseISO(doc.updatedAt),
     "d 'de' MMMM 'de' yyyy",
@@ -139,6 +146,7 @@ export function LegalPage({ doc, related }: LegalPageProps) {
                         <LinkedText>{paragraph}</LinkedText>
                       </p>
                     ))}
+                    {sectionActions?.[section.id]}
                   </div>
                 </div>
               </div>
@@ -148,13 +156,28 @@ export function LegalPage({ doc, related }: LegalPageProps) {
       </main>
 
       <footer className="border-border-subtle border-t">
-        <div className="text-text-3 mx-auto flex max-w-[760px] flex-col gap-4 px-4 py-8 text-sm leading-6 sm:flex-row sm:items-center sm:justify-between sm:px-5">
-          <Link
-            to={related.to}
-            className="focus-ring text-text-2 hover:text-accent-text rounded-sm transition-colors"
+        <div className="text-text-3 mx-auto flex max-w-[760px] flex-col gap-5 px-4 py-8 text-sm leading-6 sm:px-5">
+          <nav
+            aria-label="Documentos legais"
+            className="flex flex-wrap gap-x-5 gap-y-3"
           >
-            {related.label}
-          </Link>
+            {relatedDocuments.map((related) => (
+              <Link
+                key={related.to}
+                to={related.to}
+                className="focus-ring text-text-2 hover:text-accent-text rounded-sm transition-colors"
+              >
+                {related.label}
+              </Link>
+            ))}
+            <button
+              type="button"
+              onClick={openCookiePreferences}
+              className="focus-ring text-text-2 hover:text-accent-text rounded-sm text-left transition-colors"
+            >
+              Preferências de cookies
+            </button>
+          </nav>
           <a
             href={`mailto:${CONTACT_EMAIL}`}
             className="focus-ring hover:text-text-2 rounded-sm transition-colors"
