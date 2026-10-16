@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { ComoFunciona } from '@/components/landing/ComoFunciona';
 import { Competencias } from '@/components/landing/Competencias';
 import { CtaFinal } from '@/components/landing/CtaFinal';
@@ -13,20 +13,18 @@ import { Recursos } from '@/components/landing/Recursos';
 import { RedacaoScroll } from '@/components/landing/RedacaoScroll';
 import { TemasMarquee } from '@/components/landing/TemasMarquee';
 import { useLenis } from '@/hooks/useLenis';
+import { DEFAULT_META_DESCRIPTION, usePageMeta } from '@/lib/usePageMeta';
 
 export default function Landing() {
   useLenis();
+  usePageMeta({
+    title: 'Kelly Academy — Correção de redação do ENEM com IA',
+    description: DEFAULT_META_DESCRIPTION,
+    path: '/',
+  });
 
   const [mobileRepertorioSheetOpen, setMobileRepertorioSheetOpen] =
     useState(false);
-
-  useEffect(() => {
-    const previousTitle = document.title;
-    document.title = 'Kelly Academy — Correção de redação do ENEM com IA';
-    return () => {
-      document.title = previousTitle;
-    };
-  }, []);
 
   return (
     <div className="bg-bg text-text min-h-screen overflow-x-clip font-sans">
