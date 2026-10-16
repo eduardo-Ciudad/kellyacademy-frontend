@@ -19,7 +19,7 @@ export function LandingFooter() {
 function LandingFooterDesktop() {
   return (
     <footer className="border-border-subtle border-t px-5 pt-14 pb-10 sm:px-6">
-      <div className="mx-auto grid max-w-[1200px] grid-cols-2 gap-10 sm:grid-cols-[minmax(0,2fr)_minmax(0,1fr)_minmax(0,1fr)]">
+      <div className="mx-auto grid max-w-[1200px] grid-cols-2 gap-10 sm:grid-cols-[minmax(0,2fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)]">
         <div className="col-span-2 sm:col-span-1">
           <a
             href="#topo"
@@ -53,6 +53,15 @@ function LandingFooterDesktop() {
           </Link>
           <Link to="/criar-conta" className="focus-ring rounded-sm">
             Criar conta
+          </Link>
+        </FooterColumn>
+
+        <FooterColumn title="Legal">
+          <Link to="/privacidade" className="focus-ring rounded-sm">
+            Privacidade
+          </Link>
+          <Link to="/termos" className="focus-ring rounded-sm">
+            Termos
           </Link>
         </FooterColumn>
       </div>
