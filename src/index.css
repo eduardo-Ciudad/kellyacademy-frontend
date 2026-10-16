@@ -211,6 +211,12 @@ html {
   }
 }
 
+@keyframes cookie-panel-in {
+  from {
+    opacity: 0;
+  }
+}
+
 html[data-cookie-banner-visible='true'] .mobile-sticky-cta {
   display: none;
 }

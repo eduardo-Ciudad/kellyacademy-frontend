@@ -16,6 +16,13 @@ function buttonWithText(container: HTMLElement, text: string) {
   return button;
 }
 
+function storedAnalytics() {
+  const stored = localStorage.getItem(CONSENT_STORAGE_KEY);
+  return stored
+    ? (JSON.parse(stored) as { analytics: string }).analytics
+    : null;
+}
+
 describe('AnalyticsConsent', () => {
   let container: HTMLDivElement;
   let root: Root;
@@ -34,36 +41,55 @@ describe('AnalyticsConsent', () => {
     delete document.documentElement.dataset.cookieBannerVisible;
   });
 
-  it('permite recusar, reabrir e aceitar sem carregar GA em desenvolvimento', () => {
+  it('permite recusar, personalizar e cancelar sem carregar GA em desenvolvimento', () => {
     act(() => root.render(createElement(AnalyticsConsent)));
 
-    expect(
-      container.querySelector('[aria-label="Preferências de cookies"]'),
-    ).not.toBeNull();
+    expect(container.querySelector('[role="region"]')).not.toBeNull();
+    expect(buttonWithText(container, 'Personalizar')).toBeTruthy();
     expect(
       document.querySelector('script[src*="googletagmanager.com"]'),
     ).toBeNull();
 
     act(() => buttonWithText(container, 'Recusar').click());
-
-    expect(
-      container.querySelector('[aria-label="Preferências de cookies"]'),
-    ).toBeNull();
-    expect(
-      JSON.parse(localStorage.getItem(CONSENT_STORAGE_KEY) ?? ''),
-    ).toMatchObject({ analytics: 'denied' });
+    expect(container.querySelector('[role="region"]')).toBeNull();
+    expect(storedAnalytics()).toBe('denied');
 
     act(() => openCookiePreferences());
 
-    expect(container.textContent).toContain('Escolha atual: Recusados');
-    act(() => buttonWithText(container, 'Aceitar').click());
+    const title = container.querySelector<HTMLHeadingElement>(
+      '#cookie-banner-title',
+    );
+    const switchButton =
+      container.querySelector<HTMLButtonElement>('[role="switch"]');
+    expect(title).not.toBeNull();
+    expect(document.activeElement).toBe(title);
+    expect(switchButton?.getAttribute('aria-checked')).toBe('false');
+    expect(buttonWithText(container, 'Cancelar')).toBeTruthy();
 
-    expect(
-      container.querySelector('[aria-label="Preferências de cookies"]'),
-    ).toBeNull();
-    expect(
-      JSON.parse(localStorage.getItem(CONSENT_STORAGE_KEY) ?? ''),
-    ).toMatchObject({ analytics: 'granted' });
+    act(() => switchButton?.click());
+    expect(switchButton?.getAttribute('aria-checked')).toBe('true');
+    act(() => buttonWithText(container, 'Salvar escolhas').click());
+    expect(storedAnalytics()).toBe('granted');
+    expect(container.querySelector('[role="region"]')).toBeNull();
+
+    act(() => openCookiePreferences());
+    const reopenedSwitch =
+      container.querySelector<HTMLButtonElement>('[role="switch"]');
+    expect(reopenedSwitch?.getAttribute('aria-checked')).toBe('true');
+    act(() => reopenedSwitch?.click());
+    act(() => buttonWithText(container, 'Cancelar').click());
+    expect(storedAnalytics()).toBe('granted');
+    expect(container.querySelector('[role="region"]')).toBeNull();
+
+    act(() => openCookiePreferences());
+    const region = container.querySelector<HTMLElement>('[role="region"]');
+    act(() => {
+      region?.dispatchEvent(
+        new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }),
+      );
+    });
+    expect(container.querySelector('[role="region"]')).toBeNull();
+    expect(storedAnalytics()).toBe('granted');
     expect(
       document.querySelector('script[src*="googletagmanager.com"]'),
     ).toBeNull();

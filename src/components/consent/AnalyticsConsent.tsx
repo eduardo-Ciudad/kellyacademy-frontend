@@ -73,6 +73,11 @@ export function AnalyticsConsent() {
   }
 
   return bannerVisible ? (
-    <CookieBanner currentConsent={consent} onDecision={handleDecision} />
+    <CookieBanner
+      currentConsent={consent}
+      openedFromPreferences={preferencesOpen}
+      onDecision={handleDecision}
+      onClosePreferences={() => setPreferencesOpen(false)}
+    />
   ) : null;
 }
