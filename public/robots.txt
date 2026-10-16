@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /temas
+Disallow: /redacoes
+Disallow: /evolucao
+Disallow: /repertorio
+
+Sitemap: https://kellyacademy.com.br/sitemap.xml
