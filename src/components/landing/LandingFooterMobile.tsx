@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { KellyLogo } from '@/components/brand/KellyLogo';
 import { scrollToLandingAnchor } from '@/components/landing/scrollToLandingAnchor';
+import { openCookiePreferences } from '@/lib/consent';
 
 const LINKS = [
   ['Recursos', '#recursos'],
@@ -64,6 +65,19 @@ export function LandingFooterMobile() {
             >
               Termos
             </Link>
+            <Link
+              to="/cookies"
+              className="focus-ring hover:text-text flex min-h-11 items-center rounded-sm transition-colors motion-reduce:transition-none"
+            >
+              Cookies
+            </Link>
+            <button
+              type="button"
+              onClick={openCookiePreferences}
+              className="focus-ring hover:text-text flex min-h-11 items-center rounded-sm text-left transition-colors motion-reduce:transition-none"
+            >
+              Preferências de cookies
+            </button>
           </div>
         </div>
       </nav>

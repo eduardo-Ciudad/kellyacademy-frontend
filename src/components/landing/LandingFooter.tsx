@@ -3,6 +3,7 @@ import { KellyLogo } from '@/components/brand/KellyLogo';
 import { useIsMobileLanding } from '@/components/landing/fx/useIsMobileLanding';
 import { LandingFooterMobile } from '@/components/landing/LandingFooterMobile';
 import { scrollToLandingAnchor } from '@/components/landing/scrollToLandingAnchor';
+import { openCookiePreferences } from '@/lib/consent';
 
 const productLinks = [
   ['Recursos', '#recursos'],
@@ -63,6 +64,16 @@ function LandingFooterDesktop() {
           <Link to="/termos" className="focus-ring rounded-sm">
             Termos
           </Link>
+          <Link to="/cookies" className="focus-ring rounded-sm">
+            Cookies
+          </Link>
+          <button
+            type="button"
+            onClick={openCookiePreferences}
+            className="focus-ring hover:text-text rounded-sm text-left transition-colors motion-reduce:transition-none"
+          >
+            Preferências de cookies
+          </button>
         </FooterColumn>
       </div>
 
