@@ -236,6 +236,23 @@ export function CriarConta() {
           >
             {isSubmitting ? 'Criando conta…' : 'Criar conta'}
           </Button>
+          <p className="text-text-3 text-center text-xs leading-5 sm:text-sm">
+            Ao criar sua conta, você concorda com os{' '}
+            <Link
+              to="/termos"
+              className="focus-ring text-accent-text hover:text-accent-text-hover rounded-sm underline decoration-current/40 underline-offset-2"
+            >
+              Termos de Uso
+            </Link>{' '}
+            e a{' '}
+            <Link
+              to="/privacidade"
+              className="focus-ring text-accent-text hover:text-accent-text-hover rounded-sm underline decoration-current/40 underline-offset-2"
+            >
+              Política de Privacidade
+            </Link>
+            .
+          </p>
           <Link
             to="/entrar"
             className="focus-ring bg-control text-text rounded-pill flex h-[52px] items-center justify-center text-base font-semibold lg:hidden"
