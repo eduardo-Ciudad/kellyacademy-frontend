@@ -45,7 +45,7 @@ export function MobileStickyCta({ suppressed = false }: MobileStickyCtaProps) {
       {isMobile && visible && !suppressed ? (
         <motion.aside
           aria-label="Começar correção grátis"
-          className="border-border-subtle bg-bg/94 fixed right-0 bottom-0 left-0 z-30 flex items-center gap-3 border-t px-4 pt-3 pb-[calc(18px+env(safe-area-inset-bottom))]"
+          className="mobile-sticky-cta border-border-subtle bg-bg/94 fixed right-0 bottom-0 left-0 z-30 flex items-center gap-3 border-t px-4 pt-3 pb-[calc(18px+env(safe-area-inset-bottom))]"
           initial={reduceMotion ? false : { y: '100%' }}
           animate={{ y: 0 }}
           exit={reduceMotion ? { y: 0 } : { y: '100%' }}

@@ -204,6 +204,17 @@ html {
   }
 }
 
+@keyframes cookie-banner-in {
+  from {
+    transform: translateY(8px);
+    opacity: 0;
+  }
+}
+
+html[data-cookie-banner-visible='true'] .mobile-sticky-cta {
+  display: none;
+}
+
 @keyframes hero-blob-violet {
   to {
     transform: translate3d(-36px, -30px, 0) scale(0.97);

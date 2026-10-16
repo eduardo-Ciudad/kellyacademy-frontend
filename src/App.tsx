@@ -2,6 +2,7 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { RouterProvider } from 'react-router-dom';
 import { Toaster } from 'sonner';
+import { AnalyticsConsent } from '@/components/consent/AnalyticsConsent';
 import { AuthProvider } from '@/lib/auth';
 import { queryClient } from '@/lib/queryClient';
 import { router } from '@/routes';
@@ -28,6 +29,7 @@ export function App() {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <RouterProvider router={router} />
+        <AnalyticsConsent />
         <Toaster
           position={toastPosition}
           toastOptions={{
