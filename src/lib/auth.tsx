@@ -19,6 +19,7 @@ import {
   type StoredSession,
 } from '@/lib/session';
 import { queryClient } from '@/lib/queryClient';
+import { usePageMeta } from '@/lib/usePageMeta';
 
 type AuthContextValue = {
   session: StoredSession | null;
@@ -129,6 +130,7 @@ export function RequireAuth() {
   const { isAuthenticated } = useAuth();
   const location = useLocation();
   useSessionExpiryNotice();
+  usePageMeta({ title: 'Kelly Academy', noindex: true });
 
   return isAuthenticated ? (
     <Outlet />
