@@ -4,5 +4,6 @@ Disallow: /temas
 Disallow: /redacoes
 Disallow: /evolucao
 Disallow: /repertorio
+Disallow: /verificar-email
 
 Sitemap: https://kellyacademy.com.br/sitemap.xml

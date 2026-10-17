@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
+import { Mail } from 'lucide-react';
 import { useState } from 'react';
 import { useForm, type FieldPath } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
@@ -8,12 +9,17 @@ import { z } from 'zod';
 import { AuthLayout } from '@/components/auth/AuthLayout';
 import { FieldError, FormBanner } from '@/components/auth/FormFeedback';
 import { PasswordField } from '@/components/auth/PasswordField';
+import { ReenviarVerificacao } from '@/components/auth/ReenviarVerificacao';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { api, ApiError } from '@/lib/api';
 import { useAuth } from '@/lib/auth';
 import { usePageMeta } from '@/lib/usePageMeta';
-import type { CadastroRequest, LoginResponse } from '@/types/api';
+import type {
+  CadastroRequest,
+  CadastroResponse,
+  LoginResponse,
+} from '@/types/api';
 
 const cadastroSchema = z.object({
   nome: z
@@ -50,9 +56,11 @@ export function CriarConta() {
   const navigate = useNavigate();
   const { login } = useAuth();
   const [formError, setFormError] = useState<string>();
+  const [emailPendente, setEmailPendente] = useState<string>();
   const {
     register,
     handleSubmit,
+    reset,
     setError,
     formState: { errors, isSubmitting },
   } = useForm<CadastroForm>({
@@ -62,7 +70,7 @@ export function CriarConta() {
 
   const cadastroMutation = useMutation({
     mutationFn: (payload: CadastroRequest) =>
-      api<void>('/auth/cadastro', {
+      api<CadastroResponse>('/auth/cadastro', {
         method: 'POST',
         body: JSON.stringify(payload),
       }),
@@ -77,7 +85,11 @@ export function CriarConta() {
     };
 
     try {
-      await cadastroMutation.mutateAsync(payload);
+      const response = await cadastroMutation.mutateAsync(payload);
+      if (response.emailVerificado === false) {
+        setEmailPendente(payload.email);
+        return;
+      }
     } catch (error) {
       if (!(error instanceof ApiError)) return;
       if (error.status === 400 && error.erros) {
@@ -121,6 +133,63 @@ export function CriarConta() {
       });
     }
   });
+
+  if (emailPendente) {
+    return (
+      <AuthLayout variant="cadastro" showMobileIntro={false}>
+        <section className="my-auto flex w-full flex-col gap-7 lg:w-[420px]">
+          <div className="bg-accent-subtle border-accent-subtle-border flex size-16 items-center justify-center rounded-2xl border">
+            <Mail
+              className="text-accent-text"
+              size={30}
+              strokeWidth={1.6}
+              aria-hidden="true"
+            />
+          </div>
+          <div className="flex flex-col gap-3.5">
+            <h1 className="font-display text-text text-[36px] leading-[1.08] font-light tracking-[-0.03em] lg:text-[40px]">
+              Confira seu e-mail
+            </h1>
+            <p className="text-text-2 text-base leading-[1.55]">
+              Enviamos um link de confirmação para
+            </p>
+            <span className="bg-surface border-control text-text self-start rounded-[10px] border px-3.5 py-2.5 font-mono text-sm">
+              {emailPendente}
+            </span>
+            <p className="text-text-3 text-sm leading-[1.55]">
+              Abra o link para ativar sua conta. Ele vale por 24 horas. Não
+              chegou? Olhe também o spam e a aba Promoções.
+            </p>
+          </div>
+          <ReenviarVerificacao
+            email={emailPendente}
+            secondaryAction={
+              <Link
+                to="/entrar"
+                className="focus-ring bg-accent hover:bg-accent-hover rounded-pill flex h-[52px] w-full items-center justify-center text-base font-semibold text-white transition-colors"
+              >
+                <span className="lg:hidden">Já confirmei, quero entrar</span>
+                <span className="hidden lg:inline">Já confirmei, entrar</span>
+              </Link>
+            }
+          />
+          <p className="border-border-subtle text-text-3 border-t pt-5 text-sm">
+            E-mail errado?{' '}
+            <button
+              type="button"
+              onClick={() => {
+                setEmailPendente(undefined);
+                reset();
+              }}
+              className="focus-ring text-accent-text hover:text-accent-text-hover rounded-sm font-medium"
+            >
+              Criar a conta de novo
+            </button>
+          </p>
+        </section>
+      </AuthLayout>
+    );
+  }
 
   return (
     <AuthLayout variant="cadastro">

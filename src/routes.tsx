@@ -15,6 +15,11 @@ const CriarConta = lazy(() =>
 const Entrar = lazy(() =>
   import('@/pages/Entrar').then((module) => ({ default: module.Entrar })),
 );
+const VerificarEmail = lazy(() =>
+  import('@/pages/VerificarEmail').then((module) => ({
+    default: module.VerificarEmail,
+  })),
+);
 const Cookies = lazy(() =>
   import('@/pages/Cookies').then((module) => ({ default: module.Cookies })),
 );
@@ -97,6 +102,14 @@ export const router = createBrowserRouter([
     element: (
       <LazyRoute>
         <Termos />
+      </LazyRoute>
+    ),
+  },
+  {
+    path: '/verificar-email',
+    element: (
+      <LazyRoute>
+        <VerificarEmail />
       </LazyRoute>
     ),
   },

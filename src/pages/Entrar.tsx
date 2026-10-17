@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
+import { Mail } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
@@ -7,6 +8,7 @@ import { z } from 'zod';
 import { AuthLayout } from '@/components/auth/AuthLayout';
 import { FieldError, FormBanner } from '@/components/auth/FormFeedback';
 import { PasswordField } from '@/components/auth/PasswordField';
+import { ReenviarVerificacao } from '@/components/auth/ReenviarVerificacao';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { api, ApiError } from '@/lib/api';
@@ -42,6 +44,9 @@ export function Entrar() {
   const { login } = useAuth();
   const state = location.state as LoginLocationState | null;
   const [formError, setFormError] = useState<string>();
+  const [emailNaoVerificado, setEmailNaoVerificado] = useState<string>();
+  const [emailNaoVerificadoDetail, setEmailNaoVerificadoDetail] =
+    useState<string>();
   const {
     register,
     handleSubmit,
@@ -61,6 +66,8 @@ export function Entrar() {
 
   const onSubmit = handleSubmit(async (values) => {
     setFormError(undefined);
+    setEmailNaoVerificado(undefined);
+    setEmailNaoVerificadoDetail(undefined);
     const email = values.email.trim();
     try {
       const response = await loginMutation.mutateAsync({
@@ -78,27 +85,64 @@ export function Entrar() {
         : '/';
       void navigate(destination, { replace: true });
     } catch (error) {
-      if (error instanceof ApiError) setFormError(error.detail);
+      if (error instanceof ApiError) {
+        if (error.status === 403 && error.codigo === 'EMAIL_NAO_VERIFICADO') {
+          setEmailNaoVerificado(email);
+          setEmailNaoVerificadoDetail(error.detail);
+        } else {
+          setFormError(error.detail);
+        }
+      }
     }
   });
 
   return (
-    <AuthLayout variant="login">
+    <AuthLayout variant="login" showMobileIntro={false}>
       <form
         onSubmit={(event) => void onSubmit(event)}
         noValidate
-        className="mt-8 flex flex-1 flex-col lg:my-auto lg:w-[400px] lg:flex-none"
+        className="mt-8 flex flex-1 flex-col lg:my-auto lg:w-[420px] lg:flex-none"
       >
-        <div className="hidden flex-col gap-2 lg:flex">
-          <h1 className="text-text text-[32px] font-normal tracking-[-0.02em]">
-            Entre na sua conta
+        <div className="flex flex-col gap-2">
+          <h1 className="font-display text-text text-[36px] leading-[1.08] font-light tracking-[-0.03em] lg:text-[40px]">
+            Entrar
           </h1>
-          <p className="text-text-2 text-base leading-[1.5]">
-            Continue treinando de onde parou.
+          <p className="text-text-2 text-base leading-[1.55]">
+            Continue de onde parou.
           </p>
         </div>
 
-        <div className="flex flex-col gap-4 lg:mt-5 lg:gap-5">
+        {emailNaoVerificado && (
+          <div
+            role="alert"
+            className="bg-accent-subtle border-accent-subtle-border mt-6 flex flex-col gap-3.5 rounded-[14px] border p-4"
+          >
+            <div className="flex items-start gap-3">
+              <Mail
+                className="text-accent-text mt-px shrink-0"
+                size={20}
+                strokeWidth={1.7}
+                aria-hidden="true"
+              />
+              <div className="flex flex-col gap-1">
+                <p className="text-text text-[15px] font-semibold">
+                  Falta confirmar seu e-mail
+                </p>
+                <p className="text-accent-subtle-text text-sm leading-[1.5]">
+                  {emailNaoVerificadoDetail}
+                </p>
+              </div>
+            </div>
+            <ReenviarVerificacao
+              email={emailNaoVerificado}
+              buttonLabel="Reenviar link de confirmação"
+              buttonVariant="compact"
+              embedded
+            />
+          </div>
+        )}
+
+        <div className="mt-6 flex flex-col gap-4">
           <div>
             <label
               htmlFor="email"
