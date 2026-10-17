@@ -15,6 +15,7 @@ export class ApiError extends Error {
   code: ApiErrorCode;
   status: number;
   detail: string;
+  codigo?: string;
   erros?: Record<string, string | string[]>;
   retryAfter?: number;
   limite?: number;
@@ -25,6 +26,7 @@ export class ApiError extends Error {
     code: ApiErrorCode;
     status: number;
     detail: string;
+    codigo?: string;
     erros?: Record<string, string | string[]>;
     retryAfter?: number;
     limite?: number;
@@ -36,6 +38,7 @@ export class ApiError extends Error {
     this.code = options.code;
     this.status = options.status;
     this.detail = options.detail;
+    this.codigo = options.codigo;
     this.erros = options.erros;
     this.retryAfter = options.retryAfter;
     this.limite = options.limite;
@@ -122,6 +125,7 @@ export async function api<T>(
         code: 'HTTP',
         status: response.status,
         detail: problem.detail || fallbackMessage(response.status, isAuthRoute),
+        codigo: problem.codigo,
         erros: problem.erros,
         retryAfter: Number.isNaN(retryAfter) ? undefined : retryAfter,
         limite: problem.limite,

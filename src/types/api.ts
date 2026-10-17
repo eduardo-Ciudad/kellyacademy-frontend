@@ -6,6 +6,7 @@ export type ProblemDetail = {
   title?: string;
   status?: number;
   detail?: string;
+  codigo?: string;
   instance?: string;
   erros?: Record<string, string | string[]>;
   limite?: number;
@@ -19,6 +20,14 @@ export type CadastroRequest = {
   nome: string;
   email: string;
   senha: string;
+};
+
+export type CadastroResponse = {
+  emailVerificado: boolean;
+};
+
+export type ReenviarVerificacaoResponse = {
+  mensagem: string;
 };
 
 export type LoginResponse = {
