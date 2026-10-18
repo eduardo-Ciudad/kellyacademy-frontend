@@ -1,11 +1,12 @@
 import * as Dialog from '@radix-ui/react-dialog';
-import { LogOut, Route } from 'lucide-react';
+import { KeyRound, LogOut, Route } from 'lucide-react';
 import { useRef, useState, type PointerEvent } from 'react';
 import { SoonItem } from '@/components/layout/SoonItem';
 import { CorrecoesHojeCard } from '@/components/redacao/CorrecoesHojeCard';
 import { Button } from '@/components/ui/Button';
 import { useLogout } from '@/hooks/useLogout';
 import { useUsuario } from '@/hooks/useUsuario';
+import { Link } from 'react-router-dom';
 
 export function AccountSheet({
   open,
@@ -85,6 +86,13 @@ export function AccountSheet({
           <div className="mt-5 flex flex-col gap-3">
             <CorrecoesHojeCard mobile />
             <SoonItem icon={Route} label="Plano de estudo" />
+            <Link
+              to="/conta/senha"
+              onClick={() => onOpenChange(false)}
+              className="focus-ring bg-control text-text rounded-pill flex h-12 w-full items-center justify-center gap-2 text-sm font-semibold"
+            >
+              <KeyRound size={18} aria-hidden="true" /> Alterar senha
+            </Link>
             <Button
               type="button"
               variant="secondary"

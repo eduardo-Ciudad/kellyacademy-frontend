@@ -13,6 +13,9 @@ type ReenviarVerificacaoProps = {
   buttonVariant?: 'primary' | 'outline' | 'compact';
   secondaryAction?: ReactNode;
   embedded?: boolean;
+  endpoint?: '/auth/reenviar-verificacao' | '/auth/esqueci-senha';
+  initialSeconds?: number;
+  onSuccess?: (mensagem: string, email: string) => void;
 };
 
 export function ReenviarVerificacao({
@@ -22,14 +25,17 @@ export function ReenviarVerificacao({
   buttonVariant = 'outline',
   secondaryAction,
   embedded = false,
+  endpoint = '/auth/reenviar-verificacao',
+  initialSeconds = 0,
+  onSuccess,
 }: ReenviarVerificacaoProps) {
   const [emailDigitado, setEmailDigitado] = useState(email);
   const [mensagem, setMensagem] = useState<string>();
   const [erro, setErro] = useState<string>();
-  const [segundos, setSegundos] = useState(0);
+  const [segundos, setSegundos] = useState(initialSeconds);
   const mutation = useMutation({
     mutationFn: (destino: string) =>
-      api<ReenviarVerificacaoResponse>('/auth/reenviar-verificacao', {
+      api<ReenviarVerificacaoResponse>(endpoint, {
         method: 'POST',
         body: JSON.stringify({ email: destino }),
       }),
@@ -53,9 +59,14 @@ export function ReenviarVerificacao({
       );
       setMensagem(response.mensagem);
       setSegundos(60);
+      onSuccess?.(
+        response.mensagem,
+        (pedirEmail ? emailDigitado : email).trim(),
+      );
     } catch (error) {
       if (!(error instanceof ApiError)) return;
       if (error.status === 429) {
+        setSegundos(error.retryAfter ?? 60);
         setErro(
           error.retryAfter
             ? `Limite atingido. Tente novamente em ${error.retryAfter} segundos.`

@@ -49,12 +49,14 @@ export function Entrar() {
     useState<string>();
   const {
     register,
+    watch,
     handleSubmit,
     formState: { errors },
   } = useForm<LoginForm>({
     resolver: zodResolver(loginSchema),
     defaultValues: { email: state?.email ?? '', senha: '' },
   });
+  const emailDigitado = watch('email');
 
   const loginMutation = useMutation({
     mutationFn: (credentials: LoginRequest) =>
@@ -164,12 +166,21 @@ export function Entrar() {
           </div>
 
           <div>
-            <label
-              htmlFor="senha"
-              className="text-text-body mb-2 block text-sm font-semibold"
-            >
-              Senha
-            </label>
+            <div className="mb-2 flex min-h-11 items-center justify-between gap-3">
+              <label
+                htmlFor="senha"
+                className="text-text-body text-sm font-semibold"
+              >
+                Senha
+              </label>
+              <Link
+                to="/esqueci-senha"
+                state={{ email: emailDigitado }}
+                className="focus-ring text-accent-text hover:text-accent-text-hover rounded-sm text-sm font-semibold"
+              >
+                Esqueci minha senha
+              </Link>
+            </div>
             <PasswordField
               id="senha"
               registration={register('senha')}

@@ -20,6 +20,21 @@ const VerificarEmail = lazy(() =>
     default: module.VerificarEmail,
   })),
 );
+const EsqueciSenha = lazy(() =>
+  import('@/pages/EsqueciSenha').then((module) => ({
+    default: module.EsqueciSenha,
+  })),
+);
+const RedefinirSenha = lazy(() =>
+  import('@/pages/RedefinirSenha').then((module) => ({
+    default: module.RedefinirSenha,
+  })),
+);
+const AlterarSenha = lazy(() =>
+  import('@/pages/AlterarSenha').then((module) => ({
+    default: module.AlterarSenha,
+  })),
+);
 const Cookies = lazy(() =>
   import('@/pages/Cookies').then((module) => ({ default: module.Cookies })),
 );
@@ -114,6 +129,22 @@ export const router = createBrowserRouter([
     ),
   },
   {
+    path: '/esqueci-senha',
+    element: (
+      <LazyRoute>
+        <EsqueciSenha />
+      </LazyRoute>
+    ),
+  },
+  {
+    path: '/redefinir-senha',
+    element: (
+      <LazyRoute>
+        <RedefinirSenha />
+      </LazyRoute>
+    ),
+  },
+  {
     element: <PublicOnlyRoute />,
     children: [
       {
@@ -170,6 +201,14 @@ export const router = createBrowserRouter([
               <Suspense fallback={<EvolucaoSkeleton />}>
                 <Evolucao />
               </Suspense>
+            ),
+          },
+          {
+            path: '/conta/senha',
+            element: (
+              <LazyRoute>
+                <AlterarSenha />
+              </LazyRoute>
             ),
           },
           {

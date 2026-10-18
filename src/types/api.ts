@@ -30,6 +30,10 @@ export type ReenviarVerificacaoResponse = {
   mensagem: string;
 };
 
+export type SolicitarRedefinicaoResponse = { mensagem: string };
+
+export type AlterarSenhaResponse = LoginResponse;
+
 export type LoginResponse = {
   accessToken: string;
   tipo: string;

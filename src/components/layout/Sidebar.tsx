@@ -4,6 +4,7 @@ import {
   FileText,
   Library,
   LogOut,
+  KeyRound,
   Plus,
   Route,
 } from 'lucide-react';
@@ -86,6 +87,12 @@ export function Sidebar() {
           <LogOut size={18} aria-hidden="true" />
         </button>
       </div>
+      <NavLink
+        to="/conta/senha"
+        className="focus-ring text-text-2 hover:bg-surface-2 hover:text-text rounded-input mt-1 flex min-h-11 items-center gap-3 px-3 text-sm font-semibold transition-colors"
+      >
+        <KeyRound size={18} aria-hidden="true" /> Alterar senha
+      </NavLink>
     </aside>
   );
 }

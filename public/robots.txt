@@ -5,5 +5,8 @@ Disallow: /redacoes
 Disallow: /evolucao
 Disallow: /repertorio
 Disallow: /verificar-email
+Disallow: /esqueci-senha
+Disallow: /redefinir-senha
+Disallow: /conta
 
 Sitemap: https://kellyacademy.com.br/sitemap.xml
