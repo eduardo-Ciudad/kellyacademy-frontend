@@ -41,7 +41,7 @@ describe('ReenviarVerificacao', () => {
     vi.restoreAllMocks();
   });
 
-  it('mostra exatamente a mensagem do 202 e bloqueia novos envios por 60 segundos', async () => {
+  it('mostra exatamente a mensagem do 202 e bloqueia novos envios por 120 segundos', async () => {
     let concluir!: (response: Response) => void;
     vi.spyOn(globalThis, 'fetch').mockReturnValue(
       new Promise<Response>((resolve) => {
@@ -72,9 +72,9 @@ describe('ReenviarVerificacao', () => {
       'Se houver uma conta, enviaremos um novo link.',
     );
     expect(button.disabled).toBe(true);
-    expect(button.textContent).toContain('Reenviar em 1:00');
+    expect(button.textContent).toContain('Reenviar em 2:00');
 
-    for (let segundo = 0; segundo < 60; segundo += 1) {
+    for (let segundo = 0; segundo < 120; segundo += 1) {
       act(() => {
         vi.advanceTimersByTime(1000);
       });
