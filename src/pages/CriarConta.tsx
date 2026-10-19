@@ -7,9 +7,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { z } from 'zod';
 import { AuthLayout } from '@/components/auth/AuthLayout';
+import { AvisoEntregaEmail } from '@/components/auth/AvisoEntregaEmail';
 import { FieldError, FormBanner } from '@/components/auth/FormFeedback';
 import { PasswordField } from '@/components/auth/PasswordField';
-import { ReenviarVerificacao } from '@/components/auth/ReenviarVerificacao';
+import {
+  ESPERA_REENVIO_SEGUNDOS,
+  ReenviarVerificacao,
+} from '@/components/auth/ReenviarVerificacao';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { api, ApiError } from '@/lib/api';
@@ -57,6 +61,7 @@ export function CriarConta() {
   const { login } = useAuth();
   const [formError, setFormError] = useState<string>();
   const [emailPendente, setEmailPendente] = useState<string>();
+  const [emailReenviado, setEmailReenviado] = useState(false);
   const {
     register,
     handleSubmit,
@@ -157,12 +162,14 @@ export function CriarConta() {
               {emailPendente}
             </span>
             <p className="text-text-3 text-sm leading-[1.55]">
-              Abra o link para ativar sua conta. Ele vale por 24 horas. Não
-              chegou? Olhe também o spam e a aba Promoções.
+              Abra o link para ativar sua conta. Ele vale por 24 horas.
             </p>
           </div>
+          <AvisoEntregaEmail reenviado={emailReenviado} />
           <ReenviarVerificacao
             email={emailPendente}
+            initialSeconds={ESPERA_REENVIO_SEGUNDOS}
+            onSuccess={() => setEmailReenviado(true)}
             secondaryAction={
               <Link
                 to="/entrar"
@@ -179,6 +186,7 @@ export function CriarConta() {
               type="button"
               onClick={() => {
                 setEmailPendente(undefined);
+                setEmailReenviado(false);
                 reset();
               }}
               className="focus-ring text-accent-text hover:text-accent-text-hover rounded-sm font-medium"
