@@ -141,11 +141,17 @@ describe('fluxos de senha', () => {
     expect(container.textContent).toContain(
       'Se houver uma conta, enviaremos o link.',
     );
-    expect(
-      Array.from(container.querySelectorAll('button')).find((button) =>
-        button.textContent?.includes('Reenviar'),
-      )?.disabled,
-    ).toBe(true);
+    expect(container.textContent).toContain(
+      'O e-mail pode levar até 2 minutos para chegar.',
+    );
+    expect(container.textContent).not.toContain(
+      'Não chegou? Confira a caixa de spam.',
+    );
+    const resendButton = Array.from(container.querySelectorAll('button')).find(
+      (button) => button.textContent?.includes('Reenviar'),
+    );
+    expect(resendButton?.disabled).toBe(true);
+    expect(resendButton?.textContent).toContain('Reenviar em 2:00');
   });
 
   it('mostra a espera do Retry-After no 429', async () => {
