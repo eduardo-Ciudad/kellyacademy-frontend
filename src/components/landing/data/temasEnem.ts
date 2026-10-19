@@ -1,10 +1,15 @@
-// TODO: trocar pelo tema real escolhido pelo Eduardo
-export const TEMA_POSSIVEL_DESTAQUE = 'Seu próximo tema de treino';
+export const TEMA_POSSIVEL_DESTAQUE =
+  'Direitos de crianças e adolescentes nos ambientes digitais';
+
+export const TEMA_POSSIVEL_DESTAQUE_EIXOS = [
+  'Infância e direitos',
+  'Tecnologia',
+] as const;
 
 export const TEMAS_POSSIVEIS_PREVIEW = [
-  { nome: '[TEMA DA SUA PESQUISA]', eixo: '+ Adicionar' },
-  { nome: '[OUTRO TEMA PROVÁVEL]', eixo: 'Tecnologia' },
-  { nome: '[OUTRO TEMA PROVÁVEL]', eixo: 'Cidadania' },
+  { nome: 'Crianças e adolescentes no ambiente digital', eixo: '+ Adicionar' },
+  { nome: 'Analfabetismo entre jovens e adultos', eixo: 'Educação' },
+  { nome: 'Inclusão escolar de pessoas com deficiência', eixo: 'Inclusão' },
 ] as const;
 
 export const temasEnem = [

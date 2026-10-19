@@ -1,7 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, useReducedMotion } from 'motion/react';
 import { JuliaAvatar } from '@/components/landing/JuliaAvatar';
-import { TEMA_POSSIVEL_DESTAQUE } from '@/components/landing/data/temasEnem';
+import {
+  TEMA_POSSIVEL_DESTAQUE,
+  TEMA_POSSIVEL_DESTAQUE_EIXOS,
+} from '@/components/landing/data/temasEnem';
 import { DUR, EASE_OUT } from '@/components/landing/fx/motion';
 import { Reveal } from '@/components/landing/fx/Reveal';
 import { LandingCard } from '@/components/landing/ui/LandingCard';
@@ -368,7 +371,7 @@ function ThemesMobileCard() {
           {TEMA_POSSIVEL_DESTAQUE}
         </p>
         <div className="mt-3 flex flex-wrap gap-2">
-          {['Tecnologia e sociedade', 'Cidadania'].map((axis) => (
+          {TEMA_POSSIVEL_DESTAQUE_EIXOS.map((axis) => (
             <span
               key={axis}
               className="border-possivel-border text-possivel rounded-full border px-2.5 py-1 text-[12px]"
