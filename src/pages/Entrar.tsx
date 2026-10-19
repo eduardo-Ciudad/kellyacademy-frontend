@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 import { AuthLayout } from '@/components/auth/AuthLayout';
+import { AvisoEntregaEmail } from '@/components/auth/AvisoEntregaEmail';
 import { FieldError, FormBanner } from '@/components/auth/FormFeedback';
 import { PasswordField } from '@/components/auth/PasswordField';
 import { ReenviarVerificacao } from '@/components/auth/ReenviarVerificacao';
@@ -47,6 +48,7 @@ export function Entrar() {
   const [emailNaoVerificado, setEmailNaoVerificado] = useState<string>();
   const [emailNaoVerificadoDetail, setEmailNaoVerificadoDetail] =
     useState<string>();
+  const [emailReenviado, setEmailReenviado] = useState(false);
   const {
     register,
     watch,
@@ -70,6 +72,7 @@ export function Entrar() {
     setFormError(undefined);
     setEmailNaoVerificado(undefined);
     setEmailNaoVerificadoDetail(undefined);
+    setEmailReenviado(false);
     const email = values.email.trim();
     try {
       const response = await loginMutation.mutateAsync({
@@ -135,11 +138,13 @@ export function Entrar() {
                 </p>
               </div>
             </div>
+            <AvisoEntregaEmail reenviado={emailReenviado} />
             <ReenviarVerificacao
               email={emailNaoVerificado}
               buttonLabel="Reenviar link de confirmação"
               buttonVariant="compact"
               embedded
+              onSuccess={() => setEmailReenviado(true)}
             />
           </div>
         )}
