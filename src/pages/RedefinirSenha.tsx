@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthLayout } from '@/components/auth/AuthLayout';
+import { AvisoEntregaEmail } from '@/components/auth/AvisoEntregaEmail';
 import { FieldError } from '@/components/auth/FormFeedback';
 import { PasswordField } from '@/components/auth/PasswordField';
 import { PasswordRules } from '@/components/auth/PasswordRules';
@@ -8,7 +9,10 @@ import {
   PasswordStatusIcon,
   passwordTitleClass,
 } from '@/components/auth/PasswordStatus';
-import { ReenviarVerificacao } from '@/components/auth/ReenviarVerificacao';
+import {
+  ESPERA_REENVIO_SEGUNDOS,
+  ReenviarVerificacao,
+} from '@/components/auth/ReenviarVerificacao';
 import { Button } from '@/components/ui/Button';
 import { api, ApiError } from '@/lib/api';
 import { consumeVerificationToken } from '@/lib/emailVerification';
@@ -35,6 +39,7 @@ export function RedefinirSenha() {
   const [pending, setPending] = useState(false);
   const [emailEnviado, setEmailEnviado] = useState('');
   const [mensagemEnvio, setMensagemEnvio] = useState('');
+  const [emailReenviado, setEmailReenviado] = useState(false);
   const submitting = useRef(false);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const { register, handleSubmit, watch } = useForm<Form>({
@@ -117,6 +122,7 @@ export function RedefinirSenha() {
           onSuccess={(mensagem, email) => {
             setMensagemEnvio(mensagem);
             setEmailEnviado(email);
+            setEmailReenviado(true);
             changeState('email');
           }}
         />
@@ -145,13 +151,14 @@ export function RedefinirSenha() {
             O link vale por <strong className="text-text">30 minutos</strong> e
             só pode ser usado uma vez.
           </p>
-          <p>Não chegou? Confira a caixa de spam.</p>
         </div>
+        <AvisoEntregaEmail reenviado={emailReenviado} />
         <ReenviarVerificacao
           email={emailEnviado}
           endpoint="/auth/esqueci-senha"
-          initialSeconds={60}
+          initialSeconds={ESPERA_REENVIO_SEGUNDOS}
           embedded
+          onSuccess={() => setEmailReenviado(true)}
         />
         <Link
           to="/entrar"
