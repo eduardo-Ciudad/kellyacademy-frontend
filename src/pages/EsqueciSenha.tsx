@@ -1,12 +1,16 @@
 import { useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { AuthLayout } from '@/components/auth/AuthLayout';
+import { AvisoEntregaEmail } from '@/components/auth/AvisoEntregaEmail';
 import { FieldError } from '@/components/auth/FormFeedback';
 import {
   PasswordStatusIcon,
   passwordTitleClass,
 } from '@/components/auth/PasswordStatus';
-import { ReenviarVerificacao } from '@/components/auth/ReenviarVerificacao';
+import {
+  ESPERA_REENVIO_SEGUNDOS,
+  ReenviarVerificacao,
+} from '@/components/auth/ReenviarVerificacao';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { api, ApiError } from '@/lib/api';
@@ -27,6 +31,7 @@ export function EsqueciSenha() {
   const [estado, setEstado] = useState<Estado>({ kind: 'form' });
   const [erro, setErro] = useState<string>();
   const [pending, setPending] = useState(false);
+  const [emailReenviado, setEmailReenviado] = useState(false);
   const submitting = useRef(false);
   const titleRef = useRef<HTMLHeadingElement>(null);
 
@@ -48,7 +53,7 @@ export function EsqueciSenha() {
         kind: 'enviado',
         email: destino,
         mensagem: response.mensagem,
-        wait: 60,
+        wait: ESPERA_REENVIO_SEGUNDOS,
       });
       requestAnimationFrame(() => titleRef.current?.focus());
     } catch (error) {
@@ -142,14 +147,15 @@ export function EsqueciSenha() {
                 <strong className="text-text">30 minutos</strong> e só pode ser
                 usado uma vez.
               </p>
-              <p>Não chegou? Confira a caixa de spam.</p>
             </div>
+            <AvisoEntregaEmail reenviado={emailReenviado} />
             <ReenviarVerificacao
               email={estado.email}
               endpoint="/auth/esqueci-senha"
               initialSeconds={estado.wait}
               buttonVariant="outline"
               embedded
+              onSuccess={() => setEmailReenviado(true)}
             />
             <Link
               to="/entrar"
