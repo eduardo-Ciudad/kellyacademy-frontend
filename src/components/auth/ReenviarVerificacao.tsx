@@ -6,6 +6,8 @@ import { Input } from '@/components/ui/Input';
 import { api, ApiError } from '@/lib/api';
 import type { ReenviarVerificacaoResponse } from '@/types/api';
 
+export const ESPERA_REENVIO_SEGUNDOS = 120;
+
 type ReenviarVerificacaoProps = {
   email?: string;
   pedirEmail?: boolean;
@@ -58,7 +60,7 @@ export function ReenviarVerificacao({
         (pedirEmail ? emailDigitado : email).trim(),
       );
       setMensagem(response.mensagem);
-      setSegundos(60);
+      setSegundos(ESPERA_REENVIO_SEGUNDOS);
       onSuccess?.(
         response.mensagem,
         (pedirEmail ? emailDigitado : email).trim(),
