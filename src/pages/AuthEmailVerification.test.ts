@@ -107,6 +107,17 @@ describe('cadastro com verificação de e-mail', () => {
 
     expect(container.textContent).toContain('Confira seu e-mail');
     expect(container.textContent).toContain('aluna@exemplo.com');
+    expect(container.textContent).toContain(
+      'O e-mail pode levar até 2 minutos para chegar.',
+    );
+    expect(container.textContent).not.toContain(
+      'Não chegou? Olhe também o spam e a aba Promoções.',
+    );
+    const resendButton = Array.from(container.querySelectorAll('button')).find(
+      (button) => button.textContent?.includes('Reenviar em'),
+    );
+    expect(resendButton?.disabled).toBe(true);
+    expect(resendButton?.textContent).toContain('Reenviar em 2:00');
     expect(fetchMock).toHaveBeenCalledTimes(1);
 
     const restartButton = Array.from(container.querySelectorAll('button')).find(
@@ -179,6 +190,9 @@ describe('login com e-mail não verificado', () => {
 
     expect(container.textContent).toContain('Confirme seu e-mail para entrar.');
     expect(container.textContent).toContain('Reenviar link de confirmação');
+    expect(container.textContent).toContain(
+      'O e-mail pode levar até 2 minutos para chegar.',
+    );
     expect(container.querySelectorAll('[role="alert"]')).toHaveLength(1);
     expect(container.querySelector('.bg-accent-subtle')).toBeTruthy();
     expect(container.querySelector('.bg-danger-bg')).toBeNull();
