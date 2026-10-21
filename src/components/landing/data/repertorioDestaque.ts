@@ -1,9 +1,11 @@
 import type { FuncaoArgumentativa, TipoEntidade } from '@/types/api';
 
+export const TOTAL_REPERTORIOS = 118;
+
 export const REPERTORIO_STATS = [
-  { value: 63, label: 'repertórios curados' },
+  { value: TOTAL_REPERTORIOS, label: 'repertórios curados' },
   { value: 13, label: 'eixos temáticos do ENEM' },
-  { value: 52, label: 'problemas sociais mapeados' },
+  { value: 56, label: 'problemas sociais mapeados' },
   { value: 12, label: 'artigos da Constituição explicados' },
 ] as const;
 
