@@ -23,6 +23,7 @@ export default defineConfig(({ mode }) => {
           '/transcricoes',
           '/repertorios',
           '/macroeixos',
+          '/assinaturas',
         ].map((route) => [
           route,
           {
