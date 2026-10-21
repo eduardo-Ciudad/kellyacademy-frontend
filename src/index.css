@@ -294,6 +294,15 @@ body {
 }
 
 @layer utilities {
+  @keyframes step-progress {
+    from {
+      transform: scaleY(0);
+    }
+    to {
+      transform: scaleY(1);
+    }
+  }
+
   .landing-section {
     padding-block: 7rem;
   }
