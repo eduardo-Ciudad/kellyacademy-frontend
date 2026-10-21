@@ -80,6 +80,14 @@ const Repertorio = lazy(() =>
     default: module.Repertorio,
   })),
 );
+const Planos = lazy(() =>
+  import('@/pages/Planos').then((module) => ({ default: module.Planos })),
+);
+const AssinaturaSucesso = lazy(() =>
+  import('@/pages/AssinaturaSucesso').then((module) => ({
+    default: module.AssinaturaSucesso,
+  })),
+);
 
 export const router = createBrowserRouter([
   {
@@ -171,6 +179,22 @@ export const router = createBrowserRouter([
       {
         element: <AppShell />,
         children: [
+          {
+            path: '/planos',
+            element: (
+              <LazyRoute>
+                <Planos />
+              </LazyRoute>
+            ),
+          },
+          {
+            path: '/assinatura/sucesso',
+            element: (
+              <LazyRoute>
+                <AssinaturaSucesso />
+              </LazyRoute>
+            ),
+          },
           {
             path: '/temas',
             element: (
