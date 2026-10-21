@@ -8,5 +8,7 @@ Disallow: /verificar-email
 Disallow: /esqueci-senha
 Disallow: /redefinir-senha
 Disallow: /conta
+Disallow: /planos
+Disallow: /assinatura
 
 Sitemap: https://kellyacademy.com.br/sitemap.xml
