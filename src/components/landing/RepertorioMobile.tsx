@@ -7,6 +7,7 @@ import {
   FICHAS,
   REPERTORIO_PILARES,
   REPERTORIO_STATS,
+  TOTAL_REPERTORIOS,
   type FichaRepertorio,
 } from '@/components/landing/data/repertorioDestaque';
 import { GridBackground } from '@/components/landing/fx/GridBackground';
@@ -201,7 +202,7 @@ export function RepertorioMobile({ onSheetOpenChange }: RepertorioMobileProps) {
             to="/criar-conta"
             className="focus-ring text-accent-text mt-[18px] inline-flex min-h-11 items-center gap-2 rounded-md text-[15.5px] font-semibold"
           >
-            Explorar os 63 repertórios
+            Explorar os {TOTAL_REPERTORIOS} repertórios
             <ArrowRight size={16} strokeWidth={2.2} aria-hidden="true" />
           </Link>
         </div>
@@ -470,7 +471,7 @@ function MobileFichaSheet({
             onClick={onClose}
             className="focus-ring bg-accent hover:bg-accent-hover rounded-pill inline-flex h-[52px] shrink-0 items-center justify-center text-base font-semibold text-white transition-colors"
           >
-            Criar conta e ver os 63
+            Criar conta e ver os {TOTAL_REPERTORIOS}
           </Link>
         </Dialog.Content>
       </Dialog.Portal>
