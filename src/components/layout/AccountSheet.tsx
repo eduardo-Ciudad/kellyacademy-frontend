@@ -1,5 +1,5 @@
 import * as Dialog from '@radix-ui/react-dialog';
-import { KeyRound, LogOut, Route } from 'lucide-react';
+import { Crown, KeyRound, LogOut, RotateCcw, Route } from 'lucide-react';
 import { useRef, useState, type PointerEvent } from 'react';
 import { SoonItem } from '@/components/layout/SoonItem';
 import { CorrecoesHojeCard } from '@/components/redacao/CorrecoesHojeCard';
@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/Button';
 import { useLogout } from '@/hooks/useLogout';
 import { useUsuario } from '@/hooks/useUsuario';
 import { Link } from 'react-router-dom';
+import { useTour } from '@/features/tour/TourProvider';
 
 export function AccountSheet({
   open,
@@ -17,6 +18,7 @@ export function AccountSheet({
 }) {
   const { nome, iniciais } = useUsuario();
   const logout = useLogout();
+  const { openTour } = useTour();
   const contentRef = useRef<HTMLDivElement>(null);
   const dragStartRef = useRef<number | null>(null);
   const [dragOffset, setDragOffset] = useState(0);
@@ -87,12 +89,30 @@ export function AccountSheet({
             <CorrecoesHojeCard mobile />
             <SoonItem icon={Route} label="Plano de estudo" />
             <Link
+              to="/planos"
+              onClick={() => onOpenChange(false)}
+              className="focus-ring bg-control text-text rounded-pill flex h-12 w-full items-center justify-center gap-2 text-sm font-semibold"
+            >
+              <Crown size={18} aria-hidden="true" /> Planos
+            </Link>
+            <Link
               to="/conta/senha"
               onClick={() => onOpenChange(false)}
               className="focus-ring bg-control text-text rounded-pill flex h-12 w-full items-center justify-center gap-2 text-sm font-semibold"
             >
               <KeyRound size={18} aria-hidden="true" /> Alterar senha
             </Link>
+            <button
+              type="button"
+              onClick={() => {
+                onOpenChange(false);
+                window.setTimeout(openTour, 0);
+              }}
+              className="focus-ring bg-control text-text rounded-pill flex min-h-12 w-full items-center justify-center gap-2 px-4 text-sm font-semibold"
+            >
+              <RotateCcw size={18} aria-hidden="true" /> Rever tour de
+              boas-vindas
+            </button>
             <Button
               type="button"
               variant="secondary"
