@@ -12,6 +12,7 @@ import { Link } from 'react-router-dom';
 import {
   FICHAS,
   REPERTORIO_STATS,
+  TOTAL_REPERTORIOS,
   type FichaRepertorio,
 } from '@/components/landing/data/repertorioDestaque';
 import { DUR, EASE_OUT } from '@/components/landing/fx/motion';
@@ -95,7 +96,7 @@ function RepertorioDesktop() {
             to="/criar-conta"
             className="focus-ring text-text hover:text-accent-text inline-flex min-h-11 items-center gap-2 rounded-md text-[15px] font-semibold transition-colors motion-reduce:transition-none"
           >
-            Explorar os 63 repertórios
+            Explorar os {TOTAL_REPERTORIOS} repertórios
             <ArrowRight size={16} strokeWidth={2.2} aria-hidden="true" />
           </Link>
         </div>
@@ -224,7 +225,7 @@ function RepertorioExplorer() {
           </div>
           <div className="mx-1 mt-2 flex min-h-11 items-center justify-between gap-3">
             <p className="text-text-3 text-small">
-              Exemplos reais da base · 63 repertórios ativos
+              Exemplos reais da base · {TOTAL_REPERTORIOS} repertórios ativos
             </p>
             {automaticAvailable ? (
               <button
