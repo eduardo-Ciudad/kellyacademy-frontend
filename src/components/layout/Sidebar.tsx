@@ -1,12 +1,14 @@
 import {
   BarChart3,
   BookOpenText,
+  Crown,
   FileText,
   Library,
   LogOut,
   KeyRound,
   Plus,
   Route,
+  RotateCcw,
 } from 'lucide-react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { KellyLogo } from '@/components/brand/KellyLogo';
@@ -15,6 +17,7 @@ import { CorrecoesHojeCard } from '@/components/redacao/CorrecoesHojeCard';
 import { useLogout } from '@/hooks/useLogout';
 import { useUsuario } from '@/hooks/useUsuario';
 import { isNavActive } from '@/components/layout/navMatch';
+import { useTour } from '@/features/tour/TourProvider';
 
 const navItems = [
   { to: '/', label: 'Suas redações', icon: FileText },
@@ -23,10 +26,18 @@ const navItems = [
   { to: '/evolucao', label: 'Evolução', icon: BarChart3 },
 ] as const;
 
+const accountLinkClassName = ({ isActive }: { isActive: boolean }) =>
+  `focus-ring rounded-input mt-1 flex min-h-11 items-center gap-3 px-3 text-sm font-semibold transition-colors ${
+    isActive
+      ? 'bg-nav-active text-accent-text'
+      : 'text-text-2 hover:bg-surface-2 hover:text-text'
+  }`;
+
 export function Sidebar() {
   const logout = useLogout();
   const location = useLocation();
   const { nome, iniciais } = useUsuario();
+  const { openTour } = useTour();
 
   return (
     <aside className="border-border-subtle bg-bg fixed inset-y-0 left-0 z-20 hidden w-[248px] flex-col border-r px-4 py-5 lg:flex">
@@ -34,6 +45,7 @@ export function Sidebar() {
 
       <NavLink
         to="/temas"
+        data-tour="nova-redacao"
         className="focus-ring rounded-pill border-control text-text hover:bg-surface mt-7 inline-flex min-h-12 items-center justify-center gap-2 border px-5 text-sm font-semibold transition-colors"
       >
         <Plus className="text-accent-text" size={19} aria-hidden="true" /> Nova
@@ -49,6 +61,15 @@ export function Sidebar() {
               key={to}
               to={to}
               aria-current={active ? 'page' : undefined}
+              data-tour={
+                to === '/temas'
+                  ? 'temas'
+                  : to === '/repertorio'
+                    ? 'repertorio'
+                    : to === '/evolucao'
+                      ? 'evolucao'
+                      : undefined
+              }
               className={`focus-ring rounded-input flex min-h-11 items-center gap-3 px-3 text-sm font-semibold transition-colors ${
                 active
                   ? 'bg-nav-active text-accent-text'
@@ -87,12 +108,19 @@ export function Sidebar() {
           <LogOut size={18} aria-hidden="true" />
         </button>
       </div>
-      <NavLink
-        to="/conta/senha"
-        className="focus-ring text-text-2 hover:bg-surface-2 hover:text-text rounded-input mt-1 flex min-h-11 items-center gap-3 px-3 text-sm font-semibold transition-colors"
-      >
+      <NavLink to="/planos" className={accountLinkClassName}>
+        <Crown size={18} aria-hidden="true" /> Planos
+      </NavLink>
+      <NavLink to="/conta/senha" className={accountLinkClassName}>
         <KeyRound size={18} aria-hidden="true" /> Alterar senha
       </NavLink>
+      <button
+        type="button"
+        onClick={openTour}
+        className="focus-ring rounded-input text-text-2 hover:bg-surface-2 hover:text-text mt-1 flex min-h-11 items-center gap-3 px-3 text-left text-sm font-semibold transition-colors"
+      >
+        <RotateCcw size={18} aria-hidden="true" /> Rever tour de boas-vindas
+      </button>
     </aside>
   );
 }
