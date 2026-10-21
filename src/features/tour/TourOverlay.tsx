@@ -87,7 +87,7 @@ export function TourOverlay() {
     finish,
     closeToast,
   } = tour;
-  const mobile = useMediaQuery('(max-width: 59.999rem)');
+  const mobile = useMediaQuery('(max-width: 63.999rem)');
   const [availableSteps, setAvailableSteps] = useState<TourStep[]>(tourSteps);
   const [rect, setRect] = useState<TargetRect | null>(null);
   const [toastPaused, setToastPaused] = useState(false);
