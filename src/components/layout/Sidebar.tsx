@@ -8,7 +8,6 @@ import {
   KeyRound,
   Plus,
   Route,
-  RotateCcw,
 } from 'lucide-react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { KellyLogo } from '@/components/brand/KellyLogo';
@@ -99,6 +98,13 @@ export function Sidebar() {
           <span className="text-text-3 mt-0.5 block text-xs">
             Plano gratuito
           </span>
+          <button
+            type="button"
+            onClick={openTour}
+            className="focus-ring text-text-2 hover:text-text mt-0.5 -ml-1 block min-h-7 rounded px-1 text-left text-[13px] transition-colors"
+          >
+            Rever tour
+          </button>
         </span>
         <button
           onClick={logout}
@@ -114,13 +120,6 @@ export function Sidebar() {
       <NavLink to="/conta/senha" className={accountLinkClassName}>
         <KeyRound size={18} aria-hidden="true" /> Alterar senha
       </NavLink>
-      <button
-        type="button"
-        onClick={openTour}
-        className="focus-ring rounded-input text-text-2 hover:bg-surface-2 hover:text-text mt-1 flex min-h-11 items-center gap-3 px-3 text-left text-sm font-semibold transition-colors"
-      >
-        <RotateCcw size={18} aria-hidden="true" /> Rever tour de boas-vindas
-      </button>
     </aside>
   );
 }

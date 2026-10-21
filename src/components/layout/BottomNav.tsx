@@ -9,6 +9,7 @@ export function BottomNav() {
       {location.pathname === '/' && (
         <NavLink
           to="/temas"
+          data-tour="nova-redacao"
           className="focus-ring rounded-pill bg-accent fixed right-5 bottom-[calc(var(--bottom-nav-h)+16px)] z-30 inline-flex min-h-12 items-center gap-2 px-5 text-[15px] font-semibold text-white lg:hidden"
         >
           <Plus size={19} aria-hidden="true" /> Nova redação
@@ -64,6 +65,15 @@ function MobileLink({
   return (
     <NavLink
       to={to}
+      data-tour={
+        to === '/temas'
+          ? 'temas'
+          : to === '/repertorio'
+            ? 'repertorio'
+            : to === '/evolucao'
+              ? 'evolucao'
+              : undefined
+      }
       aria-current={active ? 'page' : undefined}
       className={`focus-ring rounded-input flex min-h-11 flex-col items-center justify-center gap-1 text-xs font-medium ${active ? 'text-accent-text' : 'text-text-3'}`}
     >

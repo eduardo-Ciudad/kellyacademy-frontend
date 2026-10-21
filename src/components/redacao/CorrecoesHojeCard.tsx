@@ -14,6 +14,7 @@ export function CorrecoesHojeCard({ mobile = false }: { mobile?: boolean }) {
 
   return (
     <div
+      data-tour="correcoes-hoje"
       className={cn(
         'bg-surface rounded-inner flex flex-col gap-2.5 p-4',
         mobile && 'rounded-[16px] px-4 py-3.5',
