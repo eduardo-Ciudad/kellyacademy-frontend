@@ -9,14 +9,22 @@ import {
   ChevronUp,
   RotateCcw,
 } from 'lucide-react';
-import { useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { JuliaChat, type FocoJulia } from '@/components/julia/JuliaChat';
+import { JuliaMarca } from '@/components/julia/JuliaMarca';
 import { SparkIcon } from '@/components/ui/SparkIcon';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { ScoreRing } from '@/components/ui/ScoreRing';
+import { useTour } from '@/features/tour/TourProvider';
 import { useRedacao } from '@/hooks/useRedacao';
 import { ApiError } from '@/lib/api';
 import { competencias } from '@/lib/competencias';
+import {
+  deveIniciarTourJulia,
+  juliaHabilitada,
+  perguntaDaCompetencia,
+} from '@/lib/julia';
 import { rotuloTema } from '@/lib/temas';
 import { cn } from '@/lib/utils';
 import type { Avaliacao, Competencia, RedacaoResponse } from '@/types/api';
@@ -281,6 +289,17 @@ function ResultadoAvaliado({
   redacao: RedacaoResponse;
   avaliacao: Avaliacao;
 }) {
+  const { screen, tourId, startTour, finish, isTourCompleted } = useTour();
+  const [juliaAberta, setJuliaAberta] = useState(false);
+  const [focoJulia, setFocoJulia] = useState<FocoJulia>(null);
+  const ultimoGatilhoJulia = useRef<HTMLElement | null>(null);
+  const [mostrarBalaoJulia, setMostrarBalaoJulia] = useState(() => {
+    try {
+      return localStorage.getItem('kelly.julia.balaoVisto') !== 'true';
+    } catch {
+      return true;
+    }
+  });
   const ordered = [...avaliacao.competencias].sort(
     (a, b) => a.numero - b.numero,
   );
@@ -290,7 +309,45 @@ function ResultadoAvaliado({
           item.nota < lowest.nota ? item : lowest,
         ).numero
       : null;
+  const juliaTarget =
+    priority ??
+    ordered.reduce<Competencia | null>(
+      (lowest, item) => (!lowest || item.nota < lowest.nota ? item : lowest),
+      null,
+    )?.numero ??
+    null;
   const title = redacao.tema?.titulo ?? 'Tema indisponível';
+
+  useEffect(() => {
+    const iniciar = deveIniciarTourJulia({
+      habilitada: juliaHabilitada,
+      avaliacao,
+      concluido: isTourCompleted('julia'),
+      chatAberto: juliaAberta,
+      tourAtivo: screen === 'welcome' || screen === 'steps',
+    });
+    if (!iniciar) return;
+    const timer = window.setTimeout(() => startTour('julia'), 600);
+    return () => window.clearTimeout(timer);
+  }, [avaliacao, isTourCompleted, juliaAberta, screen, startTour]);
+
+  function abrirJulia(gatilho: HTMLElement, foco: FocoJulia) {
+    if (tourId === 'julia' && screen === 'steps') finish();
+    ultimoGatilhoJulia.current = gatilho;
+    setFocoJulia(foco);
+    setJuliaAberta(true);
+    try {
+      localStorage.setItem('kelly.julia.balaoVisto', 'true');
+      setMostrarBalaoJulia(false);
+    } catch {
+      // Sem storage, o balão permanece visível como fallback.
+    }
+  }
+
+  function fecharJulia() {
+    setJuliaAberta(false);
+    window.setTimeout(() => ultimoGatilhoJulia.current?.focus(), 0);
+  }
 
   return (
     <article className="flex flex-col gap-4 px-4 pt-4 pb-8 lg:gap-5 lg:p-0">
@@ -313,7 +370,7 @@ function ResultadoAvaliado({
         <div className="w-full min-w-0 flex-1">
           <div className="hidden lg:block">
             <HeaderMeta redacao={redacao} />
-      <h1 className="text-text mt-3 text-[28px] leading-tight font-normal tracking-[-0.015em]">
+            <h1 className="text-text mt-3 text-[28px] leading-tight font-normal tracking-[-0.015em]">
               {title}
             </h1>
           </div>
@@ -328,7 +385,7 @@ function ResultadoAvaliado({
               <SparkIcon size={20} />
             </span>
             <div>
-        <h2 className="text-text flex items-center gap-2 text-base font-normal">
+              <h2 className="text-text flex items-center gap-2 text-base font-normal">
                 <SparkIcon
                   className="text-accent-text-hover lg:hidden"
                   size={18}
@@ -343,7 +400,7 @@ function ResultadoAvaliado({
 
           <section>
             <div className="mb-2 flex items-baseline justify-between px-1 lg:px-[18px]">
-          <h2 className="text-text text-lg font-normal">
+              <h2 className="text-text text-lg font-normal">
                 Análise por competência
               </h2>
               <span className="text-text-3 hidden text-[13px] lg:block">
@@ -356,6 +413,16 @@ function ResultadoAvaliado({
                   key={item.numero}
                   item={item}
                   priority={item.numero === priority}
+                  tourTarget={item.numero === juliaTarget}
+                  juliaAtiva={
+                    focoJulia?.competencia.numero === item.numero && juliaAberta
+                  }
+                  onPerguntar={(gatilho) =>
+                    abrirJulia(gatilho, {
+                      competencia: item,
+                      pergunta: perguntaDaCompetencia(item),
+                    })
+                  }
                 />
               ))}
             </div>
@@ -398,6 +465,63 @@ function ResultadoAvaliado({
             Escolher outro tema
           </Link>
         </div>
+      )}
+      {juliaHabilitada && (
+        <>
+          <JuliaChat
+            redacao={redacao}
+            avaliacao={avaliacao}
+            aberto={juliaAberta}
+            foco={focoJulia}
+            onFechar={fecharJulia}
+          />
+          <div
+            className={cn(
+              'fixed right-4 bottom-[calc(var(--bottom-nav-h)+16px)] z-30 flex items-center gap-2 lg:right-8 lg:bottom-8',
+              juliaAberta && 'z-[60]',
+            )}
+          >
+            {!juliaAberta && mostrarBalaoJulia && (
+              <span className="bg-surface-2 rounded-pill shadow-soft px-3 py-2 text-[13px] font-semibold lg:hidden">
+                Dúvidas? Pergunte à Júlia
+              </span>
+            )}
+            <button
+              data-tour="julia-botao"
+              type="button"
+              onClick={(event) => {
+                if (juliaAberta) fecharJulia();
+                else abrirJulia(event.currentTarget, null);
+              }}
+              aria-label={
+                juliaAberta
+                  ? 'Fechar conversa com a Júlia'
+                  : 'Abrir conversa com a Júlia'
+              }
+              aria-expanded={juliaAberta}
+              className="focus-ring bg-surface border-control shadow-raised relative flex size-[60px] shrink-0 items-center justify-center rounded-full border lg:size-16"
+            >
+              <JuliaMarca
+                variante="principal"
+                tamanho={34}
+                className="lg:hidden"
+              />
+              <JuliaMarca
+                variante="principal"
+                tamanho={36}
+                className="hidden lg:block"
+              />
+              {juliaAberta && (
+                <span
+                  className="bg-control border-bg absolute -top-1 -right-1 flex size-6 items-center justify-center rounded-full border-2"
+                  aria-hidden="true"
+                >
+                  <span className="text-sm leading-none">×</span>
+                </span>
+              )}
+            </button>
+          </div>
+        </>
       )}
     </article>
   );
@@ -446,9 +570,15 @@ function CompetenceStrip({
 function CompetenceCard({
   item,
   priority,
+  tourTarget,
+  juliaAtiva,
+  onPerguntar,
 }: {
   item: Competencia;
   priority: boolean;
+  tourTarget: boolean;
+  juliaAtiva: boolean;
+  onPerguntar: (gatilho: HTMLButtonElement) => void;
 }) {
   const metadata = competencias[item.numero - 1];
   const style = competenceStyles[item.numero];
@@ -477,6 +607,22 @@ function CompetenceCard({
             Prioridade
           </span>
         )}
+        {juliaHabilitada && (
+          <button
+            data-tour={tourTarget ? 'julia-competencia' : undefined}
+            type="button"
+            onClick={(event) => onPerguntar(event.currentTarget)}
+            aria-pressed={juliaAtiva}
+            className={cn(
+              'focus-ring border-control text-text-2 rounded-pill hidden min-h-11 items-center gap-2 border px-3 text-[13px] font-semibold lg:flex',
+              juliaAtiva &&
+                'bg-accent-tint border-accent-outline text-accent-outline-text',
+            )}
+          >
+            <JuliaMarca variante="principal" tamanho={28} />
+            Perguntar à Júlia
+          </button>
+        )}
         <span className="tabular text-[15px] font-bold lg:text-base">
           {item.nota}
           <span className="text-text-3 text-xs font-medium lg:text-[13px]">
@@ -503,6 +649,26 @@ function CompetenceCard({
             </li>
           ))}
         </ul>
+      )}
+      {juliaHabilitada && (
+        <button
+          data-tour={tourTarget ? 'julia-competencia' : undefined}
+          type="button"
+          onClick={(event) => onPerguntar(event.currentTarget)}
+          aria-pressed={juliaAtiva}
+          aria-label={
+            priority ? undefined : `Perguntar à Júlia sobre a C${item.numero}`
+          }
+          className={cn(
+            'focus-ring mt-1 flex items-center justify-center font-semibold lg:hidden',
+            priority
+              ? 'bg-accent-tint border-accent-subtle-border min-h-12 w-full gap-2 rounded-[14px] border px-4 text-sm'
+              : 'border-control size-11 self-end rounded-full border',
+          )}
+        >
+          <JuliaMarca variante="principal" tamanho={priority ? 26 : 28} />
+          {priority && `Perguntar à Júlia sobre a C${item.numero}`}
+        </button>
       )}
     </article>
   );
@@ -608,7 +774,7 @@ function Anulada({
           <span className="text-danger text-[13px] font-bold">
             Redação anulada · nota 0
           </span>
-        <h2 className="mt-1.5 text-[22px] font-normal">
+          <h2 className="mt-1.5 text-[22px] font-normal">
             {avaliacao.motivoAnulacao ?? 'Redação anulada'}
           </h2>
           <p className="text-danger-text mt-2 text-base leading-[1.6] whitespace-pre-wrap">
@@ -670,7 +836,7 @@ function CenteredState({
   return (
     <div className="flex min-h-[60vh] items-center justify-center px-1 text-center">
       <div className="bg-surface rounded-card max-w-xl px-7 py-10">
-      <h1 className="text-text text-2xl font-normal tracking-[-0.02em]">
+        <h1 className="text-text text-2xl font-normal tracking-[-0.02em]">
           {title}
         </h1>
         <p className="text-text-2 mx-auto mt-2 max-w-md text-[15px] leading-6">
