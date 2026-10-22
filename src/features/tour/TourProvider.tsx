@@ -10,14 +10,18 @@ import {
 import { useLocation } from 'react-router-dom';
 import { useUsuario } from '@/hooks/useUsuario';
 import { TourOverlay } from './TourOverlay';
+import type { TourId } from './tourSteps';
 import { useTourStorage } from './useTourStorage';
 
 export type TourScreen = 'closed' | 'welcome' | 'steps' | 'toast';
 
 type TourContextValue = {
   screen: TourScreen;
+  tourId: TourId;
   stepIndex: number;
   openTour: () => void;
+  startTour: (id: TourId) => void;
+  isTourCompleted: (id: TourId) => boolean;
   begin: () => void;
   setStepIndex: (step: number) => void;
   finish: () => void;
@@ -30,30 +34,55 @@ export function TourProvider({ children }: PropsWithChildren) {
   const { email } = useUsuario();
   const location = useLocation();
   const userId = email.trim().toLowerCase();
-  const { isCompleted, complete } = useTourStorage(userId);
+  const principalStorage = useTourStorage(userId);
+  const juliaStorage = useTourStorage(userId, 'julia');
   const [screen, setScreen] = useState<TourScreen>('closed');
+  const [tourId, setTourId] = useState<TourId>('principal');
   const [stepIndex, setStepIndex] = useState(0);
 
   useEffect(() => {
-    if (location.pathname !== '/' || !userId || isCompleted()) return;
+    if (
+      location.pathname !== '/' ||
+      !userId ||
+      principalStorage.isCompleted()
+    )
+      return;
+    setTourId('principal');
     setScreen('welcome');
-  }, [isCompleted, location.pathname, userId]);
+  }, [location.pathname, principalStorage, userId]);
 
-  const openTour = useCallback(() => {
+  const startTour = useCallback((id: TourId) => {
+    setTourId(id);
     setStepIndex(0);
-    setScreen('welcome');
+    setScreen(id === 'principal' ? 'welcome' : 'steps');
   }, []);
 
+  const openTour = useCallback(() => {
+    startTour('principal');
+  }, [startTour]);
+
+  const isTourCompleted = useCallback(
+    (id: TourId) =>
+      id === 'principal'
+        ? principalStorage.isCompleted()
+        : juliaStorage.isCompleted(),
+    [juliaStorage, principalStorage],
+  );
+
   const finish = useCallback(() => {
-    complete();
+    if (tourId === 'principal') principalStorage.complete();
+    else juliaStorage.complete();
     setScreen('toast');
-  }, [complete]);
+  }, [juliaStorage, principalStorage, tourId]);
 
   const value = useMemo<TourContextValue>(
     () => ({
       screen,
+      tourId,
       stepIndex,
       openTour,
+      startTour,
+      isTourCompleted,
       begin: () => {
         setStepIndex(0);
         setScreen('steps');
@@ -62,7 +91,7 @@ export function TourProvider({ children }: PropsWithChildren) {
       finish,
       closeToast: () => setScreen('closed'),
     }),
-    [finish, openTour, screen, stepIndex],
+    [finish, isTourCompleted, openTour, screen, startTour, stepIndex, tourId],
   );
 
   return (
