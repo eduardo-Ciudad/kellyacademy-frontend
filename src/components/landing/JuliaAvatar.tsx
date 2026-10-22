@@ -1,4 +1,4 @@
-import juliaAvatar from '@/assets/julia-avatar.webp';
+import { JuliaMarca } from '@/components/julia/JuliaMarca';
 
 type JuliaAvatarProps = {
   size: number;
@@ -6,16 +6,13 @@ type JuliaAvatarProps = {
 };
 
 export function JuliaAvatar({ size, loading = 'lazy' }: JuliaAvatarProps) {
+  void loading;
   return (
-    <img
-      src={juliaAvatar}
-      alt="Julia, assistente da Kelly Academy"
-      width={size}
-      height={size}
-      loading={loading}
-      decoding="async"
-      className="shrink-0 rounded-full"
-      style={{ width: size, height: size }}
+    <JuliaMarca
+      variante="principal"
+      tamanho={size}
+      titulo="Júlia, assistente da Kelly Academy"
+      className="shrink-0"
     />
   );
 }
