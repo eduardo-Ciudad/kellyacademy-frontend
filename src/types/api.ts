@@ -14,6 +14,30 @@ export type ProblemDetail = {
   motivo?: MotivoImagemInvalida;
 };
 
+export type PapelMensagemJulia = 'USUARIO' | 'JULIA';
+
+export type MensagemJulia = {
+  id: string;
+  papel: PapelMensagemJulia;
+  conteudo: string;
+  criadaEm: string;
+};
+
+export type JuliaConversaResponse = {
+  mensagens: MensagemJulia[];
+  restantesConversa: number;
+  restantesHoje: number;
+};
+
+export type EnviarPerguntaJuliaRequest = { pergunta: string };
+
+export type EnviarPerguntaJuliaResponse = {
+  pergunta: MensagemJulia;
+  resposta: MensagemJulia;
+  restantesConversa: number;
+  restantesHoje: number;
+};
+
 export type LoginRequest = { email: string; senha: string };
 
 export type CadastroRequest = {
