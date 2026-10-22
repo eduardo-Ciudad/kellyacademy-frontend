@@ -1,13 +1,16 @@
 import { useCallback, useMemo, useRef } from 'react';
+import type { TourId } from './tourSteps';
 
 const sessionFailures = new Set<string>();
 
-export function tourStorageKey(userId: string) {
-  return `kelly:tour:v1:${userId}`;
+export function tourStorageKey(userId: string, tourId: TourId = 'principal') {
+  return tourId === 'principal'
+    ? `kelly:tour:v1:${userId}`
+    : `kelly:tour-julia:v1:${userId}`;
 }
 
-export function useTourStorage(userId: string) {
-  const key = tourStorageKey(userId);
+export function useTourStorage(userId: string, tourId: TourId = 'principal') {
+  const key = tourStorageKey(userId, tourId);
   const failedRef = useRef(sessionFailures.has(key));
 
   const isCompleted = useCallback(() => {
