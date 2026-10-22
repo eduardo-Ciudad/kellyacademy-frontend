@@ -20,6 +20,7 @@ export default defineConfig(({ mode }) => {
           '/usuarios',
           '/temas',
           '/redacoes',
+          '/julia',
           '/transcricoes',
           '/repertorios',
           '/macroeixos',
