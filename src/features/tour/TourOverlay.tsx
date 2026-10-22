@@ -13,7 +13,8 @@ import {
 import { createPortal } from 'react-dom';
 import logo from '@/assets/brand/kelly-marca-mono-branca.svg';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
-import { tourSteps, type TourStep } from './tourSteps';
+import { posicionarPopover } from './posicionarPopover';
+import { tours, type TourStep } from './tourSteps';
 import { useTour } from './TourProvider';
 
 type TargetRect = { top: number; left: number; width: number; height: number };
@@ -80,6 +81,7 @@ export function TourOverlay() {
   const tour = useTour();
   const {
     screen,
+    tourId,
     stepIndex,
     openTour,
     begin,
@@ -88,8 +90,10 @@ export function TourOverlay() {
     closeToast,
   } = tour;
   const mobile = useMediaQuery('(max-width: 63.999rem)');
-  const [availableSteps, setAvailableSteps] = useState<TourStep[]>(tourSteps);
+  const activeSteps = tours[tourId];
+  const [availableSteps, setAvailableSteps] = useState<TourStep[]>(activeSteps);
   const [rect, setRect] = useState<TargetRect | null>(null);
+  const [popoverSize, setPopoverSize] = useState({ width: 380, height: 310 });
   const [toastPaused, setToastPaused] = useState(false);
   const dialogRef = useRef<HTMLDivElement>(null);
   const primaryRef = useRef<HTMLButtonElement>(null);
@@ -105,12 +109,28 @@ export function TourOverlay() {
 
   useLayoutEffect(() => {
     if (screen !== 'steps') return;
-    const filtered = tourSteps.filter((step) => getTarget(step.target));
+    const filtered = activeSteps.filter((step) => getTarget(step.target));
     setAvailableSteps(filtered);
     if (stepIndex >= filtered.length) setStepIndex(0);
-  }, [screen, setStepIndex, stepIndex]);
+  }, [activeSteps, screen, setStepIndex, stepIndex]);
 
   const step = availableSteps[stepIndex];
+  useLayoutEffect(() => {
+    if (screen !== 'steps' || !step) return;
+    const measure = () => {
+      const next = dialogRef.current?.getBoundingClientRect();
+      if (!next?.width || !next.height) return;
+      setPopoverSize((current) =>
+        current.width === next.width && current.height === next.height
+          ? current
+          : { width: next.width, height: next.height },
+      );
+    };
+    measure();
+    window.addEventListener('resize', measure);
+    return () => window.removeEventListener('resize', measure);
+  }, [mobile, screen, step]);
+
   useLayoutEffect(() => {
     if (screen !== 'steps' || !step) return;
     const measure = () => {
@@ -157,31 +177,55 @@ export function TourOverlay() {
     return () => window.clearTimeout(timeout);
   }, [closeToast, screen, toastPaused]);
 
-  const popoverStyle = useMemo<CSSProperties>(() => {
-    if (!rect) return {};
-    if (mobile) {
-      if (step?.target !== 'correcoes-hoje') return {};
-      const below =
-        rect.top + rect.height + 310 <= window.innerHeight ||
-        rect.top < window.innerHeight / 2;
-      return {
-        top: below ? rect.top + rect.height + 14 : Math.max(16, rect.top - 310),
-        bottom: 'auto',
-      };
-    }
-    return {
-      left: Math.max(264, rect.left + rect.width + 18),
-      top: Math.min(window.innerHeight - 310, Math.max(16, rect.top - 20)),
-    };
-  }, [mobile, rect, step?.target]);
+  const popoverPosition = useMemo(() => {
+    if (!rect || !step) return null;
+    const ancoradoNaBarraInferior = [
+      'temas',
+      'nova-redacao',
+      'repertorio',
+      'evolucao',
+    ].includes(step.target);
+    return posicionarPopover({
+      alvo: rect,
+      viewport: { largura: window.innerWidth, altura: window.innerHeight },
+      popover: {
+        largura: mobile ? window.innerWidth - 32 : popoverSize.width,
+        altura: popoverSize.height,
+      },
+      mobile,
+      ancoradoNaBarraInferior,
+    });
+  }, [mobile, popoverSize.height, popoverSize.width, rect, step]);
 
-  const correctionsPopoverBelow = Boolean(
-    mobile &&
-    rect &&
-    step?.target === 'correcoes-hoje' &&
-    (rect.top + rect.height + 310 <= window.innerHeight ||
-      rect.top < window.innerHeight / 2),
+  const popoverStyle = useMemo<CSSProperties>(
+    () =>
+      popoverPosition
+        ? {
+            top: popoverPosition.top,
+            left: popoverPosition.left,
+            bottom: popoverPosition.bottom,
+          }
+        : {},
+    [popoverPosition],
   );
+
+  const arrowStyle = useMemo<CSSProperties>(() => {
+    if (!popoverPosition) return {};
+    const offset = popoverPosition.setaOffset - 6;
+    return popoverPosition.lado === 'direita' ||
+      popoverPosition.lado === 'esquerda'
+      ? { top: offset }
+      : { left: offset };
+  }, [popoverPosition]);
+
+  const arrowClass =
+    popoverPosition?.lado === 'esquerda'
+      ? '-right-[7px] border-t border-r'
+      : popoverPosition?.lado === 'abaixo'
+        ? '-top-[7px] border-t border-l'
+        : popoverPosition?.lado === 'acima'
+          ? '-bottom-[7px] border-r border-b'
+          : '-left-[7px] border-b border-l';
 
   if (typeof document === 'undefined') return null;
 
@@ -276,13 +320,7 @@ export function TourOverlay() {
               role="dialog"
               aria-modal="true"
               aria-labelledby="tour-step-title"
-              className={`pointer-events-auto fixed z-[102] w-[calc(100%-32px)] rounded-[20px] border border-[#3a3b3c] bg-[#242526] p-[22px] shadow-[0_4px_16px_rgba(0,0,0,.18)] lg:w-[380px] ${
-                mobile
-                  ? step.target === 'correcoes-hoje'
-                    ? 'left-4'
-                    : 'bottom-[calc(var(--bottom-nav-h)+16px)] left-4'
-                  : ''
-              }`}
+              className="pointer-events-auto fixed z-[102] w-[calc(100%-32px)] rounded-[20px] border border-[#3a3b3c] bg-[#242526] p-[22px] shadow-[0_4px_16px_rgba(0,0,0,.18)] lg:w-[380px]"
               style={popoverStyle}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -291,15 +329,8 @@ export function TourOverlay() {
             >
               <span
                 aria-hidden="true"
-                className={`absolute size-3 rotate-45 border-[#3a3b3c] bg-[#242526] ${
-                  mobile
-                    ? step.target === 'correcoes-hoje'
-                      ? correctionsPopoverBelow
-                        ? '-top-[7px] right-8 border-t border-l'
-                        : 'right-8 -bottom-[7px] border-r border-b'
-                      : '-bottom-[7px] left-1/2 -translate-x-1/2 border-r border-b'
-                    : 'top-8 -left-[7px] border-b border-l'
-                }`}
+                className={`absolute size-3 rotate-45 border-[#3a3b3c] bg-[#242526] ${arrowClass}`}
+                style={arrowStyle}
               />
               <div className="flex items-center justify-between gap-4">
                 <span className="font-mono text-xs text-[#a9abb0]">
@@ -349,7 +380,9 @@ export function TourOverlay() {
                   className="focus-ring min-h-11 rounded-full bg-[#0866ff] px-5 text-sm font-semibold text-white"
                 >
                   {stepIndex === availableSteps.length - 1
-                    ? 'Começar'
+                    ? tourId === 'julia'
+                      ? 'Concluir'
+                      : 'Começar'
                     : 'Próximo'}
                 </button>
               </div>
@@ -379,20 +412,28 @@ export function TourOverlay() {
             <Check size={18} aria-hidden="true" />
           </span>
           <p className="min-w-0 flex-1 text-sm leading-5">
-            <span className="lg:hidden">
-              Pronto! Para rever o tour, toque na sua foto no topo.
-            </span>
-            <span className="hidden lg:inline">
-              Pronto! Para rever o tour, abra o menu da sua conta.
-            </span>
+            {tourId === 'julia' ? (
+              'Pronto! A Júlia fica no canto da tela sempre que você abrir uma correção.'
+            ) : (
+              <>
+                <span className="lg:hidden">
+                  Pronto! Para rever o tour, toque na sua foto no topo.
+                </span>
+                <span className="hidden lg:inline">
+                  Pronto! Para rever o tour, abra o menu da sua conta.
+                </span>
+              </>
+            )}
           </p>
-          <button
-            type="button"
-            onClick={openTour}
-            className="focus-ring min-h-11 px-2 text-sm font-semibold text-[#8ab4ff]"
-          >
-            Rever
-          </button>
+          {tourId === 'principal' ? (
+            <button
+              type="button"
+              onClick={openTour}
+              className="focus-ring min-h-11 px-2 text-sm font-semibold text-[#8ab4ff]"
+            >
+              Rever
+            </button>
+          ) : null}
           <button
             type="button"
             onClick={closeToast}
