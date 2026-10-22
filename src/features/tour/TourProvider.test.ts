@@ -22,6 +22,7 @@ vi.mock('@/hooks/useUsuario', () => ({
 }));
 
 const key = tourStorageKey('kelly@example.com');
+const juliaKey = tourStorageKey('kelly@example.com', 'julia');
 
 function matchMedia(matches = false) {
   return vi.fn().mockImplementation((query: string) => ({
@@ -68,6 +69,26 @@ function ReviewButton() {
     'button',
     { type: 'button', onClick: openTour },
     'Rever tour de boas-vindas',
+  );
+}
+
+function JuliaTourControls() {
+  const { startTour, isTourCompleted } = useTour();
+  return createElement(
+    'div',
+    null,
+    createElement(
+      'button',
+      { type: 'button', onClick: () => startTour('julia') },
+      'Iniciar tour da Júlia',
+    ),
+    createElement('span', null, String(isTourCompleted('julia'))),
+    createElement('button', { 'data-tour': 'julia-botao' }, 'Botão Júlia'),
+    createElement(
+      'button',
+      { 'data-tour': 'julia-competencia' },
+      'Competência Júlia',
+    ),
   );
 }
 
@@ -212,6 +233,15 @@ describe('tour de boas-vindas', () => {
     ).toBeTruthy();
   });
 
+  it('o principal dispara sozinho em / sem iniciar o da Júlia', async () => {
+    renderTour(createElement(JuliaTourControls));
+    expect(
+      await screen.findByRole('heading', { name: 'Primeira vez na Kelly Academy?' }),
+    ).toBeTruthy();
+    expect(screen.queryByText('Conheça a Júlia')).toBeNull();
+    expect(window.localStorage.getItem(juliaKey)).toBeNull();
+  });
+
   it('não quebra a página quando o localStorage lança erro', async () => {
     vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
       throw new Error('storage indisponível');
@@ -221,5 +251,44 @@ describe('tour de boas-vindas', () => {
     );
     expect(container.textContent).toContain('Área logada');
     await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
+  });
+});
+
+describe('tour da Júlia', () => {
+  it('mantém a chave antiga quando o id é omitido', () => {
+    expect(tourStorageKey('aluna@example.com')).toBe(
+      'kelly:tour:v1:aluna@example.com',
+    );
+  });
+
+  it('vai direto aos dois passos, sem boas-vindas', async () => {
+    const user = userEvent.setup();
+    renderTour(createElement(JuliaTourControls), '/resultado/1');
+    await user.click(screen.getByRole('button', { name: 'Iniciar tour da Júlia' }));
+    expect(screen.queryByText('Primeira vez na Kelly Academy?')).toBeNull();
+    expect(await screen.findByText('PASSO 1 DE 2')).toBeTruthy();
+    expect(screen.getByRole('heading', { name: 'Conheça a Júlia' })).toBeTruthy();
+    await user.click(screen.getByRole('button', { name: 'Próximo' }));
+    expect(await screen.findByText('PASSO 2 DE 2')).toBeTruthy();
+    expect(
+      screen.getByRole('heading', { name: 'Pergunte direto na competência' }),
+    ).toBeTruthy();
+  });
+
+  it.each(['Pular tour', 'Concluir'])('%s grava apenas a chave da Júlia', async (acao) => {
+    const user = userEvent.setup();
+    renderTour(createElement(JuliaTourControls), '/resultado/1');
+    await user.click(screen.getByRole('button', { name: 'Iniciar tour da Júlia' }));
+    if (acao === 'Concluir')
+      await user.click(await screen.findByRole('button', { name: 'Próximo' }));
+    await user.click(await screen.findByRole('button', { name: acao }));
+    expect(window.localStorage.getItem(juliaKey)).toBe('concluido');
+    expect(window.localStorage.getItem(key)).toBeNull();
+  });
+
+  it('isTourCompleted reflete o storage da Júlia', () => {
+    window.localStorage.setItem(juliaKey, 'concluido');
+    renderTour(createElement(JuliaTourControls), '/resultado/1');
+    expect(screen.getByText('true')).toBeTruthy();
   });
 });
