@@ -1,5 +1,13 @@
 export type TourTarget =
-  'temas' | 'nova-redacao' | 'repertorio' | 'evolucao' | 'correcoes-hoje';
+  | 'temas'
+  | 'nova-redacao'
+  | 'repertorio'
+  | 'evolucao'
+  | 'correcoes-hoje'
+  | 'julia-botao'
+  | 'julia-competencia';
+
+export type TourId = 'principal' | 'julia';
 
 export type TourStep = {
   target: TourTarget;
@@ -8,7 +16,7 @@ export type TourStep = {
   radius: number;
 };
 
-export const tourSteps: TourStep[] = [
+const principalSteps: TourStep[] = [
   {
     target: 'temas',
     title: 'Aqui ficam os temas',
@@ -59,3 +67,35 @@ export const tourSteps: TourStep[] = [
     radius: 14,
   },
 ];
+
+const juliaSteps: TourStep[] = [
+  {
+    target: 'julia-botao',
+    title: 'Conheça a Júlia',
+    text: {
+      desktop:
+        'Ficou com dúvida na correção? A Júlia, assistente da Kelly Academy, explica por que você perdeu pontos em cada competência. Ela só fala desta redação e não altera sua nota.',
+      mobile:
+        'Ficou com dúvida na correção? Toque aqui e a Júlia explica por que você perdeu pontos em cada competência. Ela não altera sua nota.',
+    },
+    radius: 999,
+  },
+  {
+    target: 'julia-competencia',
+    title: 'Pergunte direto na competência',
+    text: {
+      desktop:
+        'Use "Perguntar à Júlia" em qualquer competência e ela já abre focada nela, com a pergunta pronta.',
+      mobile:
+        'Toque em "Perguntar à Júlia" na competência e ela já abre focada nela, com a pergunta pronta.',
+    },
+    radius: 14,
+  },
+];
+
+export const tours: Record<TourId, TourStep[]> = {
+  principal: principalSteps,
+  julia: juliaSteps,
+};
+
+export const tourSteps = tours.principal;
