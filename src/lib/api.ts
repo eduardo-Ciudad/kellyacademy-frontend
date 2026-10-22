@@ -6,8 +6,24 @@ import type {
 } from '@/types/api';
 
 const DEFAULT_TIMEOUT_MS = 20_000;
+export const JULIA_TIMEOUT_MS = 75_000;
 // pior caso do backend: 2 tentativas × (10s conexão + 60s leitura)
 const IA_TIMEOUT_MS = 180_000;
+
+export function timeoutPara(method: string, path: string) {
+  const normalizedMethod = method.toUpperCase();
+  if (
+    normalizedMethod === 'POST' &&
+    /^\/redacoes\/[^/]+\/julia\/mensagens\/?$/.test(path)
+  )
+    return JULIA_TIMEOUT_MS;
+  if (
+    normalizedMethod === 'POST' &&
+    /^\/(?:redacoes|transcricoes)\/?$/.test(path)
+  )
+    return IA_TIMEOUT_MS;
+  return DEFAULT_TIMEOUT_MS;
+}
 
 export type ApiErrorCode = 'HTTP' | 'TIMEOUT' | 'NETWORK';
 
@@ -77,15 +93,13 @@ export async function api<T>(
   options: RequestInit = {},
 ): Promise<T> {
   const method = options.method?.toUpperCase() ?? 'GET';
-  const isSubmission =
-    method === 'POST' && /^\/(?:redacoes|transcricoes)\/?$/.test(path);
   const timeoutController = new AbortController();
   const timeoutId = window.setTimeout(
     () =>
       timeoutController.abort(
         new DOMException('Tempo limite excedido.', 'TimeoutError'),
       ),
-    isSubmission ? IA_TIMEOUT_MS : DEFAULT_TIMEOUT_MS,
+    timeoutPara(method, path),
   );
   const signal = options.signal
     ? AbortSignal.any([options.signal, timeoutController.signal])
