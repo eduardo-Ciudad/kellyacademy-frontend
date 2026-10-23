@@ -7,8 +7,16 @@
       content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     />
     <meta name="theme-color" content="#0b0c12" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link
+      rel="icon"
+      href="/favicon-96x96.png"
+      type="image/png"
+      sizes="96x96"
+    />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
     <link rel="canonical" href="https://kellyacademy.com.br/" />
     <title>Kelly Academy — Correção de redação do ENEM com IA</title>
     <meta
@@ -51,6 +59,26 @@
       name="twitter:image"
       content="https://kellyacademy.com.br/og-image.png"
     />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "name": "Kelly Academy",
+            "alternateName": "Kelly",
+            "url": "https://kellyacademy.com.br/",
+            "inLanguage": "pt-BR"
+          },
+          {
+            "@type": "Organization",
+            "name": "Kelly Academy",
+            "url": "https://kellyacademy.com.br/",
+            "logo": "https://kellyacademy.com.br/android-chrome-512x512.png"
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>
