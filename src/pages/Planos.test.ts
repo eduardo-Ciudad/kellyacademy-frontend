@@ -15,6 +15,7 @@ vi.mock('@/components/layout/AccountButton', () => ({
 }));
 vi.mock('@/lib/assinatura', async (importOriginal) => ({
   ...(await importOriginal<typeof import('@/lib/assinatura')>()),
+  pagamentoHabilitado: true,
   iniciarCheckout: vi.fn(),
 }));
 

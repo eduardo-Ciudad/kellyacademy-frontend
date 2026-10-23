@@ -3,7 +3,12 @@ import { useMutation } from '@tanstack/react-query';
 import { Mail } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import {
+  Link,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from 'react-router-dom';
 import { z } from 'zod';
 import { AuthLayout } from '@/components/auth/AuthLayout';
 import { AvisoEntregaEmail } from '@/components/auth/AvisoEntregaEmail';
@@ -14,6 +19,7 @@ import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { api, ApiError } from '@/lib/api';
 import { useAuth } from '@/lib/auth';
+import { pagamentoHabilitado } from '@/lib/assinatura';
 import { usePageMeta } from '@/lib/usePageMeta';
 import type { LoginRequest, LoginResponse } from '@/types/api';
 
@@ -42,8 +48,14 @@ export function Entrar() {
   });
   const location = useLocation();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { login } = useAuth();
   const state = location.state as LoginLocationState | null;
+  const planoProSolicitado =
+    pagamentoHabilitado && searchParams.get('plano') === 'pro';
+  const destinoCadastro = planoProSolicitado
+    ? '/criar-conta?plano=pro'
+    : '/criar-conta';
   const [formError, setFormError] = useState<string>();
   const [emailNaoVerificado, setEmailNaoVerificado] = useState<string>();
   const [emailNaoVerificadoDetail, setEmailNaoVerificadoDetail] =
@@ -85,9 +97,11 @@ export function Entrar() {
         email,
       });
       const from = state?.from;
-      const destination = from
-        ? `${from.pathname}${from.search ?? ''}${from.hash ?? ''}`
-        : '/';
+      const destination = planoProSolicitado
+        ? '/planos'
+        : from
+          ? `${from.pathname}${from.search ?? ''}${from.hash ?? ''}`
+          : '/';
       void navigate(destination, { replace: true });
     } catch (error) {
       if (error instanceof ApiError) {
@@ -207,7 +221,7 @@ export function Entrar() {
             {loginMutation.isPending ? 'Entrando…' : 'Entrar'}
           </Button>
           <Link
-            to="/criar-conta"
+            to={destinoCadastro}
             className="focus-ring bg-control text-text rounded-pill flex h-[52px] items-center justify-center text-base font-semibold lg:hidden"
           >
             Criar conta grátis
@@ -215,7 +229,7 @@ export function Entrar() {
           <p className="text-text-2 hidden text-center text-[15px] lg:block">
             Ainda não tem conta?{' '}
             <Link
-              to="/criar-conta"
+              to={destinoCadastro}
               className="focus-ring text-accent-text hover:text-accent-text-hover rounded-sm font-semibold"
             >
               Criar conta grátis

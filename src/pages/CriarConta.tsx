@@ -3,7 +3,7 @@ import { useMutation } from '@tanstack/react-query';
 import { Mail } from 'lucide-react';
 import { useState } from 'react';
 import { useForm, type FieldPath } from 'react-hook-form';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { toast } from 'sonner';
 import { z } from 'zod';
 import { AuthLayout } from '@/components/auth/AuthLayout';
@@ -18,6 +18,7 @@ import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { api, ApiError } from '@/lib/api';
 import { useAuth } from '@/lib/auth';
+import { pagamentoHabilitado } from '@/lib/assinatura';
 import { usePageMeta } from '@/lib/usePageMeta';
 import type {
   CadastroRequest,
@@ -58,7 +59,11 @@ export function CriarConta() {
     path: '/criar-conta',
   });
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { login } = useAuth();
+  const planoProSolicitado =
+    pagamentoHabilitado && searchParams.get('plano') === 'pro';
+  const destinoEntrar = planoProSolicitado ? '/entrar?plano=pro' : '/entrar';
   const [formError, setFormError] = useState<string>();
   const [emailPendente, setEmailPendente] = useState<string>();
   const [emailReenviado, setEmailReenviado] = useState(false);
@@ -129,10 +134,10 @@ export function CriarConta() {
         },
         payload.nome,
       );
-      void navigate('/', { replace: true });
+      void navigate(planoProSolicitado ? '/planos' : '/', { replace: true });
     } catch {
       toast.success('Conta criada. Entre para continuar.');
-      void navigate('/entrar', {
+      void navigate(destinoEntrar, {
         replace: true,
         state: { email: payload.email },
       });
@@ -172,7 +177,7 @@ export function CriarConta() {
             onSuccess={() => setEmailReenviado(true)}
             secondaryAction={
               <Link
-                to="/entrar"
+                to={destinoEntrar}
                 className="focus-ring bg-accent hover:bg-accent-hover rounded-pill flex h-[52px] w-full items-center justify-center text-base font-semibold text-white transition-colors"
               >
                 <span className="lg:hidden">Já confirmei, quero entrar</span>
@@ -261,7 +266,7 @@ export function CriarConta() {
               >
                 Este e-mail já tem uma conta.{' '}
                 <Link
-                  to="/entrar"
+                  to={destinoEntrar}
                   className="focus-ring text-danger rounded-sm font-semibold underline"
                 >
                   Entrar
@@ -331,7 +336,7 @@ export function CriarConta() {
             .
           </p>
           <Link
-            to="/entrar"
+            to={destinoEntrar}
             className="focus-ring bg-control text-text rounded-pill flex h-[52px] items-center justify-center text-base font-semibold lg:hidden"
           >
             Entrar
@@ -339,7 +344,7 @@ export function CriarConta() {
           <p className="text-text-2 hidden text-center text-[15px] lg:block">
             Já tem conta?{' '}
             <Link
-              to="/entrar"
+              to={destinoEntrar}
               className="focus-ring text-accent-text hover:text-accent-text-hover rounded-sm font-semibold"
             >
               Entrar

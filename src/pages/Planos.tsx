@@ -11,7 +11,7 @@ import {
 } from '@/components/landing/data/planos';
 import { Button } from '@/components/ui/Button';
 import { useIniciarCheckout } from '@/hooks/useIniciarCheckout';
-import { cicloParaCheckout } from '@/lib/assinatura';
+import { cicloParaCheckout, pagamentoHabilitado } from '@/lib/assinatura';
 import { usePageMeta } from '@/lib/usePageMeta';
 
 export function Planos() {
@@ -79,7 +79,9 @@ export function Planos() {
             <strong className="text-text tabular font-display text-4xl font-semibold">
               {formatarPreco(planos.gratis.preco)}
             </strong>
-            <span className="text-text-3 ml-1 text-sm">{planos.gratis.sufixo}</span>
+            <span className="text-text-3 ml-1 text-sm">
+              {planos.gratis.sufixo}
+            </span>
           </div>
           <div className="bg-control text-text-2 rounded-pill mt-6 flex min-h-11 items-center justify-center text-sm font-semibold">
             Seu plano atual
@@ -106,7 +108,11 @@ export function Planos() {
             </p>
           </div>
 
-          {checkout.jaAssinante ? (
+          {!pagamentoHabilitado ? (
+            <div className="bg-control text-text-2 rounded-pill mt-6 flex min-h-11 items-center justify-center px-4 text-center text-sm font-semibold">
+              Assinatura disponível em breve
+            </div>
+          ) : checkout.jaAssinante ? (
             <div
               role="status"
               className="bg-success-subtle border-success-subtle-border text-success-subtle-text rounded-inner mt-6 border px-4 py-3 text-center text-sm font-semibold"
@@ -148,7 +154,7 @@ function PlanCard({
 }) {
   return (
     <section
-      className={`rounded-card border p-6 shadow-soft lg:p-7 ${
+      className={`rounded-card shadow-soft border p-6 lg:p-7 ${
         featured
           ? 'bg-surface border-accent-outline'
           : 'bg-surface border-control'
@@ -164,11 +170,16 @@ function PlanCard({
           </span>
         ) : null}
       </div>
-      <p className="text-text-2 mt-2 min-h-12 text-sm leading-6">{description}</p>
+      <p className="text-text-2 mt-2 min-h-12 text-sm leading-6">
+        {description}
+      </p>
       {children}
       <ul className="border-control mt-6 space-y-3 border-t pt-6">
         {items.map((item) => (
-          <li key={item} className="text-text-body flex gap-3 text-sm leading-5">
+          <li
+            key={item}
+            className="text-text-body flex gap-3 text-sm leading-5"
+          >
             <Check
               className="text-success mt-0.5 shrink-0"
               size={16}

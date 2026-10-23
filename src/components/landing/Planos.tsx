@@ -14,6 +14,8 @@ import {
 } from '@/components/landing/data/planos';
 import { PlanosMobile } from '@/components/landing/PlanosMobile';
 import { useIsMobileLanding } from '@/components/landing/fx/useIsMobileLanding';
+import { useAuth } from '@/lib/auth';
+import { acaoBotaoPro, pagamentoHabilitado } from '@/lib/assinatura';
 
 export function Planos() {
   const isMobile = useIsMobileLanding();
@@ -118,6 +120,11 @@ function CicloSelector({
 function PlanoCard({ tipo, ciclo }: { tipo: 'gratis' | 'pro'; ciclo: Ciclo }) {
   const plano = planos[tipo];
   const pro = tipo === 'pro';
+  const { isAuthenticated } = useAuth();
+  const acaoPro = acaoBotaoPro({
+    pagamentoHabilitado,
+    logado: isAuthenticated,
+  });
   return (
     <article
       className={`flex min-h-[540px] flex-col rounded-[20px] border p-9 ${pro ? 'border-accent bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-accent)_6%,transparent),transparent_55%)]' : 'border-surface-2'}`}
@@ -153,12 +160,18 @@ function PlanoCard({ tipo, ciclo }: { tipo: 'gratis' | 'pro'; ciclo: Ciclo }) {
           </li>
         ))}
       </ul>
-      <Link
-        to={plano.destino}
-        className={`focus-ring mt-auto flex min-h-13 items-center justify-center rounded-full border px-5 text-center text-[15px] font-semibold transition-colors motion-reduce:transition-none ${pro ? 'border-accent bg-accent hover:bg-accent-hover text-white' : 'text-text hover:bg-surface-2 border-[#3a3b3c]'}`}
-      >
-        {plano.botao}
-      </Link>
+      {pro && acaoPro === 'em-breve' ? (
+        <div className="bg-control text-text-2 mt-auto flex min-h-13 items-center justify-center rounded-full px-5 text-center text-[15px] font-semibold">
+          Assinatura disponível em breve
+        </div>
+      ) : (
+        <Link
+          to={pro ? acaoPro : planos.gratis.destino}
+          className={`focus-ring mt-auto flex min-h-13 items-center justify-center rounded-full border px-5 text-center text-[15px] font-semibold transition-colors motion-reduce:transition-none ${pro ? 'border-accent bg-accent hover:bg-accent-hover text-white' : 'text-text hover:bg-surface-2 border-[#3a3b3c]'}`}
+        >
+          {pro ? 'Assinar Pro' : planos.gratis.botao}
+        </Link>
+      )}
     </article>
   );
 }
