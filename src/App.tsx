@@ -4,7 +4,9 @@ import { RouterProvider } from 'react-router-dom';
 import { Toaster } from 'sonner';
 import { AnalyticsConsent } from '@/components/consent/AnalyticsConsent';
 import { AuthProvider } from '@/lib/auth';
+import { isMaintenanceMode } from '@/lib/maintenance';
 import { queryClient } from '@/lib/queryClient';
+import { MaintenancePage } from '@/pages/MaintenancePage';
 import { router } from '@/routes';
 
 function useDesktopToastPosition() {
@@ -22,7 +24,7 @@ function useDesktopToastPosition() {
   return isDesktop ? 'top-right' : 'top-center';
 }
 
-export function App() {
+function Application() {
   const toastPosition = useDesktopToastPosition();
 
   return (
@@ -42,4 +44,17 @@ export function App() {
       </AuthProvider>
     </QueryClientProvider>
   );
+}
+
+export function App() {
+  if (isMaintenanceMode()) {
+    return (
+      <>
+        <MaintenancePage />
+        <AnalyticsConsent />
+      </>
+    );
+  }
+
+  return <Application />;
 }
