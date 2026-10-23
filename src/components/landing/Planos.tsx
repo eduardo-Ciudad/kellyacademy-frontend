@@ -147,7 +147,7 @@ function PlanoCard({ tipo, ciclo }: { tipo: 'gratis' | 'pro'; ciclo: Ciclo }) {
       <div className="mt-9">
         {pro ? <PrecoPro ciclo={ciclo} /> : <PrecoGratis />}
       </div>
-      <ul className="text-text-body mt-8 flex flex-col gap-3 border-t border-[#2a2b2c] pt-7 text-[15px] leading-[1.5]">
+      <ul className="text-text-body mt-8 mb-8 flex flex-col gap-3 border-t border-[#2a2b2c] pt-7 text-[15px] leading-[1.5]">
         {plano.itens.map((item) => (
           <li key={item} className="flex gap-3">
             <Check

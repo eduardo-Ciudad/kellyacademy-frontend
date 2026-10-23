@@ -185,13 +185,13 @@ function PlanoCard({ tipo, ciclo }: { tipo: 'gratis' | 'pro'; ciclo: Ciclo }) {
         ))}
       </ul>
       {pro && acaoPro === 'em-breve' ? (
-        <div className="bg-control text-text-2 mt-7 flex min-h-12 items-center justify-center rounded-full px-4 text-center text-[14px] font-semibold">
+        <div className="bg-control text-text-2 mt-9 flex min-h-12 items-center justify-center rounded-full px-4 text-center text-[14px] font-semibold">
           Assinatura disponível em breve
         </div>
       ) : (
         <Link
           to={pro ? acaoPro : planos.gratis.destino}
-          className={`focus-ring mt-7 flex min-h-12 items-center justify-center rounded-full border px-4 text-center text-[14px] font-semibold transition-colors motion-reduce:transition-none ${pro ? 'border-accent bg-accent active:bg-accent-hover text-white' : 'text-text active:bg-surface-2 border-[#3a3b3c]'}`}
+          className={`focus-ring mt-9 flex min-h-12 items-center justify-center rounded-full border px-4 text-center text-[14px] font-semibold transition-colors motion-reduce:transition-none ${pro ? 'border-accent bg-accent active:bg-accent-hover text-white' : 'text-text active:bg-surface-2 border-[#3a3b3c]'}`}
         >
           {pro ? 'Assinar Pro' : planos.gratis.botao}
         </Link>
