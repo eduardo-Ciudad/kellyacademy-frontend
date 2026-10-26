@@ -231,6 +231,23 @@ html {
   }
 }
 
+@keyframes repertorio-panel-in {
+  from {
+    transform: translateX(20px);
+    opacity: 0;
+  }
+}
+
+.repertorio-panel[data-state='open'] {
+  animation: repertorio-panel-in 200ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .repertorio-panel[data-state='open'] {
+    animation: none;
+  }
+}
+
 html[data-cookie-banner-visible='true'] .mobile-sticky-cta {
   display: none;
 }
@@ -308,12 +325,12 @@ body {
   }
 
   .landing-section {
-    padding-block: 7rem;
+    padding-block: 6rem;
   }
 
-  @media (min-width: 60rem) {
+  @media (min-width: 40rem) {
     .landing-section {
-      padding-block: 12.5rem;
+      padding-block: 10rem;
     }
   }
 
