@@ -71,6 +71,24 @@ describe('página de planos', () => {
     expect(text).toContain('cobrado anualmente');
   });
 
+  it('alinha apoio abaixo do preço e mantém a ação no fim dos dois cards', () => {
+    const cards = Array.from(
+      container.querySelectorAll<HTMLElement>('[data-plan-card]'),
+    );
+
+    expect(cards).toHaveLength(2);
+    expect(
+      cards.map((card) =>
+        normalizeText(card.querySelector('[data-plan-support]')?.textContent ?? null),
+      ),
+    ).toEqual(['sem cartão', 'cancele quando quiser']);
+    cards.forEach((card) => {
+      const action = card.querySelector('[data-plan-action]');
+      expect(action).not.toBeNull();
+      expect(action?.classList.contains('mt-auto')).toBe(true);
+    });
+  });
+
   it('troca o botão pela mensagem de assinante quando recebe 409', async () => {
     vi.mocked(iniciarCheckout).mockRejectedValueOnce(
       new ApiError({
