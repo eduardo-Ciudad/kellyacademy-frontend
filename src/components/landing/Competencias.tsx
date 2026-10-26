@@ -146,7 +146,9 @@ function CompetenciaPanel({
         </span>
       </div>
 
-      <h3 className="text-text text-h3-lg">{content.nomeOficial}</h3>
+      <h3 className="font-display text-text text-[30px] leading-[1.2] font-light tracking-[-0.02em]">
+        {content.nomeOficial}
+      </h3>
 
       <div>
         <p className="text-text-3 text-eyebrow mb-2 font-mono uppercase">
