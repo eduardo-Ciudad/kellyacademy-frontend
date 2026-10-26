@@ -62,20 +62,23 @@ describe('gaCookieNames', () => {
 describe('Google Analytics DOM integration', () => {
   beforeEach(() => {
     document.head.innerHTML = '';
-    window.dataLayer = undefined;
-    window.gtag = undefined;
+    Reflect.deleteProperty(window, 'dataLayer');
+    Reflect.deleteProperty(window, 'gtag');
     Reflect.deleteProperty(window, `ga-disable-${measurementId}`);
   });
 
-  it('carrega uma única vez e configura consentimento antes do GA', () => {
-    loadGoogleAnalytics(measurementId);
+  it('empurra objetos Arguments na ordem consent default → update → js → config', () => {
     loadGoogleAnalytics(measurementId);
 
     const scripts = document.querySelectorAll(
       `script[src="https://www.googletagmanager.com/gtag/js?id=${measurementId}"]`,
     );
     expect(scripts).toHaveLength(1);
-    expect(window.dataLayer?.[0]).toEqual([
+    expect(window.dataLayer).toHaveLength(4);
+    window.dataLayer.forEach((entry) => {
+      expect(Object.prototype.toString.call(entry)).toBe('[object Arguments]');
+    });
+    expect(Array.from(window.dataLayer[0])).toEqual([
       'consent',
       'default',
       {
@@ -85,11 +88,30 @@ describe('Google Analytics DOM integration', () => {
         analytics_storage: 'denied',
       },
     ]);
-    expect(window.dataLayer?.[1]).toEqual([
+    expect(Array.from(window.dataLayer[1])).toEqual([
       'consent',
       'update',
       { analytics_storage: 'granted' },
     ]);
+    expect(Array.from(window.dataLayer[2])).toEqual([
+      'js',
+      expect.any(Date),
+    ]);
+    expect(Array.from(window.dataLayer[3])).toEqual([
+      'config',
+      measurementId,
+    ]);
+  });
+
+  it('carrega o script uma única vez', () => {
+    loadGoogleAnalytics(measurementId);
+    loadGoogleAnalytics(measurementId);
+
+    expect(
+      document.querySelectorAll(
+        `script[src="https://www.googletagmanager.com/gtag/js?id=${measurementId}"]`,
+      ),
+    ).toHaveLength(1);
   });
 
   it('desabilita a coleta e atualiza o consentimento para denied', () => {
@@ -97,7 +119,7 @@ describe('Google Analytics DOM integration', () => {
     disableGoogleAnalytics(measurementId);
 
     expect(Reflect.get(window, `ga-disable-${measurementId}`)).toBe(true);
-    expect(window.dataLayer).toContainEqual([
+    expect(window.dataLayer.map((entry) => Array.from(entry))).toContainEqual([
       'consent',
       'update',
       { analytics_storage: 'denied' },
