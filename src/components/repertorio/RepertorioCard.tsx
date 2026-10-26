@@ -10,9 +10,13 @@ import type { RepertorioResumo } from '@/types/api';
 export function RepertorioCard({
   repertorio,
   query,
+  selected = false,
+  onOpen,
 }: {
   repertorio: RepertorioResumo;
   query: string;
+  selected?: boolean;
+  onOpen?: (element: HTMLAnchorElement) => void;
 }) {
   const risco = seloRisco(repertorio.riscoUso);
   const saturacao = seloSaturacao(repertorio.saturacao);
@@ -22,7 +26,10 @@ export function RepertorioCard({
   return (
     <Link
       to={`/repertorio/${encodeURIComponent(repertorio.codigo)}${query ? `?${query}` : ''}`}
-      className="focus-ring bg-surface rounded-card hover:bg-surface-2 flex min-h-44 flex-col p-5 transition-colors"
+      preventScrollReset
+      aria-current={selected ? 'true' : undefined}
+      onClick={(event) => onOpen?.(event.currentTarget)}
+      className={`focus-ring bg-surface rounded-card hover:bg-surface-2 flex min-h-44 flex-col border p-5 transition-colors ${selected ? 'border-[#3d4a8a]' : 'border-transparent'}`}
     >
       <div className="flex items-start gap-3">
         <span className="text-text-3 min-w-0 flex-1 text-xs font-semibold tracking-[0.04em] uppercase">
