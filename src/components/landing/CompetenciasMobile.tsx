@@ -87,7 +87,7 @@ export function CompetenciasMobile() {
               <p className="text-text-3 tabular font-mono text-[12px]">
                 {activeCompetencia.codigo} · 0 — 200 PONTOS
               </p>
-              <h3 className="text-text text-[21px] leading-[1.25] font-bold tracking-[-0.02em]">
+              <h3 className="font-display text-text text-[30px] leading-[1.2] font-light tracking-[-0.02em]">
                 {activeContent.nomeOficial}
               </h3>
               <div>
