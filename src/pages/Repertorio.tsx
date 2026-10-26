@@ -1,5 +1,5 @@
 import { RotateCcw, Search, X } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { toast } from 'sonner';
 import { AccountButton } from '@/components/layout/AccountButton';
@@ -27,11 +27,14 @@ const filtrosVazios: Filtros = {
   q: '',
 };
 
+export const REPERTORIO_GRID_CLASS = 'mt-5 grid gap-3 lg:grid-cols-2';
+
 export function Repertorio() {
   const { codigo } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const filtros = useMemo(() => lerFiltros(searchParams), [searchParams]);
   const [busca, setBusca] = useState(filtros.q);
+  const openerRef = useRef<HTMLElement | null>(null);
   const macroeixosQuery = useMacroeixos();
   const repertoriosQuery = useRepertorios(filtros);
   const queryAtual = filtrosParaParams(filtros).toString();
@@ -147,8 +150,8 @@ export function Repertorio() {
         onClear={limparFiltros}
       />
 
-      <div className="lg:flex lg:items-start lg:gap-6">
-        <div className="min-w-0 flex-1">
+      <div>
+        <div className="min-w-0">
           {repertoriosQuery.isLoading ? (
             <RepertorioSkeleton />
           ) : repertoriosQuery.isError && itens.length === 0 ? (
@@ -179,14 +182,16 @@ export function Repertorio() {
             </div>
           ) : (
             <div>
-              <div
-                className={`mt-5 grid gap-3 ${codigo ? 'grid-cols-1' : 'lg:grid-cols-2'}`}
-              >
+              <div className={REPERTORIO_GRID_CLASS}>
                 {itens.map((repertorio) => (
                   <RepertorioCard
                     key={repertorio.codigo}
                     repertorio={repertorio}
                     query={queryAtual}
+                    selected={repertorio.codigo === codigo}
+                    onOpen={(element) => {
+                      openerRef.current = element;
+                    }}
                   />
                 ))}
               </div>
@@ -206,7 +211,11 @@ export function Repertorio() {
             </div>
           )}
         </div>
-        <RepertorioDetalheSheet codigo={codigo} query={queryAtual} />
+        <RepertorioDetalheSheet
+          codigo={codigo}
+          query={queryAtual}
+          openerRef={openerRef}
+        />
       </div>
     </div>
   );
