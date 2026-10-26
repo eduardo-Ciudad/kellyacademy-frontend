@@ -1,17 +1,31 @@
 import { motion, useReducedMotion } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { HeroShaderBg } from '@/components/landing/fx/HeroShaderBg';
-import {
-  fadeUp,
-  mobileFadeUp,
-  mobileStagger,
-  stagger,
-} from '@/components/landing/fx/motion';
-import { useIsMobileLanding } from '@/components/landing/fx/useIsMobileLanding';
+import { EASE_OUT } from '@/components/landing/fx/motion';
+
+const heroContentVariants = {
+  hidden: { opacity: 0, y: 8 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.3, ease: EASE_OUT },
+  },
+} as const;
+
+const heroActionVariants = {
+  hidden: { opacity: 1, y: 8 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.3, ease: EASE_OUT },
+  },
+} as const;
 
 export function Hero() {
   const reduceMotion = useReducedMotion();
-  const isMobile = useIsMobileLanding();
+  const motionProps = reduceMotion
+    ? {}
+    : { initial: 'hidden' as const, animate: 'visible' as const };
 
   return (
     <section
@@ -22,26 +36,26 @@ export function Hero() {
 
       <motion.div
         className="relative z-10 mx-auto flex w-full max-w-[1200px] flex-col items-center text-center"
-        variants={isMobile ? mobileStagger : stagger}
-        initial={reduceMotion ? 'visible' : 'hidden'}
-        animate="visible"
       >
         <motion.p
-          variants={isMobile ? mobileFadeUp : fadeUp}
+          variants={heroContentVariants}
+          {...motionProps}
           className="m-0 font-mono text-xs tracking-[0.16em] text-white/60"
         >
           CORREÇÃO DE REDAÇÃO DO ENEM
         </motion.p>
 
         <motion.h1
-          variants={isMobile ? mobileFadeUp : fadeUp}
+          variants={heroContentVariants}
+          {...motionProps}
           className="desk:text-[clamp(44px,6vw,84px)] mt-6 max-w-[980px] text-[44px] leading-none font-light tracking-[-0.04em] text-balance text-white"
         >
           Descubra onde sua redação perde pontos.
         </motion.h1>
 
         <motion.p
-          variants={isMobile ? mobileFadeUp : fadeUp}
+          variants={heroContentVariants}
+          {...motionProps}
           className="mt-6 max-w-[600px] text-[19px] leading-[1.55] text-pretty text-white/78"
         >
           Correção competência por competência, com o trecho exato que segurou
@@ -49,7 +63,8 @@ export function Hero() {
         </motion.p>
 
         <motion.div
-          variants={isMobile ? mobileFadeUp : fadeUp}
+          variants={heroActionVariants}
+          {...motionProps}
           className="desk:w-auto mt-8 flex w-full flex-wrap justify-center gap-3"
         >
           <Link
@@ -68,7 +83,8 @@ export function Hero() {
         </motion.div>
 
         <motion.p
-          variants={isMobile ? mobileFadeUp : fadeUp}
+          variants={heroActionVariants}
+          {...motionProps}
           className="desk:w-auto desk:text-small mt-[18px] w-full text-center font-mono text-xs text-white/60"
         >
           3 correções grátis por dia · sem cartão
