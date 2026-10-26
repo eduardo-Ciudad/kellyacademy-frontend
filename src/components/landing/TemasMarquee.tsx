@@ -7,7 +7,7 @@ export function TemasMarquee() {
   const secondRow = temasEnem.slice(4);
 
   return (
-    <section aria-label="Temas" className="overflow-hidden py-12">
+    <section aria-label="Temas" className="landing-section overflow-hidden">
       <Reveal>
         <p className="text-text-3 text-eyebrow desk:px-6 desk:text-center mx-auto mb-[22px] max-w-[760px] px-4 text-left font-mono uppercase">
           TREINE COM TEMAS REAIS DO ENEM
