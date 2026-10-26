@@ -1,25 +1,32 @@
 import * as Dialog from '@radix-ui/react-dialog';
 import { RotateCcw, X } from 'lucide-react';
+import type { RefObject, ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { RepertorioDetalhe } from '@/components/repertorio/RepertorioDetalhe';
 import { Button } from '@/components/ui/Button';
 import { Skeleton } from '@/components/ui/Skeleton';
-import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { useRepertorio } from '@/hooks/useRepertorios';
 import { ApiError } from '@/lib/api';
+import {
+  caminhoListaRepertorio,
+  detalheRepertorioAberto,
+} from '@/lib/repertorioDialog';
 
 export function RepertorioDetalheSheet({
   codigo,
   query,
+  openerRef,
 }: {
   codigo: string | undefined;
   query: string;
+  openerRef: RefObject<HTMLElement | null>;
 }) {
   const navigate = useNavigate();
-  const isDesktop = useMediaQuery('(min-width: 1024px)');
   const detalhe = useRepertorio(codigo);
   const fechar = () => {
-    void navigate(`/repertorio${query ? `?${query}` : ''}`);
+    void navigate(caminhoListaRepertorio(query), {
+      preventScrollReset: true,
+    });
   };
   const notFound =
     detalhe.error instanceof ApiError && detalhe.error.status === 404;
@@ -35,46 +42,60 @@ export function RepertorioDetalheSheet({
     <RepertorioDetalhe repertorio={detalhe.data} />
   ) : null;
 
-  if (isDesktop) {
-    if (!codigo) return null;
-    return (
-      <aside className="bg-surface rounded-card sticky top-8 max-h-[calc(100dvh-64px)] w-[420px] shrink-0 overflow-y-auto p-6">
-        <div className="mb-5 flex justify-end">
-          <button
-            type="button"
-            onClick={fechar}
-            aria-label="Fechar"
-            className="focus-ring bg-control text-text-2 flex size-11 items-center justify-center rounded-full"
-          >
-            <X size={19} aria-hidden="true" />
-          </button>
-        </div>
-        {conteudo}
-      </aside>
-    );
-  }
-
   return (
-    <Dialog.Root open={!!codigo} onOpenChange={(open) => !open && fechar()}>
+    <Dialog.Root
+      open={detalheRepertorioAberto(codigo)}
+      onOpenChange={(open) => !open && fechar()}
+    >
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-40 bg-black/60" />
-        <Dialog.Content className="bg-bg fixed inset-x-0 bottom-0 z-50 max-h-[88dvh] overflow-y-auto overscroll-contain rounded-t-[28px] px-5 pt-3 pb-[calc(28px+env(safe-area-inset-bottom))] outline-none">
-          <div className="bg-control rounded-pill mx-auto h-1.5 w-10" />
-          <div className="my-4 flex items-center justify-between gap-3">
-            <Dialog.Title className="text-text truncate text-lg font-bold">
-              {detalhe.data?.nome ?? 'Detalhes do repertório'}
-            </Dialog.Title>
-            <Dialog.Close
-              className="focus-ring bg-surface flex size-11 shrink-0 items-center justify-center rounded-full"
-              aria-label="Fechar"
-            >
-              <X size={19} aria-hidden="true" />
-            </Dialog.Close>
-          </div>
+        <RepertorioDialogFrame
+          title={detalhe.data?.nome ?? 'Detalhes do repertório'}
+          openerRef={openerRef}
+        >
           {conteudo}
-        </Dialog.Content>
+        </RepertorioDialogFrame>
       </Dialog.Portal>
     </Dialog.Root>
+  );
+}
+
+export function RepertorioDialogFrame({
+  title,
+  openerRef,
+  children,
+}: {
+  title: string;
+  openerRef: RefObject<HTMLElement | null>;
+  children?: ReactNode;
+}) {
+  return (
+    <>
+      <Dialog.Overlay
+        data-testid="repertorio-overlay"
+        className="fixed inset-0 z-40 bg-[rgb(5_6_10_/_0.55)]"
+      />
+      <Dialog.Content
+        aria-modal="true"
+        aria-describedby={undefined}
+        onCloseAutoFocus={(event) => {
+          if (!openerRef.current) return;
+          event.preventDefault();
+          openerRef.current.focus({ preventScroll: true });
+        }}
+        className="repertorio-panel bg-surface border-control fixed inset-y-0 right-0 z-50 w-full overflow-y-auto overscroll-contain border-l px-8 py-7 outline-none min-[641px]:w-[460px]"
+      >
+        <Dialog.Title className="sr-only">{title}</Dialog.Title>
+        <div className="mb-5 flex justify-end">
+          <Dialog.Close
+            className="focus-ring bg-control text-text-2 hover:text-text flex size-11 shrink-0 items-center justify-center rounded-full transition-colors"
+            aria-label="Fechar"
+          >
+            <X size={19} aria-hidden="true" />
+          </Dialog.Close>
+        </div>
+        {children}
+      </Dialog.Content>
+    </>
   );
 }
 
