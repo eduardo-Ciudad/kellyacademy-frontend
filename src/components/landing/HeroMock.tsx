@@ -214,7 +214,7 @@ export function HeroMock() {
             >
               <JuliaAvatar size={34} loading="eager" />
               <p className="text-text-body text-small">
-                <strong className="text-text">Julia</strong> · Sua C3 perdeu
+            <strong className="text-text">Júlia</strong> · Sua C3 perdeu
                 pontos porque o 2º argumento não foi desenvolvido. Quer ver
                 repertórios sobre esse tema?
               </p>
