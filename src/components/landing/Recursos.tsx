@@ -42,7 +42,7 @@ function RecursosDesktop() {
             <ThemesScene />
           </ResourceItem>
           <ResourceItem
-            title="Julia, sua assistente"
+            title="Júlia, sua assistente"
             description="Explica, em linguagem simples, por que uma competência perdeu pontos."
             bottom
           >
@@ -172,8 +172,8 @@ function JuliaScene() {
         <div className="flex max-w-[88%] items-end gap-2.5">
           <JuliaAvatar size={30} />
           <div className="text-text-body rounded-[14px_14px_14px_4px] bg-[#2a2b2d] px-3.5 py-2.5 text-sm leading-[1.45]">
-            Seu 2º argumento foi anunciado, mas não explicado. Quer ver
-            repertórios sobre o tema?
+            Seu 2º argumento foi anunciado, mas não explicado: faltou causa,
+            exemplo ou dado.
           </div>
         </div>
       </div>
