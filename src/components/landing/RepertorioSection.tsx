@@ -76,10 +76,16 @@ function RepertorioDesktop() {
                 index === 0 ? 'pr-6' : 'border-surface-2 border-l px-6'
               }
             >
-              <NumberTicker
-                value={stat.value}
-                className="text-text block text-[56px] leading-none font-medium tracking-[-0.03em]"
-              />
+              {typeof stat.value === 'number' ? (
+                <NumberTicker
+                  value={stat.value}
+                  className="text-text block text-[56px] leading-none font-medium tracking-[-0.03em]"
+                />
+              ) : (
+                <span className="text-text block text-[42px] leading-none font-medium tracking-[-0.03em]">
+                  {stat.value}
+                </span>
+              )}
               <p className="text-text-3 mt-2 text-[15px] leading-[1.4]">
                 {stat.label}
               </p>
