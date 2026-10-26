@@ -153,25 +153,26 @@ function PlanoCard({ tipo, ciclo }: { tipo: 'gratis' | 'pro'; ciclo: Ciclo }) {
   });
   return (
     <article
-      className={`flex flex-col rounded-[20px] border p-6 ${pro ? 'border-accent bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-accent)_6%,transparent),transparent_55%)]' : 'border-surface-2'}`}
+      data-plan-card={tipo}
+      className={`flex h-full flex-col rounded-[20px] border p-6 ${pro ? 'border-accent bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-accent)_6%,transparent),transparent_55%)]' : 'border-surface-2'}`}
     >
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <h3 className="text-text text-[22px] font-semibold">{plano.nome}</h3>
-          <p className="text-text-2 mt-1.5 text-[14px] leading-[1.5]">
-            {plano.descricao}
-          </p>
-        </div>
+      <div className="flex h-7 items-start justify-between gap-4">
+        <h3 className="text-text text-[22px] leading-7 font-semibold">
+          {plano.nome}
+        </h3>
         {pro && (
           <span className="border-accent/40 bg-accent/10 text-accent-text mt-0.5 shrink-0 rounded-full border px-2 py-1 font-mono text-[9px] font-semibold tracking-[0.09em]">
             {planos.pro.selo}
           </span>
         )}
       </div>
+      <p className="text-text-2 mt-1.5 min-h-12 text-[14px] leading-6">
+        {plano.descricao}
+      </p>
       <div className="mt-7">
         {pro ? <PrecoPro ciclo={ciclo} /> : <PrecoGratis />}
       </div>
-      <ul className="text-text-body mt-6 flex flex-col gap-2.5 border-t border-[#2a2b2c] pt-5 text-[14px] leading-[1.45]">
+      <ul className="text-text-body mt-6 mb-9 flex flex-col gap-2.5 border-t border-[#2a2b2c] pt-5 text-[14px] leading-[1.45]">
         {plano.itens.map((item) => (
           <li key={item} className="flex gap-2.5">
             <Check
@@ -185,13 +186,14 @@ function PlanoCard({ tipo, ciclo }: { tipo: 'gratis' | 'pro'; ciclo: Ciclo }) {
         ))}
       </ul>
       {pro && acaoPro === 'em-breve' ? (
-        <div className="bg-control text-text-2 mt-9 flex min-h-12 items-center justify-center rounded-full px-4 text-center text-[14px] font-semibold">
+        <div data-plan-action className="bg-control text-text-2 mt-auto flex min-h-12 items-center justify-center rounded-full px-4 text-center text-[14px] font-semibold">
           Assinatura disponível em breve
         </div>
       ) : (
         <Link
+          data-plan-action
           to={pro ? acaoPro : planos.gratis.destino}
-          className={`focus-ring mt-9 flex min-h-12 items-center justify-center rounded-full border px-4 text-center text-[14px] font-semibold transition-colors motion-reduce:transition-none ${pro ? 'border-accent bg-accent active:bg-accent-hover text-white' : 'text-text active:bg-surface-2 border-[#3a3b3c]'}`}
+          className={`focus-ring mt-auto flex min-h-12 items-center justify-center rounded-full border px-4 text-center text-[14px] font-semibold transition-colors motion-reduce:transition-none ${pro ? 'border-accent bg-accent active:bg-accent-hover text-white' : 'text-text active:bg-surface-2 border-[#3a3b3c]'}`}
         >
           {pro ? 'Assinar Pro' : planos.gratis.botao}
         </Link>
@@ -209,7 +211,9 @@ function PrecoGratis() {
           {planos.gratis.sufixo}
         </span>
       </p>
-      <div className="mt-2 h-6" aria-hidden="true" />
+      <p data-plan-support className="text-text-3 mt-2 h-6 text-[11px] leading-6">
+        sem cartão
+      </p>
     </>
   );
 }
@@ -233,18 +237,11 @@ function PrecoPro({ ciclo }: { ciclo: Ciclo }) {
             {planos.pro.sufixo}
           </span>
         </p>
-        <p className="text-text-3 mt-2 h-6 text-[11px] leading-6 whitespace-nowrap">
-          {anual ? (
-            <>
-              {planos.pro.detalheAnual} ·{' '}
-              {formatarPreco(PRECO_PRO_ANUAL.totalAnual)}/ano ·{' '}
-              <span className="line-through">
-                {formatarPreco(PRECO_PRO_MENSAL)}
-              </span>
-            </>
-          ) : (
-            planos.pro.detalheMensal
-          )}
+        <p
+          data-plan-support
+          className="text-text-3 mt-2 h-6 text-[11px] leading-6 whitespace-nowrap"
+        >
+          cancele quando quiser
         </p>
       </motion.div>
     </AnimatePresence>
