@@ -13,6 +13,7 @@ import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { JuliaChat, type FocoJulia } from '@/components/julia/JuliaChat';
 import { JuliaMarca } from '@/components/julia/JuliaMarca';
+import { JuliaRouteGate } from '@/components/julia/JuliaRouteGate';
 import { SparkIcon } from '@/components/ui/SparkIcon';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { ScoreRing } from '@/components/ui/ScoreRing';
@@ -24,6 +25,7 @@ import {
   deveIniciarTourJulia,
   juliaHabilitada,
   perguntaDaCompetencia,
+  RESULTADO_CONTENT_CLASS,
 } from '@/lib/julia';
 import { rotuloTema } from '@/lib/temas';
 import { cn } from '@/lib/utils';
@@ -350,7 +352,7 @@ function ResultadoAvaliado({
   }
 
   return (
-    <article className="flex flex-col gap-4 px-4 pt-4 pb-8 lg:gap-5 lg:p-0">
+    <article className={RESULTADO_CONTENT_CLASS}>
       <PageTop redacao={redacao} badge />
       <div className="px-1 lg:hidden">
         <HeaderMeta redacao={redacao} mobile />
@@ -467,7 +469,7 @@ function ResultadoAvaliado({
         </div>
       )}
       {juliaHabilitada && (
-        <>
+        <JuliaRouteGate>
           <JuliaChat
             redacao={redacao}
             avaliacao={avaliacao}
@@ -477,7 +479,7 @@ function ResultadoAvaliado({
           />
           <div
             className={cn(
-              'fixed right-4 bottom-[calc(var(--bottom-nav-h)+16px)] z-30 flex items-center gap-2 lg:right-8 lg:bottom-8',
+              'fixed right-6 bottom-6 z-30 flex items-center gap-2',
               juliaAberta && 'z-[60]',
             )}
           >
@@ -499,7 +501,7 @@ function ResultadoAvaliado({
                   : 'Abrir conversa com a Júlia'
               }
               aria-expanded={juliaAberta}
-              className="focus-ring bg-surface border-control shadow-raised relative flex size-[60px] shrink-0 items-center justify-center rounded-full border lg:size-16"
+              className="focus-ring bg-surface border-control shadow-raised relative flex size-16 shrink-0 items-center justify-center rounded-full border"
             >
               <JuliaMarca
                 variante="principal"
@@ -521,7 +523,7 @@ function ResultadoAvaliado({
               )}
             </button>
           </div>
-        </>
+        </JuliaRouteGate>
       )}
     </article>
   );
