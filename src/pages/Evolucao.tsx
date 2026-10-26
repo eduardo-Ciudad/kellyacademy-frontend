@@ -5,35 +5,35 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   CartesianGrid,
-  LabelList,
   Legend,
   Line,
   LineChart,
   ReferenceLine,
   ResponsiveContainer,
-  Tooltip,
   XAxis,
   YAxis,
-  type TooltipContentProps,
 } from 'recharts';
-import type {
-  NameType,
-  ValueType,
-} from 'recharts/types/component/DefaultTooltipContent';
 import { EvolucaoSkeleton } from '@/components/evolucao/EvolucaoSkeleton';
 import { AccountButton } from '@/components/layout/AccountButton';
 import { Button } from '@/components/ui/Button';
 import { useEvolucao } from '@/hooks/useEvolucao';
 import { chartTheme } from '@/lib/chartTheme';
 import { competencias } from '@/lib/competencias';
+import {
+  rotuloMediaRecente,
+  rotuloOrdinal,
+  Y_DOMAIN_COMPETENCIA,
+  Y_DOMAIN_TOTAL,
+  Y_TICKS_COMPETENCIA,
+  Y_TICKS_TOTAL,
+} from '@/lib/evolucaoChart';
 import type { MediaRecente, PontoEvolucao } from '@/types/api';
 
 type ChartMode = 'total' | 'competencias';
-type ChartRow = PontoEvolucao & {
+export type ChartRow = PontoEvolucao & {
   dateLabel: string;
-  shortDateLabel: string;
+  orderLabel: string;
   anuladaY: number | null;
-  showMobileLabel: boolean;
   c1: number | null;
   c2: number | null;
   c3: number | null;
@@ -69,18 +69,13 @@ export function Evolucao() {
 
   const recentCount = Math.min(3, evolucao.totalCorrigidas);
   const anuladas = evolucao.serie.filter((point) => point.anulada).length;
-  const lastValidIndex = evolucao.serie.reduce(
-    (lastIndex, point, index) => (point.anulada ? lastIndex : index),
-    -1,
-  );
   const chartData: ChartRow[] = evolucao.serie.map((point, index) => ({
     ...point,
     dateLabel: format(new Date(point.enviadaEm), 'dd MMM', {
       locale: ptBR,
     }).replace('.', ''),
-    shortDateLabel: format(new Date(point.enviadaEm), 'dd'),
+    orderLabel: rotuloOrdinal(index),
     anuladaY: point.anulada ? 0 : null,
-    showMobileLabel: index === lastValidIndex,
     c1: point.notas?.c1 ?? null,
     c2: point.notas?.c2 ?? null,
     c3: point.notas?.c3 ?? null,
@@ -308,6 +303,8 @@ function ChartCard({
   average: number | null;
   focus: number | null;
 }) {
+  const [activePoint, setActivePoint] = useState<ActiveChartPoint | null>(null);
+
   return (
     <section className="bg-surface lg:rounded-card rounded-[18px] p-4 lg:px-6 lg:py-[22px]">
       <div className="flex items-center justify-between gap-4">
@@ -343,55 +340,51 @@ function ChartCard({
         )}
       </div>
 
-      <div className="mt-3 h-[215px] w-full lg:mt-4 lg:h-[280px]">
+      <div className="relative mt-3 h-[215px] w-full lg:mt-4 lg:h-[280px]">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart
             data={data}
-            margin={{ top: 16, right: 10, bottom: 0, left: -8 }}
+            margin={{ top: 24, right: 16, bottom: 0, left: -8 }}
+            style={{ fontFamily: 'var(--font-mono)', fontSize: 11 }}
           >
             <CartesianGrid vertical={false} stroke={chartTheme.grid} />
             <XAxis
-              dataKey={isDesktop ? 'dateLabel' : 'shortDateLabel'}
+              dataKey="orderLabel"
               axisLine={false}
               tickLine={false}
               interval={0}
-              tick={<DateTick data={data} />}
+              tick={<OrderTick data={data} />}
               height={28}
             />
             <YAxis
-              domain={mode === 'total' ? [0, 1000] : [0, 200]}
-              ticks={
-                mode === 'total'
-                  ? [0, 250, 500, 750, 1000]
-                  : [0, 40, 80, 120, 160, 200]
-              }
+              domain={mode === 'total' ? Y_DOMAIN_TOTAL : Y_DOMAIN_COMPETENCIA}
+              ticks={mode === 'total' ? Y_TICKS_TOTAL : Y_TICKS_COMPETENCIA}
               axisLine={false}
               tickLine={false}
               width={42}
               tick={{
                 fill: chartTheme.text3,
-                fontFamily: 'Figtree',
-                fontSize: isDesktop ? 12 : 11,
+                fontFamily: 'Geist Mono Variable, Geist Mono, monospace',
+                fontSize: 11,
               }}
-            />
-            <Tooltip
-              content={ChartTooltip}
-              cursor={{ stroke: chartTheme.grid }}
             />
             {mode === 'total' ? (
               <>
                 {average !== null ? (
                   <ReferenceLine
                     y={average}
-                    stroke={chartTheme.text3}
+                    stroke={chartTheme.average}
                     strokeDasharray="4 4"
                     label={
                       isDesktop
                         ? {
-                            value: `Média recente ${average}`,
-                            fill: chartTheme.text2,
-                            fontSize: 12,
-                            position: 'insideTopLeft',
+                            value: rotuloMediaRecente(average),
+                            fill: chartTheme.average,
+                            fontFamily:
+                              'Geist Mono Variable, Geist Mono, monospace',
+                            fontSize: 11,
+                            position: 'insideTopRight',
+                            dy: -8,
                           }
                         : undefined
                     }
@@ -403,26 +396,16 @@ function ChartCard({
                   connectNulls
                   stroke={chartTheme.accent}
                   strokeWidth={2.5}
-                  dot={<ScoreDot />}
-                  activeDot={{ r: 5 }}
+                  dot={<AccessibleDot onActivate={setActivePoint} />}
+                  activeDot={false}
                   isAnimationActive={false}
-                >
-                  <LabelList
-                    dataKey="notaTotal"
-                    content={
-                      <ScoreLabel
-                        desktop={isDesktop}
-                        lastIndex={data.findIndex((row) => row.showMobileLabel)}
-                      />
-                    }
-                  />
-                </Line>
+                />
                 <Line
                   type="linear"
                   dataKey="anuladaY"
                   stroke="transparent"
                   connectNulls={false}
-                  dot={<CancelledDot />}
+                  dot={<CancelledDot onActivate={setActivePoint} />}
                   activeDot={false}
                   isAnimationActive={false}
                 />
@@ -440,9 +423,15 @@ function ChartCard({
                     strokeWidth={highlighted ? 3 : 2}
                     strokeOpacity={highlighted ? 1 : 0.45}
                     dot={
-                      highlighted ? <ScoreDot color={competency.hex} /> : false
+                      <AccessibleDot
+                        color={competency.hex}
+                        opacity={highlighted ? 1 : 0.55}
+                        competency={competency.codigo}
+                        competencyName={competency.nomeCurto}
+                        onActivate={setActivePoint}
+                      />
                     }
-                    activeDot={{ r: 4 }}
+                    activeDot={false}
                     isAnimationActive={false}
                   />
                 );
@@ -453,10 +442,11 @@ function ChartCard({
             ) : null}
           </LineChart>
         </ResponsiveContainer>
+        {activePoint ? <PointTooltip point={activePoint} /> : null}
       </div>
 
       {mode === 'total' ? (
-        <div className="text-text-2 mt-2 flex flex-wrap gap-x-5 gap-y-2 text-xs">
+        <div className="text-text-3 mt-2 flex flex-wrap gap-x-5 gap-y-2 font-mono text-[11px]">
           {isDesktop ? (
             <LegendItem
               marker={<span className="bg-accent size-2.5 rounded-full" />}
@@ -483,7 +473,7 @@ function ChartCard({
   );
 }
 
-function DateTick({
+function OrderTick({
   x = 0,
   y = 0,
   payload,
@@ -501,106 +491,159 @@ function DateTick({
       y={y + 16}
       textAnchor="middle"
       fill={cancelled ? chartTheme.danger : chartTheme.text3}
-      fontFamily="Figtree"
-      fontSize={12}
+      fontFamily="Geist Mono Variable, Geist Mono, monospace"
+      fontSize={11}
     >
       {payload?.value}
     </text>
   );
 }
 
-function ScoreDot(props: {
-  cx?: number;
-  cy?: number;
-  value?: number;
-  color?: string;
-}) {
-  if (props.cx === undefined || props.cy === undefined || props.value === null)
-    return <></>;
-  return (
-    <circle
-      cx={props.cx}
-      cy={props.cy}
-      r={4}
-      fill={props.color ?? chartTheme.accent}
-      stroke={chartTheme.surface}
-      strokeWidth={2}
-    />
-  );
-}
+export type ActiveChartPoint = {
+  row: ChartRow;
+  value: number | null;
+  x: number;
+  y: number;
+  containerWidth: number;
+  competency?: string;
+  competencyName?: string;
+};
 
-function CancelledDot(props: {
+type DotProps = {
   cx?: number;
   cy?: number;
   value?: number | null;
+  payload?: ChartRow;
+};
+
+export function AccessibleDot(props: DotProps & {
+  color?: string;
+  opacity?: number;
+  competency?: string;
+  competencyName?: string;
+  onActivate: (point: ActiveChartPoint | null) => void;
 }) {
-  if (props.cx === undefined || props.cy === undefined || props.value === null)
+  if (
+    props.cx === undefined ||
+    props.cy === undefined ||
+    props.value == null ||
+    !props.payload
+  )
     return <></>;
+  const activate = (element: SVGGElement) =>
+    props.onActivate({
+      row: props.payload as ChartRow,
+      value: props.value ?? null,
+      x: props.cx as number,
+      y: props.cy as number,
+      containerWidth: element.ownerSVGElement?.clientWidth ?? 0,
+      competency: props.competency,
+      competencyName: props.competencyName,
+    });
   return (
-    <circle
-      cx={props.cx}
-      cy={props.cy}
-      r={5}
-      fill={chartTheme.surface}
-      stroke={chartTheme.danger}
-      strokeWidth={2}
-    />
-  );
-}
-
-function ScoreLabel({
-  desktop,
-  lastIndex,
-  index,
-  x = 0,
-  y = 0,
-  value,
-}: {
-  desktop: boolean;
-  lastIndex: number;
-  index?: number;
-  x?: number;
-  y?: number;
-  value?: number;
-}) {
-  if (value === undefined) return <></>;
-  const shouldShow = desktop || index === lastIndex;
-  if (!shouldShow) return <></>;
-  return (
-    <text
-      x={x}
-      y={y - 11}
-      textAnchor="middle"
-      fill={chartTheme.text}
-      fontFamily="Figtree"
-      fontSize={12}
-      fontWeight={700}
+    <g
+      tabIndex={0}
+      role="button"
+      aria-label={`${props.payload.orderLabel} redação, nota ${props.value}`}
+      onMouseEnter={(event) => activate(event.currentTarget)}
+      onMouseLeave={() => props.onActivate(null)}
+      onFocus={(event) => activate(event.currentTarget)}
+      onBlur={() => props.onActivate(null)}
+      className="group outline-none"
     >
-      {value}
-    </text>
+      <circle
+        cx={props.cx}
+        cy={props.cy}
+        r={4.5}
+        fill={props.color ?? chartTheme.accent}
+        opacity={props.opacity}
+      />
+      <circle
+        cx={props.cx}
+        cy={props.cy}
+        r={7}
+        fill={chartTheme.surface}
+        stroke={props.color ?? chartTheme.accent}
+        strokeWidth={2}
+        className="pointer-events-none opacity-0 group-focus:opacity-100"
+      />
+    </g>
   );
 }
 
-function ChartTooltip({
-  active,
-  payload,
-}: TooltipContentProps<ValueType, NameType>) {
-  if (!active || !payload?.length) return null;
-  const row = payload[0]?.payload as ChartRow;
+function CancelledDot(
+  props: DotProps & {
+    onActivate: (point: ActiveChartPoint | null) => void;
+  },
+) {
+  if (props.cx === undefined || props.cy === undefined || !props.payload)
+    return <></>;
+  const activate = (element: SVGGElement) =>
+    props.onActivate({
+      row: props.payload as ChartRow,
+      value: null,
+      x: props.cx as number,
+      y: props.cy as number,
+      containerWidth: element.ownerSVGElement?.clientWidth ?? 0,
+    });
   return (
-    <div className="bg-surface-2 rounded-input max-w-60 px-3.5 py-3 shadow-xl">
-      <p className="text-text text-sm leading-5 font-semibold">
-        {row.temaTitulo}
+    <g
+      tabIndex={0}
+      role="button"
+      aria-label={`${props.payload.orderLabel} redação, anulada`}
+      onMouseEnter={(event) => activate(event.currentTarget)}
+      onMouseLeave={() => props.onActivate(null)}
+      onFocus={(event) => activate(event.currentTarget)}
+      onBlur={() => props.onActivate(null)}
+      className="group outline-none"
+    >
+      <circle
+        cx={props.cx}
+        cy={props.cy}
+        r={4.5}
+        fill={chartTheme.surface}
+        stroke={chartTheme.danger}
+        strokeWidth={2}
+      />
+      <circle
+        cx={props.cx}
+        cy={props.cy}
+        r={7}
+        fill={chartTheme.surface}
+        stroke={chartTheme.danger}
+        strokeWidth={2}
+        className="pointer-events-none opacity-0 group-focus:opacity-100"
+      />
+    </g>
+  );
+}
+
+export function PointTooltip({ point }: { point: ActiveChartPoint }) {
+  const placeOnLeft = point.x + 248 > point.containerWidth;
+  return (
+    <div
+      role="tooltip"
+      className="border-control bg-[#1b1d29] shadow-raised pointer-events-none absolute z-10 w-[232px] rounded-xl border px-3.5 py-3"
+      style={{
+        top: Math.max(0, point.y - 64),
+        ...(placeOnLeft
+          ? { right: Math.max(0, point.containerWidth - point.x + 12) }
+          : { left: point.x + 12 }),
+      }}
+    >
+      <p className="text-text-3 font-mono text-[11px]">
+        {point.row.orderLabel} redação · {point.row.dateLabel}
       </p>
-      <p className="text-text-3 mt-1 text-xs">
-        {format(new Date(row.enviadaEm), "d 'de' MMMM 'de' yyyy", {
-          locale: ptBR,
-        })}
+      <p className="text-text mt-1 font-display text-[22px] leading-none font-normal">
+        {point.value ?? 'Anulada'}
       </p>
-      <p
-        className={`mt-2 text-sm font-bold ${row.anulada ? 'text-danger' : 'text-text'}`}
-      >
-        {row.anulada ? 'Anulada' : `Nota ${row.notaTotal}`}
+      {point.competency ? (
+        <p className="text-text-2 mt-2 text-[13px] font-semibold">
+          {point.competency} · {point.competencyName}
+        </p>
+      ) : null}
+      <p className="text-text mt-2 text-[13px] leading-[1.4]">
+        {point.row.temaTitulo}
       </p>
     </div>
   );
@@ -608,11 +651,11 @@ function ChartTooltip({
 
 function CompetencyLegend({ focus }: { focus: number | null }) {
   return (
-    <div className="mt-2 flex flex-wrap gap-x-[18px] gap-y-2">
+    <div className="text-text-3 mt-2 flex flex-wrap gap-x-[18px] gap-y-2 font-mono text-[11px]">
       {competencias.map((competency) => (
         <span
           key={competency.numero}
-          className={`inline-flex items-center gap-1.5 text-xs font-semibold ${competency.numero === focus ? 'text-text' : 'text-text-2'}`}
+          className={`inline-flex items-center gap-1.5 ${competency.numero === focus ? 'text-text' : 'text-text-3'}`}
         >
           <span
             className="size-2.5 rounded-[3px]"
