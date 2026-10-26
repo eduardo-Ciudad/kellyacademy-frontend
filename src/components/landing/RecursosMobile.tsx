@@ -134,7 +134,7 @@ export function RecursosMobile() {
           <JuliaAvatar size={52} />
           <div className="min-w-0">
             <h3 className="text-text text-[17px] leading-tight font-semibold">
-              Julia, sua assistente
+              Júlia, sua assistente
             </h3>
             <p className="text-text-body mt-0.5 text-[14.5px] leading-[1.45]">
               Explica, em linguagem simples, por que uma competência perdeu
