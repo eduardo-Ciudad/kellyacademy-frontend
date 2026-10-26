@@ -1,6 +1,6 @@
 import type { FuncaoArgumentativa, TipoEntidade } from '@/types/api';
 
-export const TOTAL_REPERTORIOS = 118;
+export const TOTAL_REPERTORIOS = 'mais de 100';
 
 export const REPERTORIO_STATS = [
   { value: TOTAL_REPERTORIOS, label: 'repertórios curados' },
