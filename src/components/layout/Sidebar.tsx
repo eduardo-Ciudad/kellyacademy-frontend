@@ -1,11 +1,8 @@
 import {
   BarChart3,
   BookOpenText,
-  Crown,
   FileText,
   Library,
-  LogOut,
-  KeyRound,
   Plus,
   Route,
 } from 'lucide-react';
@@ -17,6 +14,7 @@ import { useLogout } from '@/hooks/useLogout';
 import { useUsuario } from '@/hooks/useUsuario';
 import { isNavActive } from '@/components/layout/navMatch';
 import { useTour } from '@/features/tour/TourProvider';
+import { SidebarAccountMenu } from '@/components/layout/SidebarAccountMenu';
 
 const navItems = [
   { to: '/', label: 'Suas redações', icon: FileText },
@@ -25,17 +23,10 @@ const navItems = [
   { to: '/evolucao', label: 'Evolução', icon: BarChart3 },
 ] as const;
 
-const accountLinkClassName = ({ isActive }: { isActive: boolean }) =>
-  `focus-ring rounded-input mt-1 flex min-h-11 items-center gap-3 px-3 text-sm font-semibold transition-colors ${
-    isActive
-      ? 'bg-nav-active text-accent-text'
-      : 'text-text-2 hover:bg-surface-2 hover:text-text'
-  }`;
-
 export function Sidebar() {
   const logout = useLogout();
   const location = useLocation();
-  const { nome, iniciais } = useUsuario();
+  const { nome, iniciais, email } = useUsuario();
   const { openTour } = useTour();
 
   return (
@@ -85,41 +76,14 @@ export function Sidebar() {
 
       <div className="mt-auto">
         <CorrecoesHojeCard />
+        <SidebarAccountMenu
+          name={nome}
+          email={email}
+          initials={iniciais}
+          onLogout={logout}
+          onOpenTour={openTour}
+        />
       </div>
-
-      <div className="border-border-subtle mt-3 flex min-h-16 items-center gap-3 border-t pt-3">
-        <span className="bg-control text-text flex size-10 shrink-0 items-center justify-center rounded-full text-sm font-bold">
-          {iniciais}
-        </span>
-        <span className="min-w-0 flex-1">
-          <span className="text-text block truncate text-sm font-semibold">
-            {nome}
-          </span>
-          <span className="text-text-3 mt-0.5 block text-xs">
-            Plano gratuito
-          </span>
-          <button
-            type="button"
-            onClick={openTour}
-            className="focus-ring text-text-2 hover:text-text mt-0.5 -ml-1 block min-h-7 rounded px-1 text-left text-[13px] transition-colors"
-          >
-            Rever tour
-          </button>
-        </span>
-        <button
-          onClick={logout}
-          className="focus-ring text-text-3 hover:bg-control hover:text-text flex size-11 items-center justify-center rounded-full"
-          aria-label="Sair"
-        >
-          <LogOut size={18} aria-hidden="true" />
-        </button>
-      </div>
-      <NavLink to="/planos" className={accountLinkClassName}>
-        <Crown size={18} aria-hidden="true" /> Planos
-      </NavLink>
-      <NavLink to="/conta/senha" className={accountLinkClassName}>
-        <KeyRound size={18} aria-hidden="true" /> Alterar senha
-      </NavLink>
     </aside>
   );
 }
