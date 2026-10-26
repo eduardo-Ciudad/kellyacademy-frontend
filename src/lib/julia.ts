@@ -7,6 +7,13 @@ import type {
 
 export const juliaHabilitada = import.meta.env.VITE_JULIA_HABILITADA === 'true';
 
+export const RESULTADO_CONTENT_CLASS =
+  'flex flex-col gap-4 px-4 pt-4 pb-28 lg:gap-5 lg:px-0 lg:pt-0 lg:pb-28';
+
+export function rotaTemBotaoJulia(pathname: string) {
+  return /^\/redacoes\/[^/]+\/?$/.test(pathname);
+}
+
 export function deveIniciarTourJulia({
   habilitada,
   avaliacao,
