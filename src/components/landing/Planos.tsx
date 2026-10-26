@@ -48,7 +48,7 @@ function PlanosDesktop({
       <div className="mt-8 flex justify-center">
         <CicloSelector ciclo={ciclo} onChange={onCicloChange} />
       </div>
-      <div className="mx-auto mt-10 grid max-w-[1000px] grid-cols-2 gap-5">
+      <div className="mx-auto mt-10 grid max-w-[1000px] grid-cols-2 items-stretch gap-5">
         <PlanoCard tipo="gratis" ciclo={ciclo} />
         <PlanoCard tipo="pro" ciclo={ciclo} />
       </div>
@@ -127,23 +127,22 @@ function PlanoCard({ tipo, ciclo }: { tipo: 'gratis' | 'pro'; ciclo: Ciclo }) {
   });
   return (
     <article
-      className={`flex min-h-[540px] flex-col rounded-[20px] border p-9 ${pro ? 'border-accent bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-accent)_6%,transparent),transparent_55%)]' : 'border-surface-2'}`}
+      data-plan-card={tipo}
+      className={`flex h-full min-h-[540px] flex-col rounded-[20px] border p-9 ${pro ? 'border-accent bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-accent)_6%,transparent),transparent_55%)]' : 'border-surface-2'}`}
     >
-      <div className="flex min-h-16 items-start justify-between gap-5">
-        <div>
-          <h3 className="text-text text-[24px] leading-tight font-semibold">
-            {plano.nome}
-          </h3>
-          <p className="text-text-2 mt-2 max-w-[340px] text-[15px] leading-[1.55]">
-            {plano.descricao}
-          </p>
-        </div>
+      <div className="flex h-7 items-start justify-between gap-5">
+        <h3 className="text-text text-[24px] leading-7 font-semibold">
+          {plano.nome}
+        </h3>
         {pro && (
           <span className="border-accent/40 bg-accent/10 text-accent-text shrink-0 rounded-full border px-2.5 py-1 font-mono text-[10px] font-semibold tracking-[0.1em]">
             {planos.pro.selo}
           </span>
         )}
       </div>
+      <p className="text-text-2 mt-2 min-h-12 max-w-[340px] text-[15px] leading-6">
+        {plano.descricao}
+      </p>
       <div className="mt-9">
         {pro ? <PrecoPro ciclo={ciclo} /> : <PrecoGratis />}
       </div>
@@ -161,11 +160,12 @@ function PlanoCard({ tipo, ciclo }: { tipo: 'gratis' | 'pro'; ciclo: Ciclo }) {
         ))}
       </ul>
       {pro && acaoPro === 'em-breve' ? (
-        <div className="bg-control text-text-2 mt-auto flex min-h-13 items-center justify-center rounded-full px-5 text-center text-[15px] font-semibold">
+        <div data-plan-action className="bg-control text-text-2 mt-auto flex min-h-13 items-center justify-center rounded-full px-5 text-center text-[15px] font-semibold">
           Assinatura disponível em breve
         </div>
       ) : (
         <Link
+          data-plan-action
           to={pro ? acaoPro : planos.gratis.destino}
           className={`focus-ring mt-auto flex min-h-13 items-center justify-center rounded-full border px-5 text-center text-[15px] font-semibold transition-colors motion-reduce:transition-none ${pro ? 'border-accent bg-accent hover:bg-accent-hover text-white' : 'text-text hover:bg-surface-2 border-[#3a3b3c]'}`}
         >
@@ -185,7 +185,9 @@ function PrecoGratis() {
           {planos.gratis.sufixo}
         </span>
       </p>
-      <div className="mt-3 h-6" aria-hidden="true" />
+      <p data-plan-support className="text-text-3 mt-3 h-6 text-[13px] leading-6">
+        sem cartão
+      </p>
     </>
   );
 }
@@ -209,18 +211,11 @@ function PrecoPro({ ciclo }: { ciclo: Ciclo }) {
             {planos.pro.sufixo}
           </span>
         </p>
-        <p className="text-text-3 mt-3 h-6 text-[13px] leading-6">
-          {anual ? (
-            <>
-              {planos.pro.detalheAnual} ·{' '}
-              {formatarPreco(PRECO_PRO_ANUAL.totalAnual)}/ano ·{' '}
-              <span className="line-through">
-                {formatarPreco(PRECO_PRO_MENSAL)}
-              </span>
-            </>
-          ) : (
-            planos.pro.detalheMensal
-          )}
+        <p
+          data-plan-support
+          className="text-text-3 mt-3 h-6 text-[13px] leading-6"
+        >
+          cancele quando quiser
         </p>
       </motion.div>
     </AnimatePresence>
