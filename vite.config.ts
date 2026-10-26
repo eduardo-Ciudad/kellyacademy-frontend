@@ -25,6 +25,7 @@ export default defineConfig(({ mode }) => {
           '/repertorios',
           '/macroeixos',
           '/assinaturas',
+          '/admin',
         ].map((route) => [
           route,
           {

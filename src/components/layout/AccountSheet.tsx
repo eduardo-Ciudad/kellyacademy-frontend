@@ -1,5 +1,12 @@
 import * as Dialog from '@radix-ui/react-dialog';
-import { Crown, KeyRound, LogOut, RotateCcw, Route } from 'lucide-react';
+import {
+  Crown,
+  KeyRound,
+  LogOut,
+  RotateCcw,
+  Route,
+  Shield,
+} from 'lucide-react';
 import { useRef, useState, type PointerEvent } from 'react';
 import { SoonItem } from '@/components/layout/SoonItem';
 import { CorrecoesHojeCard } from '@/components/redacao/CorrecoesHojeCard';
@@ -8,6 +15,7 @@ import { useLogout } from '@/hooks/useLogout';
 import { useUsuario } from '@/hooks/useUsuario';
 import { Link } from 'react-router-dom';
 import { useTour } from '@/features/tour/TourProvider';
+import { useIsAdmin } from '@/hooks/useMe';
 
 export function AccountSheet({
   open,
@@ -19,6 +27,7 @@ export function AccountSheet({
   const { nome, iniciais } = useUsuario();
   const logout = useLogout();
   const { openTour } = useTour();
+  const { isAdmin } = useIsAdmin();
   const contentRef = useRef<HTMLDivElement>(null);
   const dragStartRef = useRef<number | null>(null);
   const [dragOffset, setDragOffset] = useState(0);
@@ -102,6 +111,15 @@ export function AccountSheet({
             >
               <KeyRound size={18} aria-hidden="true" /> Alterar senha
             </Link>
+            {isAdmin ? (
+              <Link
+                to="/admin"
+                onClick={() => onOpenChange(false)}
+                className="focus-ring bg-control text-text rounded-pill flex h-12 w-full items-center justify-center gap-2 text-sm font-semibold"
+              >
+                <Shield size={18} aria-hidden="true" /> Painel admin
+              </Link>
+            ) : null}
             <button
               type="button"
               onClick={() => {

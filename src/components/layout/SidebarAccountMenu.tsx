@@ -4,6 +4,7 @@ import {
   KeyRound,
   LogOut,
   RotateCcw,
+  Shield,
 } from 'lucide-react';
 import {
   useEffect,
@@ -13,6 +14,7 @@ import {
   type ReactNode,
 } from 'react';
 import { Link } from 'react-router-dom';
+import { useIsAdmin } from '@/hooks/useMe';
 
 type SidebarAccountMenuProps = {
   name: string;
@@ -29,6 +31,7 @@ export function SidebarAccountMenu({
   onLogout,
   onOpenTour,
 }: SidebarAccountMenuProps) {
+  const { isAdmin } = useIsAdmin();
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -88,22 +91,35 @@ export function SidebarAccountMenu({
             <p className="text-text-3 mt-0.5 truncate text-xs">{email}</p>
           </div>
           <div className="bg-control my-1 h-px" />
-          <MenuLink ref={setItemRef(0)} to="/planos" onClick={() => closeMenu()}>
+          <MenuLink
+            ref={setItemRef(0)}
+            to="/planos"
+            onClick={() => closeMenu()}
+          >
             <Crown size={17} aria-hidden="true" />
             <span className="flex-1">Planos</span>
             <span className="bg-control text-text-3 rounded-md px-2 py-1 text-[11px] font-semibold">
               Grátis
             </span>
           </MenuLink>
+          {isAdmin ? (
+            <MenuLink
+              ref={setItemRef(1)}
+              to="/admin"
+              onClick={() => closeMenu()}
+            >
+              <Shield size={17} aria-hidden="true" /> Painel admin
+            </MenuLink>
+          ) : null}
           <MenuLink
-            ref={setItemRef(1)}
+            ref={setItemRef(isAdmin ? 2 : 1)}
             to="/conta/senha"
             onClick={() => closeMenu()}
           >
             <KeyRound size={17} aria-hidden="true" /> Alterar senha
           </MenuLink>
           <MenuButton
-            ref={setItemRef(2)}
+            ref={setItemRef(isAdmin ? 3 : 2)}
             onClick={() => {
               closeMenu();
               window.setTimeout(onOpenTour, 0);
@@ -113,7 +129,7 @@ export function SidebarAccountMenu({
           </MenuButton>
           <div className="bg-control my-1 h-px" />
           <MenuButton
-            ref={setItemRef(3)}
+            ref={setItemRef(isAdmin ? 4 : 3)}
             onClick={() => {
               closeMenu();
               onLogout();

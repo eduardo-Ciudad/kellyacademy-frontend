@@ -6,6 +6,7 @@ import { HomeGate } from '@/components/landing/HomeGate';
 import { RepertorioSkeleton } from '@/components/repertorio/RepertorioSkeleton';
 import { AppShell } from '@/components/layout/AppShell';
 import { LazyRoute } from '@/components/routing/LazyRoute';
+import { RequireAdmin } from '@/components/routing/RequireAdmin';
 import { PublicOnlyRoute, RequireAuth } from '@/lib/auth';
 
 const CriarConta = lazy(() =>
@@ -87,6 +88,26 @@ const Planos = lazy(() =>
 const AssinaturaSucesso = lazy(() =>
   import('@/pages/AssinaturaSucesso').then((module) => ({
     default: module.AssinaturaSucesso,
+  })),
+);
+const AdminShell = lazy(() =>
+  import('@/components/admin/AdminShell').then((module) => ({
+    default: module.AdminShell,
+  })),
+);
+const AdminVisaoGeral = lazy(() =>
+  import('@/pages/admin/AdminVisaoGeral').then((module) => ({
+    default: module.AdminVisaoGeral,
+  })),
+);
+const AdminUsuarios = lazy(() =>
+  import('@/pages/admin/AdminUsuarios').then((module) => ({
+    default: module.AdminUsuarios,
+  })),
+);
+const AdminUsuarioDetalhe = lazy(() =>
+  import('@/pages/admin/AdminUsuarioDetalhe').then((module) => ({
+    default: module.AdminUsuarioDetalhe,
   })),
 );
 
@@ -177,6 +198,44 @@ export const router = createBrowserRouter([
   {
     element: <RequireAuth />,
     children: [
+      {
+        element: <RequireAdmin />,
+        children: [
+          {
+            element: (
+              <LazyRoute>
+                <AdminShell />
+              </LazyRoute>
+            ),
+            children: [
+              {
+                path: '/admin',
+                element: (
+                  <LazyRoute>
+                    <AdminVisaoGeral />
+                  </LazyRoute>
+                ),
+              },
+              {
+                path: '/admin/usuarios',
+                element: (
+                  <LazyRoute>
+                    <AdminUsuarios />
+                  </LazyRoute>
+                ),
+              },
+              {
+                path: '/admin/usuarios/:id',
+                element: (
+                  <LazyRoute>
+                    <AdminUsuarioDetalhe />
+                  </LazyRoute>
+                ),
+              },
+            ],
+          },
+        ],
+      },
       {
         element: <AppShell />,
         children: [

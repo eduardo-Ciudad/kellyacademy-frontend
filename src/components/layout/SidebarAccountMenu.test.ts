@@ -7,7 +7,16 @@ import { MemoryRouter } from 'react-router-dom';
 import { SidebarAccountMenu } from '@/components/layout/SidebarAccountMenu';
 import { nomeDoUsuario } from '@/hooks/useUsuario';
 
-afterEach(cleanup);
+const { adminState } = vi.hoisted(() => ({
+  adminState: { isAdmin: false },
+}));
+
+vi.mock('@/hooks/useMe', () => ({ useIsAdmin: () => adminState }));
+
+afterEach(() => {
+  cleanup();
+  adminState.isAdmin = false;
+});
 
 function renderMenu(
   overrides: Partial<ComponentProps<typeof SidebarAccountMenu>> = {},
@@ -21,11 +30,7 @@ function renderMenu(
     ...overrides,
   };
   render(
-    createElement(
-      MemoryRouter,
-      null,
-      createElement(SidebarAccountMenu, props),
-    ),
+    createElement(MemoryRouter, null, createElement(SidebarAccountMenu, props)),
   );
   return props;
 }
@@ -48,9 +53,7 @@ describe('SidebarAccountMenu', () => {
     expect(button.getAttribute('aria-expanded')).toBe('true');
     expect(screen.getByText('kelly@academy.com')).not.toBeNull();
     expect(
-      screen
-        .getAllByRole('menuitem')
-        .map((item) => item.textContent?.trim()),
+      screen.getAllByRole('menuitem').map((item) => item.textContent?.trim()),
     ).toEqual(['PlanosGrátis', 'Alterar senha', 'Rever tour', 'Sair']);
   });
 
@@ -76,5 +79,19 @@ describe('SidebarAccountMenu', () => {
     await user.click(screen.getByRole('button', { name: /kelly souza/i }));
     await user.click(screen.getByRole('menuitem', { name: 'Sair' }));
     expect(props.onLogout).toHaveBeenCalledOnce();
+  });
+
+  it('exibe Painel admin somente para ADMIN', async () => {
+    const user = userEvent.setup();
+    renderMenu();
+    await user.click(screen.getByRole('button', { name: /kelly souza/i }));
+    expect(screen.queryByRole('menuitem', { name: 'Painel admin' })).toBeNull();
+    cleanup();
+
+    adminState.isAdmin = true;
+    renderMenu();
+    await user.click(screen.getByRole('button', { name: /kelly souza/i }));
+    const item = screen.getByRole('menuitem', { name: 'Painel admin' });
+    expect(item.getAttribute('href')).toBe('/admin');
   });
 });
