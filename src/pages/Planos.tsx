@@ -69,60 +69,72 @@ export function Planos() {
         ))}
       </div>
 
-      <div className="mx-auto mt-6 grid max-w-[900px] gap-4 lg:grid-cols-2">
+      <div className="mx-auto mt-6 grid max-w-[900px] items-stretch gap-4 lg:grid-cols-2">
         <PlanCard
           name={planos.gratis.nome}
           description={planos.gratis.descricao}
           items={planos.gratis.itens}
-        >
-          <div className="mt-6">
+          price={
+            <div className="mt-6">
             <strong className="text-text tabular font-display text-4xl font-semibold">
               {formatarPreco(planos.gratis.preco)}
             </strong>
             <span className="text-text-3 ml-1 text-sm">
               {planos.gratis.sufixo}
             </span>
-          </div>
-          <div className="bg-control text-text-2 rounded-pill mt-6 flex min-h-11 items-center justify-center text-sm font-semibold">
-            Seu plano atual
-          </div>
-        </PlanCard>
+              <p data-plan-support className="text-text-3 mt-2 h-5 text-xs leading-5">
+                sem cartão
+              </p>
+            </div>
+          }
+          action={
+            <div className="bg-control text-text-2 rounded-pill flex min-h-11 items-center justify-center text-sm font-semibold">
+              Seu plano atual
+            </div>
+          }
+        />
 
         <PlanCard
           featured
           name={planos.pro.nome}
           description={planos.pro.descricao}
           items={planos.pro.itens}
-        >
-          <div className="mt-6">
+          price={
+            <div className="mt-6">
             <div className="flex items-end gap-1">
               <strong className="text-text tabular font-display text-4xl font-semibold">
                 {formatarPreco(precoMensal)}
               </strong>
               <span className="text-text-3 pb-1 text-sm">/mês</span>
             </div>
-            <p className="text-text-3 mt-1 min-h-5 text-xs">
-              {anual
-                ? `${formatarPreco(PRECO_PRO_ANUAL.totalAnual)}/ano · ${planos.pro.detalheAnual}`
-                : planos.pro.detalheMensal}
+              <p data-plan-support className="text-text-3 mt-2 h-5 text-xs leading-5">
+                cancele quando quiser
+                {anual ? (
+                  <span className="sr-only">
+                    {' '}
+                    {formatarPreco(PRECO_PRO_ANUAL.totalAnual)}/ano ·{' '}
+                    {planos.pro.detalheAnual}
+                  </span>
+                ) : null}
             </p>
-          </div>
-
-          {!pagamentoHabilitado ? (
-            <div className="bg-control text-text-2 rounded-pill mt-6 flex min-h-11 items-center justify-center px-4 text-center text-sm font-semibold">
+            </div>
+          }
+          action={
+            !pagamentoHabilitado ? (
+            <div className="bg-control text-text-2 rounded-pill flex min-h-11 items-center justify-center px-4 text-center text-sm font-semibold">
               Assinatura disponível em breve
             </div>
           ) : checkout.jaAssinante ? (
             <div
               role="status"
-              className="bg-success-subtle border-success-subtle-border text-success-subtle-text rounded-inner mt-6 border px-4 py-3 text-center text-sm font-semibold"
+              className="bg-success-subtle border-success-subtle-border text-success-subtle-text rounded-inner border px-4 py-3 text-center text-sm font-semibold"
             >
               Você já é assinante Pro.
             </div>
           ) : (
             <>
               <Button
-                className="mt-6 w-full"
+                className="w-full"
                 loading={checkout.isLoading}
                 onClick={() => checkout.mutate(cicloParaCheckout(ciclo))}
               >
@@ -132,8 +144,9 @@ export function Planos() {
                 Pagamento seguro pelo Stripe. Cancele quando quiser.
               </p>
             </>
-          )}
-        </PlanCard>
+            )
+          }
+        />
       </div>
     </div>
   );
@@ -144,23 +157,26 @@ function PlanCard({
   description,
   items,
   featured = false,
-  children,
+  price,
+  action,
 }: {
   name: string;
   description: string;
   items: readonly string[];
   featured?: boolean;
-  children: React.ReactNode;
+  price: React.ReactNode;
+  action: React.ReactNode;
 }) {
   return (
     <section
-      className={`rounded-card shadow-soft border p-6 lg:p-7 ${
+      data-plan-card={featured ? 'pro' : 'gratis'}
+      className={`rounded-card shadow-soft flex h-full flex-col border p-6 lg:p-7 ${
         featured
           ? 'bg-surface border-accent-outline'
           : 'bg-surface border-control'
       }`}
     >
-      <div className="flex items-center justify-between gap-3">
+      <div className="flex h-7 items-center justify-between gap-3">
         <h2 className="text-text text-2xl font-semibold tracking-[-0.02em]">
           {name}
         </h2>
@@ -173,7 +189,7 @@ function PlanCard({
       <p className="text-text-2 mt-2 min-h-12 text-sm leading-6">
         {description}
       </p>
-      {children}
+      {price}
       <ul className="border-control mt-6 space-y-3 border-t pt-6">
         {items.map((item) => (
           <li
@@ -181,7 +197,7 @@ function PlanCard({
             className="text-text-body flex gap-3 text-sm leading-5"
           >
             <Check
-              className="text-success mt-0.5 shrink-0"
+              className={`${featured ? 'text-accent-text' : 'text-text-3'} mt-0.5 shrink-0`}
               size={16}
               strokeWidth={2.5}
               aria-hidden="true"
@@ -190,6 +206,9 @@ function PlanCard({
           </li>
         ))}
       </ul>
+      <div data-plan-action className="mt-auto pt-6">
+        {action}
+      </div>
     </section>
   );
 }
