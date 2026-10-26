@@ -7,10 +7,6 @@ type AnalyticsEligibility = {
   hostname: string;
 };
 
-type GoogleAnalyticsWindow = Window & {
-  [key: `ga-disable-${string}`]: boolean | undefined;
-};
-
 const ANALYTICS_SCRIPT_ATTRIBUTE = 'data-kelly-google-analytics';
 
 export function shouldEnableAnalytics({
@@ -34,32 +30,31 @@ export function gaCookieNames(measurementId: string) {
 export function loadGoogleAnalytics(
   measurementId: string,
   doc: Document = document,
-  win: Window = window,
 ) {
-  const analyticsWindow = win as GoogleAnalyticsWindow;
-  analyticsWindow[`ga-disable-${measurementId}`] = false;
-  win.dataLayer ??= [];
-  win.gtag ??= (...args: GoogleTagArguments) => {
-    win.dataLayer?.push(args);
+  window[`ga-disable-${measurementId}`] = false;
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function gtag() {
+    // eslint-disable-next-line prefer-rest-params
+    window.dataLayer.push(arguments);
   };
 
   const existingScript = doc.querySelector<HTMLScriptElement>(
     `script[${ANALYTICS_SCRIPT_ATTRIBUTE}="${measurementId}"]`,
   );
   if (existingScript) {
-    win.gtag('consent', 'update', { analytics_storage: 'granted' });
+    window.gtag('consent', 'update', { analytics_storage: 'granted' });
     return existingScript;
   }
 
-  win.gtag('consent', 'default', {
+  window.gtag('consent', 'default', {
     ad_storage: 'denied',
     ad_user_data: 'denied',
     ad_personalization: 'denied',
     analytics_storage: 'denied',
   });
-  win.gtag('consent', 'update', { analytics_storage: 'granted' });
-  win.gtag('js', new Date());
-  win.gtag('config', measurementId);
+  window.gtag('consent', 'update', { analytics_storage: 'granted' });
+  window.gtag('js', new Date());
+  window.gtag('config', measurementId);
 
   const script = doc.createElement('script');
   script.async = true;
@@ -72,15 +67,13 @@ export function loadGoogleAnalytics(
 export function disableGoogleAnalytics(
   measurementId: string,
   doc: Document = document,
-  win: Window = window,
 ) {
   if (!measurementId.trim()) return;
 
-  if (win.gtag) {
-    win.gtag('consent', 'update', { analytics_storage: 'denied' });
+  if (window.gtag) {
+    window.gtag('consent', 'update', { analytics_storage: 'denied' });
   }
-  const analyticsWindow = win as GoogleAnalyticsWindow;
-  analyticsWindow[`ga-disable-${measurementId}`] = true;
+  window[`ga-disable-${measurementId}`] = true;
 
   const expired = 'Thu, 01 Jan 1970 00:00:00 GMT';
   gaCookieNames(measurementId).forEach((name) => {
