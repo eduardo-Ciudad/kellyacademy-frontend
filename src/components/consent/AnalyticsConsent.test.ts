@@ -4,7 +4,11 @@ import { act, createElement } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { AnalyticsConsent } from '@/components/consent/AnalyticsConsent';
-import { CONSENT_STORAGE_KEY, openCookiePreferences } from '@/lib/consent';
+import {
+  CONSENT_STORAGE_KEY,
+  openCookiePreferences,
+  writeConsent,
+} from '@/lib/consent';
 
 Object.assign(globalThis, { IS_REACT_ACT_ENVIRONMENT: true });
 
@@ -23,6 +27,14 @@ function storedAnalytics() {
     : null;
 }
 
+function expectAnalyticsNotInitialized() {
+  expect(window.dataLayer).toBeUndefined();
+  expect(window.gtag).toBeUndefined();
+  expect(
+    document.querySelector('script[src*="googletagmanager.com"]'),
+  ).toBeNull();
+}
+
 describe('AnalyticsConsent', () => {
   let container: HTMLDivElement;
   let root: Root;
@@ -30,6 +42,8 @@ describe('AnalyticsConsent', () => {
   beforeEach(() => {
     localStorage.clear();
     document.head.innerHTML = '';
+    Reflect.deleteProperty(window, 'dataLayer');
+    Reflect.deleteProperty(window, 'gtag');
     container = document.createElement('div');
     document.body.append(container);
     root = createRoot(container);
@@ -39,6 +53,27 @@ describe('AnalyticsConsent', () => {
     act(() => root.unmount());
     container.remove();
     delete document.documentElement.dataset.cookieBannerVisible;
+  });
+
+  it('não inicializa nem carrega GA com o storage de consentimento vazio', () => {
+    act(() => root.render(createElement(AnalyticsConsent)));
+
+    expect(container.querySelector('[role="region"]')).not.toBeNull();
+    expectAnalyticsNotInitialized();
+  });
+
+  it('não inicializa nem carrega GA com consentimento recusado', () => {
+    writeConsent(
+      localStorage,
+      'denied',
+      new Date('2026-10-16T12:00:00.000Z'),
+    );
+
+    act(() => root.render(createElement(AnalyticsConsent)));
+
+    expect(container.querySelector('[role="region"]')).toBeNull();
+    expect(storedAnalytics()).toBe('denied');
+    expectAnalyticsNotInitialized();
   });
 
   it('permite recusar, personalizar e cancelar sem carregar GA em desenvolvimento', () => {
