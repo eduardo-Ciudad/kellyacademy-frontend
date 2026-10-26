@@ -2,7 +2,8 @@
 export const chartTheme = {
   accent: '#2F5BFF',
   danger: '#F3727F',
-  grid: '#1F2130',
+  grid: '#232534',
+  average: '#6B7088',
   surface: '#12131B',
   surface2: '#1F2130',
   text: '#E6E8EF',
