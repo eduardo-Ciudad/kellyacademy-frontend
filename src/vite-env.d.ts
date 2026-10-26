@@ -10,10 +10,12 @@ type GoogleConsentSettings = {
 type GoogleTagArguments =
   | ['consent', 'default' | 'update', GoogleConsentSettings]
   | ['js', Date]
-  | ['config', string];
+  | ['config', string]
+  | ['event', string, Record<string, unknown>?];
 
 interface Window {
-  dataLayer?: GoogleTagArguments[];
+  [key: `ga-disable-${string}`]: boolean | undefined;
+  dataLayer: ArrayLike<unknown>[];
   gtag?: (...args: GoogleTagArguments) => void;
 }
 
