@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
+import { AuthRouteFallback } from '@/components/auth/AuthRouteFallback';
 import { EvolucaoSkeleton } from '@/components/evolucao/EvolucaoSkeleton';
 import { HomeGate } from '@/components/landing/HomeGate';
 import { RepertorioSkeleton } from '@/components/repertorio/RepertorioSkeleton';
@@ -131,25 +132,25 @@ export const router = createBrowserRouter([
   {
     path: '/verificar-email',
     element: (
-      <LazyRoute>
+      <Suspense fallback={<AuthRouteFallback variant="login" />}>
         <VerificarEmail />
-      </LazyRoute>
+      </Suspense>
     ),
   },
   {
     path: '/esqueci-senha',
     element: (
-      <LazyRoute>
+      <Suspense fallback={<AuthRouteFallback variant="login" />}>
         <EsqueciSenha />
-      </LazyRoute>
+      </Suspense>
     ),
   },
   {
     path: '/redefinir-senha',
     element: (
-      <LazyRoute>
+      <Suspense fallback={<AuthRouteFallback variant="login" />}>
         <RedefinirSenha />
-      </LazyRoute>
+      </Suspense>
     ),
   },
   {
@@ -158,17 +159,17 @@ export const router = createBrowserRouter([
       {
         path: '/entrar',
         element: (
-          <LazyRoute>
+          <Suspense fallback={<AuthRouteFallback variant="login" />}>
             <Entrar />
-          </LazyRoute>
+          </Suspense>
         ),
       },
       {
         path: '/criar-conta',
         element: (
-          <LazyRoute>
+          <Suspense fallback={<AuthRouteFallback variant="cadastro" />}>
             <CriarConta />
-          </LazyRoute>
+          </Suspense>
         ),
       },
     ],
