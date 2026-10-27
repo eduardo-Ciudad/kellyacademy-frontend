@@ -7,8 +7,8 @@ import {
   type KeyboardEvent,
   type ReactNode,
 } from 'react';
-import { Link } from 'react-router-dom';
 import { JuliaMarca } from '@/components/julia/JuliaMarca';
+import { ConvitePro } from '@/components/planos/ConvitePro';
 import {
   useEnviarPerguntaJulia,
   useJuliaConversa,
@@ -42,19 +42,21 @@ export function JuliaChat({
   aberto,
   foco,
   onFechar,
+  bloqueado = false,
 }: {
   redacao: RedacaoResponse;
   avaliacao: Avaliacao;
   aberto: boolean;
   foco: FocoJulia;
   onFechar: () => void;
+  bloqueado?: boolean;
 }) {
   const desktop = useMediaQuery('(min-width: 60rem)');
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const finalRef = useRef<HTMLDivElement>(null);
   const [pergunta, setPergunta] = useState('');
   const [perguntaPendente, setPerguntaPendente] = useState<string | null>(null);
-  const conversa = useJuliaConversa(redacao.id, aberto);
+  const conversa = useJuliaConversa(redacao.id, aberto && !bloqueado);
   const enviar = useEnviarPerguntaJulia(redacao.id);
   const resetarEnvio = enviar.reset;
 
@@ -140,12 +142,8 @@ export function JuliaChat({
         className="min-h-0 flex-1 space-y-3 overflow-y-auto px-4 py-4"
         aria-live="polite"
       >
-        {plano ? (
-          <EstadoBloqueado texto={mensagemDeErroJulia(erro)}>
-            <Link className="text-accent-text font-semibold" to="/planos">
-              Conhecer o plano Pro
-            </Link>
-          </EstadoBloqueado>
+        {bloqueado || plano ? (
+          <ConvitePro recurso="JULIA" variante="sheet" />
         ) : semCorrecao ? (
           <EstadoBloqueado texto={mensagemDeErroJulia(erro)} />
         ) : (
@@ -235,7 +233,7 @@ export function JuliaChat({
         <div ref={finalRef} />
       </div>
 
-      {!plano && !semCorrecao && (
+      {!bloqueado && !plano && !semCorrecao && (
         <footer className="border-border-subtle shrink-0 border-t px-4 pt-3 pb-[calc(12px+env(safe-area-inset-bottom))] lg:pb-3">
           <div className="flex items-end gap-2">
             <label className="sr-only" htmlFor="pergunta-julia">

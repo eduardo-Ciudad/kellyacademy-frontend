@@ -7,6 +7,7 @@ import {
   Check,
   ChevronDown,
   ChevronUp,
+  Lock,
   RotateCcw,
 } from 'lucide-react';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
@@ -19,9 +20,11 @@ import { Skeleton } from '@/components/ui/Skeleton';
 import { ScoreRing } from '@/components/ui/ScoreRing';
 import { useTour } from '@/features/tour/TourProvider';
 import { useRedacao } from '@/hooks/useRedacao';
+import { usePlano } from '@/hooks/usePlano';
 import { ApiError } from '@/lib/api';
 import { competencias } from '@/lib/competencias';
 import {
+  acessoJulia,
   deveIniciarTourJulia,
   juliaHabilitada,
   perguntaDaCompetencia,
@@ -292,6 +295,10 @@ function ResultadoAvaliado({
   avaliacao: Avaliacao;
 }) {
   const { screen, tourId, startTour, finish, isTourCompleted } = useTour();
+  const plano = usePlano();
+  const acesso = acessoJulia(plano.isLoading, plano.libera('JULIA'));
+  const juliaBloqueada = acesso.bloqueada;
+  const juliaLiberada = acesso.liberada;
   const [juliaAberta, setJuliaAberta] = useState(false);
   const [focoJulia, setFocoJulia] = useState<FocoJulia>(null);
   const ultimoGatilhoJulia = useRef<HTMLElement | null>(null);
@@ -327,11 +334,19 @@ function ResultadoAvaliado({
       concluido: isTourCompleted('julia'),
       chatAberto: juliaAberta,
       tourAtivo: screen === 'welcome' || screen === 'steps',
+      ehPro: juliaLiberada,
     });
     if (!iniciar) return;
     const timer = window.setTimeout(() => startTour('julia'), 600);
     return () => window.clearTimeout(timer);
-  }, [avaliacao, isTourCompleted, juliaAberta, screen, startTour]);
+  }, [
+    avaliacao,
+    isTourCompleted,
+    juliaAberta,
+    juliaLiberada,
+    screen,
+    startTour,
+  ]);
 
   function abrirJulia(gatilho: HTMLElement, foco: FocoJulia) {
     if (tourId === 'julia' && screen === 'steps') finish();
@@ -416,6 +431,8 @@ function ResultadoAvaliado({
                   item={item}
                   priority={item.numero === priority}
                   tourTarget={item.numero === juliaTarget}
+                  juliaBloqueada={juliaBloqueada}
+                  juliaCarregando={plano.isLoading}
                   juliaAtiva={
                     focoJulia?.competencia.numero === item.numero && juliaAberta
                   }
@@ -470,13 +487,16 @@ function ResultadoAvaliado({
       )}
       {juliaHabilitada && (
         <JuliaRouteGate>
-          <JuliaChat
-            redacao={redacao}
-            avaliacao={avaliacao}
-            aberto={juliaAberta}
-            foco={focoJulia}
-            onFechar={fecharJulia}
-          />
+          {(juliaLiberada || juliaBloqueada) && (
+            <JuliaChat
+              redacao={redacao}
+              avaliacao={avaliacao}
+              aberto={juliaAberta}
+              foco={focoJulia}
+              onFechar={fecharJulia}
+              bloqueado={juliaBloqueada}
+            />
+          )}
           <div
             className={cn(
               'fixed right-6 bottom-6 z-30 flex items-center gap-2',
@@ -489,8 +509,9 @@ function ResultadoAvaliado({
               </span>
             )}
             <button
-              data-tour="julia-botao"
+              data-tour={juliaLiberada ? 'julia-botao' : undefined}
               type="button"
+              disabled={plano.isLoading}
               onClick={(event) => {
                 if (juliaAberta) fecharJulia();
                 else abrirJulia(event.currentTarget, null);
@@ -513,6 +534,12 @@ function ResultadoAvaliado({
                 tamanho={36}
                 className="hidden lg:block"
               />
+              {juliaBloqueada && (
+                <span className="bg-surface border-bg absolute -top-1 -right-1 flex size-6 items-center justify-center rounded-full border-2">
+                  <Lock size={12} aria-hidden="true" />
+                  <span className="sr-only">Recurso do plano Pro</span>
+                </span>
+              )}
               {juliaAberta && (
                 <span
                   className="bg-control border-bg absolute -top-1 -right-1 flex size-6 items-center justify-center rounded-full border-2"
@@ -573,12 +600,16 @@ function CompetenceCard({
   item,
   priority,
   tourTarget,
+  juliaBloqueada,
+  juliaCarregando,
   juliaAtiva,
   onPerguntar,
 }: {
   item: Competencia;
   priority: boolean;
   tourTarget: boolean;
+  juliaBloqueada: boolean;
+  juliaCarregando: boolean;
   juliaAtiva: boolean;
   onPerguntar: (gatilho: HTMLButtonElement) => void;
 }) {
@@ -611,8 +642,11 @@ function CompetenceCard({
         )}
         {juliaHabilitada && (
           <button
-            data-tour={tourTarget ? 'julia-competencia' : undefined}
+            data-tour={
+              tourTarget && !juliaBloqueada ? 'julia-competencia' : undefined
+            }
             type="button"
+            disabled={juliaCarregando}
             onClick={(event) => onPerguntar(event.currentTarget)}
             aria-pressed={juliaAtiva}
             className={cn(
@@ -623,6 +657,10 @@ function CompetenceCard({
           >
             <JuliaMarca variante="principal" tamanho={28} />
             Perguntar à Júlia
+            {juliaBloqueada && <Lock size={13} aria-hidden="true" />}
+            {juliaBloqueada && (
+              <span className="sr-only">Recurso do plano Pro</span>
+            )}
           </button>
         )}
         <span className="tabular text-[15px] font-bold lg:text-base">
@@ -654,8 +692,11 @@ function CompetenceCard({
       )}
       {juliaHabilitada && (
         <button
-          data-tour={tourTarget ? 'julia-competencia' : undefined}
+          data-tour={
+            tourTarget && !juliaBloqueada ? 'julia-competencia' : undefined
+          }
           type="button"
+          disabled={juliaCarregando}
           onClick={(event) => onPerguntar(event.currentTarget)}
           aria-pressed={juliaAtiva}
           aria-label={
@@ -670,6 +711,10 @@ function CompetenceCard({
         >
           <JuliaMarca variante="principal" tamanho={priority ? 26 : 28} />
           {priority && `Perguntar à Júlia sobre a C${item.numero}`}
+          {juliaBloqueada && <Lock size={13} aria-hidden="true" />}
+          {juliaBloqueada && (
+            <span className="sr-only">Recurso do plano Pro</span>
+          )}
         </button>
       )}
     </article>

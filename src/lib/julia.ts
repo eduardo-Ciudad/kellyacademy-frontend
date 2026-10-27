@@ -1,4 +1,4 @@
-import { ApiError } from '@/lib/api';
+import { ApiError, recursoProDoErro } from '@/lib/api';
 import type {
   Avaliacao,
   Competencia,
@@ -10,6 +10,13 @@ export const juliaHabilitada = import.meta.env.VITE_JULIA_HABILITADA === 'true';
 export const RESULTADO_CONTENT_CLASS =
   'flex flex-col gap-4 px-4 pt-4 pb-28 lg:gap-5 lg:px-0 lg:pt-0 lg:pb-28';
 
+export function acessoJulia(isLoading: boolean, libera: boolean) {
+  return {
+    bloqueada: !isLoading && !libera,
+    liberada: !isLoading && libera,
+  };
+}
+
 export function rotaTemBotaoJulia(pathname: string) {
   return /^\/redacoes\/[^/]+\/?$/.test(pathname);
 }
@@ -20,15 +27,18 @@ export function deveIniciarTourJulia({
   concluido,
   chatAberto,
   tourAtivo,
+  ehPro,
 }: {
   habilitada: boolean;
   avaliacao: Avaliacao | null | undefined;
   concluido: boolean;
   chatAberto: boolean;
   tourAtivo: boolean;
+  ehPro: boolean;
 }) {
   return (
     habilitada &&
+    ehPro &&
     Boolean(avaliacao) &&
     !avaliacao?.anulada &&
     !concluido &&
@@ -68,7 +78,7 @@ export function mensagemDeErroJulia(erro: unknown) {
       return 'Você chegou ao limite de perguntas à Júlia hoje. Volte amanhã.';
     if (erro.codigo === 'JULIA_LIMITE_GLOBAL')
       return 'A Júlia atingiu o limite de atendimentos de hoje. Tente novamente amanhã.';
-    if (erro.codigo === 'JULIA_PLANO')
+    if (recursoProDoErro(erro) === 'JULIA')
       return 'A Júlia está disponível no plano Pro.';
     if (erro.codigo === 'JULIA_SEM_CORRECAO')
       return 'A Júlia só explica redações que já foram corrigidas.';
@@ -88,7 +98,7 @@ export type TipoErroJulia =
 export function tipoErroJulia(erro: unknown): TipoErroJulia {
   if (!(erro instanceof ApiError)) return 'outro';
   if (erro.codigo?.startsWith('JULIA_LIMITE')) return 'limite';
-  if (erro.codigo === 'JULIA_PLANO') return 'plano';
+  if (recursoProDoErro(erro) === 'JULIA') return 'plano';
   if (erro.codigo === 'JULIA_SEM_CORRECAO') return 'semCorrecao';
   if (
     erro.codigo === 'JULIA_INDISPONIVEL' ||

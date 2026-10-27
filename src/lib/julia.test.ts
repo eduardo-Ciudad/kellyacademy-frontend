@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { ApiError } from '@/lib/api';
 import {
+  acessoJulia,
   deveIniciarTourJulia,
   formatarRespostaJulia,
   limiteAtingido,
@@ -36,6 +37,26 @@ const avaliacao = (notas: Competencia['nota'][]): Avaliacao => ({
   avaliadoEm: '',
 });
 
+describe('acesso à Júlia', () => {
+  it('enquanto carrega não considera a Júlia bloqueada nem liberada', () => {
+    expect(acessoJulia(true, false)).toEqual({
+      bloqueada: false,
+      liberada: false,
+    });
+  });
+
+  it('distingue o acesso liberado do bloqueado depois do carregamento', () => {
+    expect(acessoJulia(false, true)).toEqual({
+      bloqueada: false,
+      liberada: true,
+    });
+    expect(acessoJulia(false, false)).toEqual({
+      bloqueada: true,
+      liberada: false,
+    });
+  });
+});
+
 describe('tour da Júlia', () => {
   const corrigida = avaliacao([120, 160, 200, 80, 40]);
   const base = {
@@ -44,6 +65,7 @@ describe('tour da Júlia', () => {
     concluido: false,
     chatAberto: false,
     tourAtivo: false,
+    ehPro: true,
   };
 
   it('inicia quando todas as condições são atendidas', () => {
@@ -57,6 +79,7 @@ describe('tour da Júlia', () => {
     ['já concluído', { concluido: true }],
     ['chat aberto', { chatAberto: true }],
     ['outro tour ativo', { tourAtivo: true }],
+    ['plano Grátis', { ehPro: false }],
   ])('não inicia com %s', (_cenario, alteracao) => {
     expect(deveIniciarTourJulia({ ...base, ...alteracao })).toBe(false);
   });
@@ -95,7 +118,8 @@ describe('mensagens de erro', () => {
     status: number,
     codigo?: string,
     code: 'HTTP' | 'TIMEOUT' | 'NETWORK' = 'HTTP',
-  ) => new ApiError({ status, codigo, code, detail: '' });
+    recurso?: 'JULIA',
+  ) => new ApiError({ status, codigo, code, detail: '', recurso });
 
   it.each([
     [
@@ -110,7 +134,10 @@ describe('mensagens de erro', () => {
       erro(503, 'JULIA_LIMITE_GLOBAL'),
       'A Júlia atingiu o limite de atendimentos de hoje. Tente novamente amanhã.',
     ],
-    [erro(403, 'JULIA_PLANO'), 'A Júlia está disponível no plano Pro.'],
+    [
+      erro(403, 'PLANO_PRO_NECESSARIO', 'HTTP', 'JULIA'),
+      'A Júlia está disponível no plano Pro.',
+    ],
     [
       erro(409, 'JULIA_SEM_CORRECAO'),
       'A Júlia só explica redações que já foram corrigidas.',
@@ -139,13 +166,15 @@ describe('tipo de erro da Júlia', () => {
     status: number,
     codigo?: string,
     code: 'HTTP' | 'TIMEOUT' | 'NETWORK' = 'HTTP',
-  ) => new ApiError({ status, codigo, code, detail: '' });
+    recurso?: 'JULIA',
+  ) => new ApiError({ status, codigo, code, detail: '', recurso });
 
   it.each([
     [erro(503, 'JULIA_LIMITE_GLOBAL'), 'limite'],
     [erro(503, 'JULIA_INDISPONIVEL'), 'indisponivel'],
     [erro(503), 'indisponivel'],
     [erro(409, 'JULIA_SEM_CORRECAO'), 'semCorrecao'],
+    [erro(403, 'PLANO_PRO_NECESSARIO', 'HTTP', 'JULIA'), 'plano'],
     [erro(409), 'outro'],
     [erro(0, undefined, 'TIMEOUT'), 'indisponivel'],
     [erro(0, undefined, 'NETWORK'), 'indisponivel'],
