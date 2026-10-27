@@ -3,6 +3,7 @@ import type {
   MotivoImagemInvalida,
   ProblemDetail,
   RecursoIA,
+  RecursoPro,
 } from '@/types/api';
 
 const DEFAULT_TIMEOUT_MS = 20_000;
@@ -35,7 +36,7 @@ export class ApiError extends Error {
   erros?: Record<string, string | string[]>;
   retryAfter?: number;
   limite?: number;
-  recurso?: RecursoIA;
+  recurso?: RecursoIA | RecursoPro;
   motivo?: MotivoImagemInvalida;
 
   constructor(options: {
@@ -46,7 +47,7 @@ export class ApiError extends Error {
     erros?: Record<string, string | string[]>;
     retryAfter?: number;
     limite?: number;
-    recurso?: RecursoIA;
+    recurso?: RecursoIA | RecursoPro;
     motivo?: MotivoImagemInvalida;
   }) {
     super(options.detail);
@@ -61,6 +62,19 @@ export class ApiError extends Error {
     this.recurso = options.recurso;
     this.motivo = options.motivo;
   }
+}
+
+export function recursoProDoErro(erro: unknown): RecursoPro | null {
+  if (
+    erro instanceof ApiError &&
+    erro.status === 403 &&
+    erro.codigo === 'PLANO_PRO_NECESSARIO' &&
+    (erro.recurso === 'JULIA' ||
+      erro.recurso === 'TEMAS_POSSIVEIS' ||
+      erro.recurso === 'REPERTORIO_COMPLETO')
+  )
+    return erro.recurso;
+  return null;
 }
 
 function fallbackMessage(status: number, isAuthRoute: boolean) {

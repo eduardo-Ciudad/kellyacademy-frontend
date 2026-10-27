@@ -1,4 +1,15 @@
 export type RecursoIA = 'CORRECAO' | 'TRANSCRICAO';
+export type RecursoPro = 'JULIA' | 'TEMAS_POSSIVEIS' | 'REPERTORIO_COMPLETO';
+export type PlanoUsuario = {
+  plano: 'GRATIS' | 'PRO';
+  limites: { correcoesPorDia: number; transcricoesPorDia: number };
+  recursos: RecursoPro[];
+  assinatura: {
+    ciclo: 'MENSAL' | 'ANUAL';
+    periodoAtualFim: string;
+    cancelarNoFimDoPeriodo: boolean;
+  } | null;
+};
 export type MotivoImagemInvalida =
   'VAZIA' | 'GRANDE_DEMAIS' | 'TIPO_INVALIDO' | 'QUANTIDADE_INVALIDA';
 
@@ -10,7 +21,7 @@ export type ProblemDetail = {
   instance?: string;
   erros?: Record<string, string | string[]>;
   limite?: number;
-  recurso?: RecursoIA;
+  recurso?: RecursoIA | RecursoPro;
   motivo?: MotivoImagemInvalida;
 };
 
@@ -278,4 +289,5 @@ export type Pagina<T> = {
   totalItens: number;
   totalPaginas: number;
   temProxima: boolean;
+  limitadoAoPlano?: boolean;
 };
