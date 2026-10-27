@@ -3,10 +3,11 @@ import { RotateCcw, X } from 'lucide-react';
 import type { RefObject, ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { RepertorioDetalhe } from '@/components/repertorio/RepertorioDetalhe';
+import { ConvitePro } from '@/components/planos/ConvitePro';
 import { Button } from '@/components/ui/Button';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { useRepertorio } from '@/hooks/useRepertorios';
-import { ApiError } from '@/lib/api';
+import { ApiError, recursoProDoErro } from '@/lib/api';
 import {
   caminhoListaRepertorio,
   detalheRepertorioAberto,
@@ -30,8 +31,11 @@ export function RepertorioDetalheSheet({
   };
   const notFound =
     detalhe.error instanceof ApiError && detalhe.error.status === 404;
+  const bloqueado = recursoProDoErro(detalhe.error) === 'REPERTORIO_COMPLETO';
   const conteudo = detalhe.isLoading ? (
     <DetalheSkeleton />
+  ) : bloqueado ? (
+    <ConvitePro recurso="REPERTORIO_COMPLETO" variante="sheet" />
   ) : detalhe.isError ? (
     <EstadoErro
       notFound={notFound}
@@ -110,7 +114,7 @@ function EstadoErro({
 }) {
   return (
     <div className="py-10 text-center">
-          <h2 className="text-text text-lg font-normal">
+      <h2 className="text-text text-lg font-normal">
         {notFound
           ? 'Repertório não encontrado.'
           : 'Não foi possível carregar o repertório.'}

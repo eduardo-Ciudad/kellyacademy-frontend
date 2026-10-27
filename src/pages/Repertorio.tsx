@@ -1,6 +1,6 @@
 import { RotateCcw, Search, X } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { toast } from 'sonner';
 import { AccountButton } from '@/components/layout/AccountButton';
 import { FiltrosRepertorio } from '@/components/repertorio/FiltrosRepertorio';
@@ -41,6 +41,8 @@ export function Repertorio() {
   const itens =
     repertoriosQuery.data?.pages.flatMap((pagina) => pagina.itens) ?? [];
   const total = repertoriosQuery.data?.pages[0]?.totalItens;
+  const limitadoAoPlano =
+    repertoriosQuery.data?.pages[0]?.limitadoAoPlano === true;
 
   useEffect(() => {
     setBusca((atual) =>
@@ -85,7 +87,7 @@ export function Repertorio() {
       <header>
         <div className="flex items-start gap-3">
           <div className="min-w-0 flex-1">
-          <h1 className="text-text text-[22px] font-normal tracking-[-0.02em] lg:text-[28px]">
+            <h1 className="text-text text-[22px] font-normal tracking-[-0.02em] lg:text-[28px]">
               Repertório
             </h1>
             <p className="text-text-2 mt-1.5 text-sm leading-relaxed lg:max-w-3xl lg:text-[15px]">
@@ -150,13 +152,22 @@ export function Repertorio() {
         onClear={limparFiltros}
       />
 
+      {limitadoAoPlano && (
+        <div className="bg-accent-tint border-accent-outline text-text-body rounded-inner mt-4 border px-4 py-3 text-sm leading-6">
+          No plano Grátis você vê um repertório por problema social.{' '}
+          <Link to="/planos" className="text-accent-text font-semibold">
+            Liberar todos com o Pro
+          </Link>
+        </div>
+      )}
+
       <div>
         <div className="min-w-0">
           {repertoriosQuery.isLoading ? (
             <RepertorioSkeleton />
           ) : repertoriosQuery.isError && itens.length === 0 ? (
             <div className="bg-surface rounded-card mt-5 p-8 text-center">
-        <h2 className="text-text text-lg font-normal">
+              <h2 className="text-text text-lg font-normal">
                 Não foi possível carregar os repertórios
               </h2>
               <Button
