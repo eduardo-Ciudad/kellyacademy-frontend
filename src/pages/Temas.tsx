@@ -2,6 +2,7 @@ import {
   ArrowLeft,
   ArrowRight,
   ChevronRight,
+  Lock,
   RotateCcw,
   Search,
 } from 'lucide-react';
@@ -13,6 +14,7 @@ import { Skeleton } from '@/components/ui/Skeleton';
 import { SparkIcon } from '@/components/ui/SparkIcon';
 import { useRedacoes } from '@/hooks/useRedacoes';
 import { useTemas } from '@/hooks/useTemas';
+import { usePlano } from '@/hooks/usePlano';
 import type { ResumoRedacao, Tema } from '@/types/api';
 
 type Filter = 'todos' | 'nao-praticados' | 'praticados';
@@ -25,6 +27,7 @@ function normalize(value: string) {
 }
 
 export function Temas() {
+  const plano = usePlano();
   const temasQuery = useTemas();
   const redacoesQuery = useRedacoes();
   const [search, setSearch] = useState('');
@@ -74,7 +77,7 @@ export function Temas() {
             <ArrowLeft size={18} />
           </Link>
           <div>
-          <h1 className="text-text text-[22px] font-normal tracking-[-0.02em] lg:text-[28px]">
+            <h1 className="text-text text-[22px] font-normal tracking-[-0.02em] lg:text-[28px]">
               Escolha um tema
             </h1>
             <p className="text-text-2 mt-1.5 hidden text-[15px] lg:block">
@@ -94,6 +97,12 @@ export function Temas() {
           <span className="min-w-0 flex-1">
             <span className="block text-base font-bold lg:text-lg">
               Possíveis temas do ENEM 2026
+              {!plano.isLoading && !plano.libera('TEMAS_POSSIVEIS') && (
+                <span className="bg-surface text-accent-text rounded-pill ml-2 inline-flex items-center gap-1 px-2 py-0.5 align-middle text-[11px] font-bold">
+                  <Lock size={11} aria-hidden="true" /> Pro
+                  <span className="sr-only">Recurso do plano Pro</span>
+                </span>
+              )}
             </span>
             <span className="text-text-body mt-0.5 block text-[13px] leading-5 lg:text-sm lg:leading-[1.5]">
               <span className="hidden lg:inline">
@@ -166,7 +175,7 @@ export function Temas() {
         <TemasSkeleton />
       ) : hasError ? (
         <div className="bg-surface rounded-card mx-5 mt-4 p-8 text-center lg:mx-0 lg:mt-6">
-        <h2 className="text-text text-lg font-normal">
+          <h2 className="text-text text-lg font-normal">
             Não foi possível carregar os temas
           </h2>
           <Button onClick={refetch} variant="secondary" className="mt-5">

@@ -2,9 +2,12 @@ import { ArrowLeft, Info, RotateCcw } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { TemaPossivelCard } from '@/components/temas/TemaPossivelCard';
+import { ConvitePro } from '@/components/planos/ConvitePro';
 import { Button } from '@/components/ui/Button';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { useTemasPossiveis } from '@/hooks/useTemasPossiveis';
+import { usePlano } from '@/hooks/usePlano';
+import { recursoProDoErro } from '@/lib/api';
 import type { ForcaEvidencia } from '@/types/api';
 
 const grupos: Array<{
@@ -18,7 +21,10 @@ const grupos: Array<{
 ];
 
 export function TemasPossiveis() {
-  const query = useTemasPossiveis();
+  const plano = usePlano();
+  const liberado = plano.libera('TEMAS_POSSIVEIS');
+  const query = useTemasPossiveis(!plano.isLoading && liberado);
+  const [bloqueadoPorErro, setBloqueadoPorErro] = useState(false);
   const [abertoId, setAbertoId] = useState<string | null>(null);
   const temas = query.data ?? [];
   const adicionados = temas.filter((tema) => tema.adicionado).length;
@@ -40,7 +46,7 @@ export function TemasPossiveis() {
 
       <header className="mt-4 flex items-end justify-between gap-6 lg:mt-3">
         <div>
-        <h1 className="text-text text-[24px] leading-tight font-normal tracking-[-0.02em] lg:text-[28px]">
+          <h1 className="text-text text-[24px] leading-tight font-normal tracking-[-0.02em] lg:text-[28px]">
             Possíveis temas do ENEM 2026
           </h1>
           <p className="text-text-2 mt-2 max-w-[680px] text-sm leading-[1.55] lg:text-[15px]">
@@ -57,33 +63,41 @@ export function TemasPossiveis() {
         </span>
       </header>
 
-      <div
-        role="note"
-        className="bg-surface mt-5 flex items-start gap-3 rounded-2xl px-4 py-3.5 lg:px-[18px]"
-      >
-        <Info
-          className="text-text-2 mt-px shrink-0"
-          size={20}
-          aria-hidden="true"
-        />
-        <p className="text-text-body text-sm leading-[1.55]">
-          <span className="lg:hidden">
-            Isto não é uma previsão. A força mostra apenas o quanto as
-            evidências apontam para cada recorte.
-          </span>
-          <span className="hidden lg:inline">
-            Isto não é uma previsão de que algum tema vai cair. A força indica o
-            quanto as evidências apontam para cada recorte. Treinar eixos
-            diferentes é o que prepara você para qualquer tema.
-          </span>
-        </p>
-      </div>
+      {!plano.isLoading && liberado && !bloqueadoPorErro && (
+        <div
+          role="note"
+          className="bg-surface mt-5 flex items-start gap-3 rounded-2xl px-4 py-3.5 lg:px-[18px]"
+        >
+          <Info
+            className="text-text-2 mt-px shrink-0"
+            size={20}
+            aria-hidden="true"
+          />
+          <p className="text-text-body text-sm leading-[1.55]">
+            <span className="lg:hidden">
+              Isto não é uma previsão. A força mostra apenas o quanto as
+              evidências apontam para cada recorte.
+            </span>
+            <span className="hidden lg:inline">
+              Isto não é uma previsão de que algum tema vai cair. A força indica
+              o quanto as evidências apontam para cada recorte. Treinar eixos
+              diferentes é o que prepara você para qualquer tema.
+            </span>
+          </p>
+        </div>
+      )}
 
-      {query.isLoading ? (
+      {plano.isLoading ? null : !liberado ||
+        bloqueadoPorErro ||
+        recursoProDoErro(query.error) === 'TEMAS_POSSIVEIS' ? (
+        <div className="mt-6">
+          <ConvitePro recurso="TEMAS_POSSIVEIS" />
+        </div>
+      ) : query.isLoading ? (
         <TemasPossiveisSkeleton />
       ) : query.isError ? (
         <div className="bg-surface rounded-card mt-6 p-8 text-center">
-        <h2 className="text-text text-lg font-normal">
+          <h2 className="text-text text-lg font-normal">
             Não foi possível carregar os temas possíveis
           </h2>
           <Button
@@ -106,7 +120,7 @@ export function TemasPossiveis() {
                 <section key={grupo.forca} className="flex flex-col gap-3">
                   <div className="flex items-center gap-2.5">
                     <SinalForca acesas={grupo.barras} />
-        <h2 className="text-text text-lg font-normal tracking-[-0.01em]">
+                    <h2 className="text-text text-lg font-normal tracking-[-0.01em]">
                       {grupo.titulo}
                     </h2>
                     <span className="text-text-3 text-[13px]">
@@ -123,6 +137,7 @@ export function TemasPossiveis() {
                           atual === tema.id ? null : tema.id,
                         )
                       }
+                      onProRequired={() => setBloqueadoPorErro(true)}
                     />
                   ))}
                 </section>

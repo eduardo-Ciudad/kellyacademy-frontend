@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { temasQueryKey } from '@/hooks/useTemas';
-import { api, ApiError } from '@/lib/api';
+import { api, ApiError, recursoProDoErro } from '@/lib/api';
 import type { TemaPossivel } from '@/types/api';
 
 export const temasPossiveisQueryKey = ['temas', 'possiveis'] as const;
@@ -11,17 +11,18 @@ export const alternarTemaPossivelMutationKey = [
   'alternar',
 ] as const;
 
-export function useTemasPossiveis() {
+export function useTemasPossiveis(enabled = true) {
   return useQuery({
     queryKey: temasPossiveisQueryKey,
     queryFn: ({ signal }) =>
       api<TemaPossivel[]>('/temas/possiveis', { signal }),
+    enabled,
   });
 }
 
 type AlternarTemaPossivel = { temaId: string; adicionar: boolean };
 
-export function useAlternarTemaPossivel() {
+export function useAlternarTemaPossivel(onProRequired?: () => void) {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -50,6 +51,10 @@ export function useAlternarTemaPossivel() {
               : tema,
           ),
       );
+      if (recursoProDoErro(error) === 'TEMAS_POSSIVEIS') {
+        onProRequired?.();
+        return;
+      }
       toast.error(
         error instanceof ApiError
           ? error.detail

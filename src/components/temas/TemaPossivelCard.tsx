@@ -9,15 +9,17 @@ type TemaPossivelCardProps = {
   tema: TemaPossivel;
   aberto: boolean;
   onAlternarAberto: () => void;
+  onProRequired?: () => void;
 };
 
 export function TemaPossivelCard({
   tema,
   aberto,
   onAlternarAberto,
+  onProRequired,
 }: TemaPossivelCardProps) {
   const painelId = `material-tema-${tema.id}`;
-  const alternarTema = useAlternarTemaPossivel();
+  const alternarTema = useAlternarTemaPossivel(onProRequired);
 
   return (
     <article className="bg-surface rounded-[18px] p-4 lg:p-0">
