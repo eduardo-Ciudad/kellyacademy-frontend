@@ -63,6 +63,11 @@ const Resultado = lazy(() =>
 const Temas = lazy(() =>
   import('@/pages/Temas').then((module) => ({ default: module.Temas })),
 );
+const NovaRedacao = lazy(() =>
+  import('@/pages/NovaRedacao').then((module) => ({
+    default: module.NovaRedacao,
+  })),
+);
 const TemasPossiveis = lazy(() =>
   import('@/pages/TemasPossiveis').then((module) => ({
     default: module.TemasPossiveis,
@@ -260,6 +265,14 @@ export const router = createBrowserRouter([
             element: (
               <LazyRoute>
                 <Temas />
+              </LazyRoute>
+            ),
+          },
+          {
+            path: '/nova-redacao/:temaId?',
+            element: (
+              <LazyRoute>
+                <NovaRedacao />
               </LazyRoute>
             ),
           },
