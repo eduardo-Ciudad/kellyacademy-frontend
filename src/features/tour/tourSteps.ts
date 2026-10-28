@@ -5,15 +5,19 @@ export type TourTarget =
   | 'evolucao'
   | 'correcoes-hoje'
   | 'julia-botao'
-  | 'julia-competencia';
+  | 'julia-competencia'
+  | 'nova-redacao-lista'
+  | 'nova-redacao-meu-tema'
+  | 'nova-redacao-etapas';
 
-export type TourId = 'principal' | 'julia';
+export type TourId = 'principal' | 'julia' | 'nova-redacao';
 
 export type TourStep = {
   target: TourTarget;
   title: string;
   text: { desktop: string; mobile?: string };
   radius: number;
+  mobileRadius?: number;
 };
 
 const principalSteps: TourStep[] = [
@@ -57,12 +61,12 @@ const principalSteps: TourStep[] = [
   },
   {
     target: 'correcoes-hoje',
-    title: '3 correções por dia',
+    title: 'Suas correções do dia',
     text: {
       desktop:
-        'No plano gratuito você tem 3 correções por dia. O contador fica aqui e renova à meia-noite.',
+        'O contador mostra quantas correções você ainda tem hoje e renova à meia-noite.',
       mobile:
-        'No plano gratuito você tem 3 correções por dia. O contador fica aqui e renova à meia-noite.',
+        'O contador mostra quantas correções você ainda tem hoje e renova à meia-noite.',
     },
     radius: 14,
   },
@@ -93,9 +97,47 @@ const juliaSteps: TourStep[] = [
   },
 ];
 
+const novaRedacaoSteps: TourStep[] = [
+  {
+    target: 'nova-redacao-lista',
+    title: 'Escolha um tema pronto',
+    text: {
+      desktop:
+        'Aqui estão os temas oficiais do ENEM, os possíveis temas de 2026 e os temas que você já escreveu.',
+      mobile:
+        'Temas oficiais do ENEM, possíveis temas de 2026 e os temas que você já escreveu.',
+    },
+    radius: 20,
+  },
+  {
+    target: 'nova-redacao-meu-tema',
+    title: 'Ou traga o seu tema',
+    text: {
+      desktop:
+        'Recebeu uma proposta na escola ou no cursinho? Digite o título e a Kelly corrige do mesmo jeito. O tema fica salvo para você praticar de novo.',
+      mobile:
+        'Recebeu uma proposta na escola ou no cursinho? Digite o título e a Kelly corrige do mesmo jeito.',
+    },
+    radius: 20,
+  },
+  {
+    target: 'nova-redacao-etapas',
+    title: 'Depois, é só escrever',
+    text: {
+      desktop:
+        'Com o tema escolhido, você decide se digita a redação no editor ou envia uma foto dela escrita à mão.',
+      mobile:
+        'Com o tema escolhido, você digita a redação no editor ou envia uma foto dela escrita à mão.',
+    },
+    radius: 999,
+    mobileRadius: 12,
+  },
+];
+
 export const tours: Record<TourId, TourStep[]> = {
   principal: principalSteps,
   julia: juliaSteps,
+  'nova-redacao': novaRedacaoSteps,
 };
 
 export const tourSteps = tours.principal;
