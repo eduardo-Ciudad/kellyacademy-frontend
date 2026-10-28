@@ -85,7 +85,7 @@ export function Transcricao() {
   const [aviso, setAviso] = useState<AvisoCaptura>();
   const [texto, setTexto] = useState('');
   const [limiteOpen, setLimiteOpen] = useState(false);
-  const [limiteData, setLimiteData] = useState({ limite: 3, retryAfter: 0 });
+  const [limiteData, setLimiteData] = useState({ limite: 0, retryAfter: 0 });
   const [descartarOpen, setDescartarOpen] = useState(false);
   const [substituirOpen, setSubstituirOpen] = useState(false);
   const allowNavigation = useRef(false);
@@ -180,7 +180,7 @@ export function Transcricao() {
         setAviso({ tipo: 'recusada', mensagem: error.detail });
       else if (error.status === 429) {
         setLimiteData({
-          limite: error.limite ?? uso.limite ?? 3,
+          limite: error.limite ?? uso.limite ?? 0,
           retryAfter: error.retryAfter ?? 0,
         });
         setLimiteOpen(true);

@@ -74,7 +74,7 @@ export function Editor() {
   const [banner, setBanner] = useState<EditorBanner>();
   const [infoOpen, setInfoOpen] = useState(false);
   const [limitOpen, setLimitOpen] = useState(false);
-  const [limitData, setLimitData] = useState({ limite: 3, retryAfter: 0 });
+  const [limitData, setLimitData] = useState({ limite: 0, retryAfter: 0 });
   const sendingRef = useRef(false);
   const allowNavigationRef = useRef(false);
   const { atingido, limite } = useCorrecoesHoje();
@@ -148,7 +148,7 @@ export function Editor() {
       if (error.status === 429) {
         const retryAfter = error.retryAfter ?? 0;
         void queryClient.invalidateQueries({ queryKey: correcoesHojeQueryKey });
-        setLimitData({ limite: error.limite ?? 3, retryAfter });
+        setLimitData({ limite: error.limite ?? limite ?? 0, retryAfter });
         setLimitOpen(true);
       } else if (error.status === 502) {
         void queryClient.invalidateQueries({ queryKey: correcoesHojeQueryKey });
