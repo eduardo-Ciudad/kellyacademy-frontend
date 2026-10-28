@@ -4,9 +4,8 @@ import type { TourId } from './tourSteps';
 const sessionFailures = new Set<string>();
 
 export function tourStorageKey(userId: string, tourId: TourId = 'principal') {
-  return tourId === 'principal'
-    ? `kelly:tour:v1:${userId}`
-    : `kelly:tour-julia:v1:${userId}`;
+  if (tourId === 'principal') return `kelly:tour:v1:${userId}`;
+  return `kelly:tour-${tourId}:v1:${userId}`;
 }
 
 export function useTourStorage(userId: string, tourId: TourId = 'principal') {
