@@ -54,7 +54,7 @@ describe('BottomNav', () => {
     renderBottomNav();
     expect(
       screen.getByRole('link', { name: 'Nova redação' }).getAttribute('href'),
-    ).toBe('/temas');
+    ).toBe('/nova-redacao');
   });
 
   it('mantém o alvo do tour de Nova redação fora da rota inicial', () => {
