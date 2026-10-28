@@ -90,7 +90,7 @@ export type Tema = {
   id: string;
   titulo: string;
   textosMotivadores: string | null;
-  origem: 'ENEM_OFICIAL' | 'AUTORAL' | 'PREVISAO';
+  origem: 'ENEM_OFICIAL' | 'AUTORAL' | 'PREVISAO' | 'PERSONALIZADO';
   ano: number | null;
 };
 
