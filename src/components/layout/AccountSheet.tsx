@@ -16,6 +16,8 @@ import { useUsuario } from '@/hooks/useUsuario';
 import { Link } from 'react-router-dom';
 import { useTour } from '@/features/tour/TourProvider';
 import { useIsAdmin } from '@/hooks/useMe';
+import { usePlano } from '@/hooks/usePlano';
+import { rotuloPlano } from '@/lib/rotuloPlano';
 
 export function AccountSheet({
   open,
@@ -28,6 +30,7 @@ export function AccountSheet({
   const logout = useLogout();
   const { openTour } = useTour();
   const { isAdmin } = useIsAdmin();
+  const { dados } = usePlano();
   const contentRef = useRef<HTMLDivElement>(null);
   const dragStartRef = useRef<number | null>(null);
   const [dragOffset, setDragOffset] = useState(0);
@@ -81,11 +84,18 @@ export function AccountSheet({
                 {iniciais}
               </span>
               <span className="min-w-0">
-                <span className="text-text block truncate font-semibold">
-                  {nome}
+                <span className="flex min-w-0 items-center gap-2">
+                  <span className="text-text truncate font-semibold">
+                    {nome}
+                  </span>
+                  {dados?.plano === 'PRO' ? (
+                    <span className="bg-accent-tint border-accent-outline text-accent-outline-text shrink-0 rounded border px-1.5 py-0.5 font-mono text-[10px] leading-none font-semibold">
+                      PRO
+                    </span>
+                  ) : null}
                 </span>
                 <span className="text-text-3 mt-0.5 block text-xs">
-                  Plano gratuito
+                  {rotuloPlano(dados)}
                 </span>
               </span>
             </Dialog.Title>
