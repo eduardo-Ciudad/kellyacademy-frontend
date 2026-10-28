@@ -15,6 +15,8 @@ import {
 } from 'react';
 import { Link } from 'react-router-dom';
 import { useIsAdmin } from '@/hooks/useMe';
+import { usePlano } from '@/hooks/usePlano';
+import { rotuloPlano, seloPlano } from '@/lib/rotuloPlano';
 
 type SidebarAccountMenuProps = {
   name: string;
@@ -32,6 +34,8 @@ export function SidebarAccountMenu({
   onOpenTour,
 }: SidebarAccountMenuProps) {
   const { isAdmin } = useIsAdmin();
+  const { dados } = usePlano();
+  const selo = seloPlano(dados);
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -98,9 +102,13 @@ export function SidebarAccountMenu({
           >
             <Crown size={17} aria-hidden="true" />
             <span className="flex-1">Planos</span>
-            <span className="bg-control text-text-3 rounded-md px-2 py-1 text-[11px] font-semibold">
-              Grátis
-            </span>
+            {selo ? (
+              <span
+                className={`${selo === 'Pro' ? 'bg-accent-tint text-accent-outline-text' : 'bg-control text-text-3'} rounded-md px-2 py-1 text-[11px] font-semibold`}
+              >
+                {selo}
+              </span>
+            ) : null}
           </MenuLink>
           {isAdmin ? (
             <MenuLink
@@ -152,11 +160,18 @@ export function SidebarAccountMenu({
           {initials}
         </span>
         <span className="min-w-0 flex-1">
-          <span className="text-text block truncate text-sm font-semibold">
-            {name}
+          <span className="flex min-w-0 items-center gap-2">
+            <span className="text-text truncate text-sm font-semibold">
+              {name}
+            </span>
+            {dados?.plano === 'PRO' ? (
+              <span className="bg-accent-tint border-accent-outline text-accent-outline-text shrink-0 rounded border px-1.5 py-0.5 font-mono text-[10px] leading-none font-semibold">
+                PRO
+              </span>
+            ) : null}
           </span>
           <span className="text-text-3 mt-0.5 block text-xs">
-            Plano gratuito
+            {rotuloPlano(dados)}
           </span>
         </span>
         <ChevronsUpDown
