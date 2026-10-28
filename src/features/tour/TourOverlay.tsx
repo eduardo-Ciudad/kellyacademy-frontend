@@ -303,7 +303,9 @@ export function TourOverlay() {
                 left: rect.left,
                 width: rect.width,
                 height: rect.height,
-                borderRadius: step.radius,
+                borderRadius: mobile
+                  ? (step.mobileRadius ?? step.radius)
+                  : step.radius,
               }}
               transition={
                 reducedMotion
@@ -380,9 +382,11 @@ export function TourOverlay() {
                   className="focus-ring min-h-11 rounded-full bg-[#0866ff] px-5 text-sm font-semibold text-white"
                 >
                   {stepIndex === availableSteps.length - 1
-                    ? tourId === 'julia'
-                      ? 'Concluir'
-                      : 'Começar'
+                    ? tourId === 'nova-redacao'
+                      ? 'Entendi'
+                      : tourId === 'julia'
+                        ? 'Concluir'
+                        : 'Começar'
                     : 'Próximo'}
                 </button>
               </div>
