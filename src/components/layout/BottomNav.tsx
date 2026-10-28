@@ -30,7 +30,7 @@ export function BottomNav() {
         pathname={location.pathname}
       />
       <Link
-        to="/temas"
+        to="/nova-redacao"
         data-tour="nova-redacao"
         aria-label="Nova redação"
         className="focus-ring bg-accent border-bg relative top-[-14px] mx-auto flex size-14 items-center justify-center self-start rounded-full border-4 text-white transition-[transform,filter] duration-150 active:scale-96 active:brightness-90 motion-reduce:transition-none"
