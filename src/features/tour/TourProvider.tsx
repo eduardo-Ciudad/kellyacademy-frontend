@@ -36,16 +36,13 @@ export function TourProvider({ children }: PropsWithChildren) {
   const userId = email.trim().toLowerCase();
   const principalStorage = useTourStorage(userId);
   const juliaStorage = useTourStorage(userId, 'julia');
+  const novaRedacaoStorage = useTourStorage(userId, 'nova-redacao');
   const [screen, setScreen] = useState<TourScreen>('closed');
   const [tourId, setTourId] = useState<TourId>('principal');
   const [stepIndex, setStepIndex] = useState(0);
 
   useEffect(() => {
-    if (
-      location.pathname !== '/' ||
-      !userId ||
-      principalStorage.isCompleted()
-    )
+    if (location.pathname !== '/' || !userId || principalStorage.isCompleted())
       return;
     setTourId('principal');
     setScreen('welcome');
@@ -63,17 +60,22 @@ export function TourProvider({ children }: PropsWithChildren) {
 
   const isTourCompleted = useCallback(
     (id: TourId) =>
-      id === 'principal'
-        ? principalStorage.isCompleted()
-        : juliaStorage.isCompleted(),
-    [juliaStorage, principalStorage],
+      ({
+        principal: principalStorage,
+        julia: juliaStorage,
+        'nova-redacao': novaRedacaoStorage,
+      })[id].isCompleted(),
+    [juliaStorage, novaRedacaoStorage, principalStorage],
   );
 
   const finish = useCallback(() => {
-    if (tourId === 'principal') principalStorage.complete();
-    else juliaStorage.complete();
-    setScreen('toast');
-  }, [juliaStorage, principalStorage, tourId]);
+    ({
+      principal: principalStorage,
+      julia: juliaStorage,
+      'nova-redacao': novaRedacaoStorage,
+    })[tourId].complete();
+    setScreen(tourId === 'nova-redacao' ? 'closed' : 'toast');
+  }, [juliaStorage, novaRedacaoStorage, principalStorage, tourId]);
 
   const value = useMemo<TourContextValue>(
     () => ({
