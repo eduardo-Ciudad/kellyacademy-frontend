@@ -20,6 +20,7 @@ export function usePlano() {
   });
 
   return {
+    dados: query.data,
     plano: query.data?.plano,
     ehPro: query.data?.plano === 'PRO',
     libera: (recurso: RecursoPro) => planoLibera(query.data, recurso),
