@@ -70,7 +70,7 @@ export function Historico() {
           </p>
         </div>
         <Link
-          to="/temas"
+          to="/nova-redacao"
           className="focus-ring bg-accent hover:bg-accent-hover rounded-pill flex min-h-11 items-center gap-2 px-5 text-[15px] font-semibold text-white"
         >
           <Plus size={16} strokeWidth={2.4} aria-hidden="true" /> Nova redação
@@ -257,7 +257,7 @@ function EmptyState() {
         primeiro.
       </p>
       <Link
-        to="/temas"
+        to="/nova-redacao"
         className="focus-ring bg-accent rounded-pill mt-6 px-6 py-3 text-sm font-semibold text-white"
       >
         Escolher tema
