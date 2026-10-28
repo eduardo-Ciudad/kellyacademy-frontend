@@ -148,7 +148,7 @@ function PageHeader() {
         </p>
       </div>
       <Link
-        to="/temas"
+        to="/nova-redacao"
         className="focus-ring bg-accent hover:bg-accent-hover rounded-pill hidden min-h-11 items-center gap-2 px-5 text-[15px] font-semibold text-white lg:flex"
       >
         <Plus size={16} strokeWidth={2.4} aria-hidden="true" /> Nova redação
@@ -777,7 +777,7 @@ function EmptyState() {
             tempo e qual competência treinar primeiro.
           </p>
           <Link
-            to="/temas"
+            to="/nova-redacao"
             className="focus-ring bg-accent hover:bg-accent-hover rounded-pill mt-1.5 inline-flex min-h-11 items-center gap-2 px-[22px] text-[15px] font-semibold text-white"
           >
             <Plus size={16} strokeWidth={2.4} /> Escrever a primeira redação
