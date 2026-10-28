@@ -23,6 +23,7 @@ vi.mock('@/hooks/useUsuario', () => ({
 
 const key = tourStorageKey('kelly@example.com');
 const juliaKey = tourStorageKey('kelly@example.com', 'julia');
+const novaRedacaoKey = tourStorageKey('kelly@example.com', 'nova-redacao');
 
 function matchMedia(matches = false) {
   return vi.fn().mockImplementation((query: string) => ({
@@ -89,6 +90,26 @@ function JuliaTourControls() {
       { 'data-tour': 'julia-competencia' },
       'Competência Júlia',
     ),
+  );
+}
+
+function NovaRedacaoTourControls() {
+  const { startTour } = useTour();
+  return createElement(
+    'div',
+    null,
+    createElement(
+      'button',
+      { type: 'button', onClick: () => startTour('nova-redacao') },
+      'Iniciar tour da nova redação',
+    ),
+    createElement('button', { 'data-tour': 'nova-redacao-lista' }, 'Lista'),
+    createElement(
+      'button',
+      { 'data-tour': 'nova-redacao-meu-tema' },
+      'Meu tema',
+    ),
+    createElement('button', { 'data-tour': 'nova-redacao-etapas' }, 'Etapas'),
   );
 }
 
@@ -290,5 +311,23 @@ describe('tour da Júlia', () => {
     window.localStorage.setItem(juliaKey, 'concluido');
     renderTour(createElement(JuliaTourControls), '/resultado/1');
     expect(screen.getByText('true')).toBeTruthy();
+  });
+});
+
+describe('tour da nova redação', () => {
+  it('concluir grava a chave e fecha sem mostrar toast', async () => {
+    const user = userEvent.setup();
+    renderTour(createElement(NovaRedacaoTourControls), '/nova-redacao');
+
+    await user.click(
+      screen.getByRole('button', { name: 'Iniciar tour da nova redação' }),
+    );
+    await user.click(await screen.findByRole('button', { name: 'Próximo' }));
+    await user.click(await screen.findByRole('button', { name: 'Próximo' }));
+    await user.click(await screen.findByRole('button', { name: 'Entendi' }));
+
+    expect(window.localStorage.getItem(novaRedacaoKey)).toBe('concluido');
+    expect(screen.queryByRole('status')).toBeNull();
+    expect(screen.queryByText(/Para rever o tour/)).toBeNull();
   });
 });
