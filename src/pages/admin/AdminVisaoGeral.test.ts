@@ -44,7 +44,6 @@ const overview: AdminVisaoGeralData = {
   correcoesNoPeriodo: 721,
   notaMediaNoPeriodo: 743.5,
   assinantesPro: 125,
-  receitaMensalCentavos: 499000,
   serieDiaria: [{ data: '2026-10-26', cadastros: 4, correcoes: 7 }],
   usoIaHoje: [
     { recurso: 'CORRECAO', usados: 40, teto: 100 },

@@ -11,6 +11,7 @@ import type {
   AdminUsuariosFiltros,
   AdminVisaoGeral,
   PeriodoAdmin,
+  ConcessaoPro,
 } from '@/types/admin';
 import type { Pagina } from '@/types/api';
 
@@ -66,6 +67,37 @@ function useAdminMutation(pathForId: (id: string) => string) {
     mutationFn: (id: string) => api<void>(pathForId(id), { method: 'POST' }),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: adminQueryKey }),
   });
+}
+
+function useConcessaoMutation<TBody>(
+  pathForId: (id: string) => string,
+) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, ...body }: { id: string } & TBody) =>
+      api<ConcessaoPro>(pathForId(id), {
+        method: 'POST',
+        body: JSON.stringify(body),
+      }),
+    onSuccess: (_data, variables) => {
+      void queryClient.invalidateQueries({ queryKey: adminQueryKey });
+      void queryClient.invalidateQueries({
+        queryKey: [...adminQueryKey, 'usuarios', variables.id],
+      });
+    },
+  });
+}
+
+export function useConcederPro() {
+  return useConcessaoMutation<{ dias: number; motivo: string }>(
+    (id) => `/admin/usuarios/${encodeURIComponent(id)}/concessao-pro`,
+  );
+}
+
+export function useRevogarPro() {
+  return useConcessaoMutation<{ motivo: string }>(
+    (id) => `/admin/usuarios/${encodeURIComponent(id)}/concessao-pro/revogar`,
+  );
 }
 
 export function useReenviarVerificacao() {

@@ -25,6 +25,8 @@ export function usePlano() {
     libera: (recurso: RecursoPro) => planoLibera(query.data, recurso),
     limites: query.data?.limites,
     assinatura: query.data?.assinatura,
+    origem: query.data?.origem,
+    concessao: query.data?.concessao,
     isLoading: query.isLoading,
   };
 }

@@ -26,7 +26,6 @@ export type AdminVisaoGeral = {
   correcoesNoPeriodo: number;
   notaMediaNoPeriodo: number | null;
   assinantesPro: number;
-  receitaMensalCentavos: number;
   serieDiaria: { data: string; cadastros: number; correcoes: number }[];
   usoIaHoje: { recurso: RecursoIAAdmin; usados: number; teto: number }[];
   tokensHoje: number;
@@ -44,6 +43,18 @@ export type AdminVisaoGeral = {
   };
 };
 
+export type ConcessaoPro = {
+  id: string;
+  inicio: string;
+  fim: string;
+  vigente: boolean;
+  motivo: string;
+  concedidaPor: string;
+  revogadaEm: string | null;
+  revogadaPor: string | null;
+  motivoRevogacao: string | null;
+};
+
 export type AdminUsuarioDetalhe = {
   usuario: AdminUsuarioResumo;
   melhorNota: number | null;
@@ -58,6 +69,8 @@ export type AdminUsuarioDetalhe = {
     cancelarNoFimDoPeriodo: boolean;
     stripeCustomerId: string | null;
   } | null;
+  concessaoPro: ConcessaoPro | null;
+  concessoes: ConcessaoPro[];
   usoHoje: { recurso: RecursoIAAdmin; usados: number; limite: number }[];
   julia: { conversas: number; mensagens: number };
   redacoes: {

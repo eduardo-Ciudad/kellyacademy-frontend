@@ -40,11 +40,6 @@ const numberFormatter = new Intl.NumberFormat('pt-BR');
 const decimalFormatter = new Intl.NumberFormat('pt-BR', {
   maximumFractionDigits: 1,
 });
-const currencyFormatter = new Intl.NumberFormat('pt-BR', {
-  style: 'currency',
-  currency: 'BRL',
-  maximumFractionDigits: 0,
-});
 const compactFormatter = new Intl.NumberFormat('pt-BR', {
   notation: 'compact',
   maximumFractionDigits: 1,
@@ -159,7 +154,7 @@ function KpiGrid({ data, periodo }: { data: AdminVisaoGeral; periodo: number }) 
     {
       label: 'Assinantes Pro',
       value: numberFormatter.format(data.assinantesPro),
-      detail: `${currencyFormatter.format(data.receitaMensalCentavos / 100)}/mês · ${decimalFormatter.format(proShare)}% dos usuários`,
+      detail: `${decimalFormatter.format(proShare)}% dos usuários`,
     },
   ];
 

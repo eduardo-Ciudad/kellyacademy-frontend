@@ -136,7 +136,12 @@ export function Planos() {
                 <div className="bg-control text-text-2 rounded-pill flex min-h-11 items-center justify-center text-sm font-semibold">
                   Seu plano atual
                 </div>
-                {plano.assinatura && (
+                {plano.origem === 'CONCESSAO' && plano.concessao ? (
+                  <p className="text-text-3 mt-2.5 text-xs leading-5">
+                    Pro liberado até{' '}
+                    {format(new Date(plano.concessao.fim), 'dd/MM/yyyy')}
+                  </p>
+                ) : plano.assinatura ? (
                   <p className="text-text-3 mt-2.5 text-xs leading-5">
                     {plano.assinatura.cancelarNoFimDoPeriodo
                       ? 'Acesso Pro até'
@@ -146,7 +151,7 @@ export function Planos() {
                       'dd/MM/yyyy',
                     )}
                   </p>
-                )}
+                ) : null}
               </div>
             ) : !pagamentoHabilitado ? (
               <div className="bg-control text-text-2 rounded-pill flex min-h-11 items-center justify-center px-4 text-center text-sm font-semibold">

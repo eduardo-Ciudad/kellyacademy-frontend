@@ -13,15 +13,20 @@ vi.mock('sonner', () => ({ toast: { error: vi.fn() } }));
 vi.mock('@/components/layout/AccountButton', () => ({
   AccountButton: () => null,
 }));
-vi.mock('@/hooks/usePlano', () => ({
-  usePlano: () => ({
+const { planoMock } = vi.hoisted(() => ({
+  planoMock: {
     plano: 'GRATIS',
     ehPro: false,
     libera: () => false,
     limites: { correcoesPorDia: 3, transcricoesPorDia: 2 },
     assinatura: null,
+    origem: null,
+    concessao: null,
     isLoading: false,
-  }),
+  },
+}));
+vi.mock('@/hooks/usePlano', () => ({
+  usePlano: () => planoMock,
 }));
 vi.mock('@/lib/assinatura', async (importOriginal) => ({
   ...(await importOriginal<typeof import('@/lib/assinatura')>()),
@@ -44,13 +49,21 @@ function button(container: HTMLElement, label: string) {
 describe('página de planos', () => {
   let container: HTMLDivElement;
   let root: Root;
+  let queryClient: QueryClient;
 
   beforeEach(() => {
     vi.clearAllMocks();
+    Object.assign(planoMock, {
+      plano: 'GRATIS',
+      ehPro: false,
+      assinatura: null,
+      origem: null,
+      concessao: null,
+    });
     container = document.createElement('div');
     document.body.append(container);
     root = createRoot(container);
-    const queryClient = new QueryClient({
+    queryClient = new QueryClient({
       defaultOptions: { mutations: { retry: false } },
     });
     act(() => {
@@ -139,5 +152,30 @@ describe('página de planos', () => {
     expect(toast.error).toHaveBeenCalledWith(
       'Pagamentos temporariamente indisponíveis.',
     );
+  });
+
+  it('mostra a validade da concessão e não oferece assinatura', () => {
+    Object.assign(planoMock, {
+      plano: 'PRO',
+      ehPro: true,
+      origem: 'CONCESSAO',
+      concessao: { fim: '2026-12-15T23:59:59-03:00' },
+    });
+    act(() => {
+      root.unmount();
+      root = createRoot(container);
+      root.render(
+        createElement(
+          QueryClientProvider,
+          { client: queryClient },
+          createElement(Planos),
+        ),
+      );
+    });
+
+    expect(normalizeText(container.textContent)).toContain(
+      'Pro liberado até 15/12/2026',
+    );
+    expect(button(container, 'Assinar Pro')).toBeUndefined();
   });
 });

@@ -12,6 +12,8 @@ describe('planoLibera', () => {
   it('não libera recursos no Grátis', () => {
     const plano: PlanoUsuario = {
       plano: 'GRATIS',
+      origem: null,
+      concessao: null,
       limites: { correcoesPorDia: 3, transcricoesPorDia: 2 },
       recursos: [],
       assinatura: null,
@@ -26,6 +28,8 @@ describe('planoLibera', () => {
   it('libera os três recursos no Pro', () => {
     const plano: PlanoUsuario = {
       plano: 'PRO',
+      origem: 'ASSINATURA',
+      concessao: null,
       limites: { correcoesPorDia: 10, transcricoesPorDia: 10 },
       recursos,
       assinatura: null,

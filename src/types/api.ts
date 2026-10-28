@@ -2,6 +2,8 @@ export type RecursoIA = 'CORRECAO' | 'TRANSCRICAO';
 export type RecursoPro = 'JULIA' | 'TEMAS_POSSIVEIS' | 'REPERTORIO_COMPLETO';
 export type PlanoUsuario = {
   plano: 'GRATIS' | 'PRO';
+  origem: 'ASSINATURA' | 'CONCESSAO' | null;
+  concessao: { fim: string } | null;
   limites: { correcoesPorDia: number; transcricoesPorDia: number };
   recursos: RecursoPro[];
   assinatura: {

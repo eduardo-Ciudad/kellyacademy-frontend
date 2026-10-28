@@ -6,6 +6,11 @@ import {
   periodoAdminFromSearch,
   percentualSeguro,
   rotuloFaixa,
+  erroConcessao,
+  fimConcessao,
+  mensagemReenvio429,
+  proPelaAssinatura,
+  traduzirStatusAssinatura,
 } from '@/lib/admin';
 
 describe('helpers do painel admin', () => {
@@ -49,5 +54,44 @@ describe('helpers do painel admin', () => {
     expect(corAlertaStripe('2026-10-25T16:00:00Z', agora)).toBe('success');
     expect(corAlertaStripe('2026-10-25T14:00:00Z', agora)).toBe('warning');
     expect(corAlertaStripe(null, agora)).toBe('warning');
+  });
+
+  it('traduz os status de assinatura', () => {
+    expect(traduzirStatusAssinatura('ACTIVE')).toBe('Ativa');
+    expect(traduzirStatusAssinatura('PAST_DUE')).toBe('Pagamento atrasado');
+    expect(traduzirStatusAssinatura('PAUSED')).toBe('Pausada');
+  });
+
+  it('calcula o fim da concessao no fim do dia de Sao Paulo', () => {
+    expect(fimConcessao(7, new Date('2026-10-27T02:00:00Z'))).toBe(
+      '2026-11-02T23:59:59-03:00',
+    );
+  });
+
+  it('valida dias e motivo da concessao', () => {
+    expect(erroConcessao(0, 'motivo válido')).toContain('1 e 365');
+    expect(erroConcessao(366, 'motivo válido')).toContain('1 e 365');
+    expect(erroConcessao(30, 'abcd')).toContain('5 e 300');
+    expect(erroConcessao(30, 'Apoio para o simulado')).toBeNull();
+  });
+
+  it('arredonda o retry-after para cima em minutos', () => {
+    expect(mensagemReenvio429(61)).toContain('2 min');
+  });
+
+  it('identifica Pro por assinatura ativa e ainda válida', () => {
+    const agora = new Date('2026-10-27T12:00:00Z');
+    expect(
+      proPelaAssinatura(
+        { status: 'ACTIVE', periodoAtualFim: '2026-10-28T12:00:00Z' },
+        agora,
+      ),
+    ).toBe(true);
+    expect(
+      proPelaAssinatura(
+        { status: 'CANCELED', periodoAtualFim: '2026-10-28T12:00:00Z' },
+        agora,
+      ),
+    ).toBe(false);
   });
 });
