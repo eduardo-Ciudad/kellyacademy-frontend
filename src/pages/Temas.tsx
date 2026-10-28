@@ -17,7 +17,7 @@ import { useTemas } from '@/hooks/useTemas';
 import { usePlano } from '@/hooks/usePlano';
 import type { ResumoRedacao, Tema } from '@/types/api';
 
-type Filter = 'todos' | 'nao-praticados' | 'praticados';
+type Filter = 'todos' | 'seus' | 'nao-praticados' | 'praticados';
 
 function normalize(value: string) {
   return value
@@ -52,7 +52,9 @@ export function Temas() {
         tema.ano?.toString().includes(term);
       const matchesFilter =
         filter === 'todos' ||
-        (filter === 'praticados' ? practiced : !practiced);
+        (filter === 'seus' && tema.origem === 'PERSONALIZADO') ||
+        (filter === 'praticados' && practiced) ||
+        (filter === 'nao-praticados' && !practiced);
       return matchesSearch && matchesFilter;
     });
   }, [attemptsByTema, filter, search, temasQuery.data]);
@@ -155,6 +157,12 @@ export function Temas() {
               Todos
             </FilterButton>
             <FilterButton
+              active={filter === 'seus'}
+              onClick={() => setFilter('seus')}
+            >
+              Seus temas
+            </FilterButton>
+            <FilterButton
               active={filter === 'nao-praticados'}
               onClick={() => setFilter('nao-praticados')}
             >
@@ -244,9 +252,17 @@ function TemaCard({
         <span
           className={`tabular text-[22px] font-bold lg:text-[30px] ${tema.origem === 'PREVISAO' ? 'text-text-2' : 'text-accent-text-hover lg:text-text'}`}
         >
-          {tema.origem === 'AUTORAL' ? 'Autoral' : (tema.ano ?? 'ENEM')}
+          {tema.origem === 'PERSONALIZADO'
+            ? 'Meu tema'
+            : tema.origem === 'AUTORAL'
+              ? 'Autoral'
+              : (tema.ano ?? 'ENEM')}
         </span>
-        {tema.origem === 'PREVISAO' ? (
+        {tema.origem === 'PERSONALIZADO' ? (
+          <span className="rounded-pill ml-3 hidden border border-[#2b4a7a] bg-[#1b2638] px-2.5 py-1 text-xs font-semibold text-[#b9c7dd] lg:inline">
+            Meu tema
+          </span>
+        ) : tema.origem === 'PREVISAO' ? (
           <span className="text-possivel border-possivel-border rounded-pill ml-3 hidden items-center gap-1 border border-dashed px-2.5 py-1 text-xs font-semibold lg:inline-flex">
             <SparkIcon size={12} double={false} /> Possível
           </span>
@@ -265,6 +281,11 @@ function TemaCard({
             {tema.origem === 'PREVISAO' && (
               <span className="text-possivel border-possivel-border rounded-pill inline-flex shrink-0 items-center gap-1 border border-dashed px-2 py-0.5 text-[11px] font-semibold lg:hidden">
                 <SparkIcon size={12} double={false} /> Possível
+              </span>
+            )}
+            {tema.origem === 'PERSONALIZADO' && (
+              <span className="rounded-pill inline-flex shrink-0 border border-[#2b4a7a] bg-[#1b2638] px-2 py-0.5 text-[11px] font-semibold text-[#b9c7dd] lg:hidden">
+                Meu tema
               </span>
             )}
             {practiced ? (
