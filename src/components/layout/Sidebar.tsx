@@ -34,9 +34,9 @@ export function Sidebar() {
       <KellyLogo size={26} className="ml-2 self-start" />
 
       <NavLink
-        to="/temas"
+        to="/nova-redacao"
         data-tour="nova-redacao"
-        className="focus-ring rounded-pill border-control text-text hover:bg-surface mt-7 inline-flex min-h-12 items-center justify-center gap-2 border px-5 text-sm font-semibold transition-colors"
+        className={`focus-ring rounded-pill text-text hover:bg-surface mt-7 inline-flex min-h-12 items-center justify-center gap-2 border px-5 text-sm font-semibold transition-colors ${location.pathname.startsWith('/nova-redacao') ? 'border-[#2f5bff] bg-[#1d2240]' : 'border-control'}`}
       >
         <Plus className="text-accent-text" size={19} aria-hidden="true" /> Nova
         redação
