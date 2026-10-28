@@ -59,9 +59,9 @@ export const planos = {
     destino: '/criar-conta',
     itens: [
       '3 correções por dia',
-      '1 transcrição de redação por foto por dia',
+      '2 transcrições de redação por foto por dia',
       'Banco de temas oficiais do ENEM',
-      'Repertório essencial',
+      'Repertório essencial: um por problema social',
       'Histórico e evolução por competência',
     ],
   },
@@ -87,12 +87,16 @@ export const linhasComparativo: readonly LinhaComparativo[] = [
   { nome: 'Correções por dia', gratis: '3 por dia', pro: '10 por dia' },
   {
     nome: 'Transcrição de redação por foto',
-    gratis: '1 por dia',
+    gratis: '2 por dia',
     pro: '10 por dia',
   },
   { nome: 'Banco de temas oficiais do ENEM', gratis: true, pro: true },
   { nome: 'Possíveis temas do ENEM 2026', gratis: false, pro: true },
-  { nome: 'Repertório', gratis: 'Essencial', pro: 'Completo' },
+  {
+    nome: 'Repertório',
+    gratis: 'Essencial (1 por problema)',
+    pro: 'Completo',
+  },
   { nome: 'Histórico e evolução por competência', gratis: true, pro: true },
   { nome: 'Assistente Júlia', gratis: false, pro: true },
 ];

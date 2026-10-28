@@ -13,6 +13,16 @@ vi.mock('sonner', () => ({ toast: { error: vi.fn() } }));
 vi.mock('@/components/layout/AccountButton', () => ({
   AccountButton: () => null,
 }));
+vi.mock('@/hooks/usePlano', () => ({
+  usePlano: () => ({
+    plano: 'GRATIS',
+    ehPro: false,
+    libera: () => false,
+    limites: { correcoesPorDia: 3, transcricoesPorDia: 2 },
+    assinatura: null,
+    isLoading: false,
+  }),
+}));
 vi.mock('@/lib/assinatura', async (importOriginal) => ({
   ...(await importOriginal<typeof import('@/lib/assinatura')>()),
   pagamentoHabilitado: true,
@@ -79,7 +89,9 @@ describe('página de planos', () => {
     expect(cards).toHaveLength(2);
     expect(
       cards.map((card) =>
-        normalizeText(card.querySelector('[data-plan-support]')?.textContent ?? null),
+        normalizeText(
+          card.querySelector('[data-plan-support]')?.textContent ?? null,
+        ),
       ),
     ).toEqual(['sem cartão', 'cancele quando quiser']);
     cards.forEach((card) => {

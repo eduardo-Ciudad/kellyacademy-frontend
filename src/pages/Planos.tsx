@@ -1,4 +1,5 @@
 import { Check, Crown } from 'lucide-react';
+import { format } from 'date-fns';
 import { useState } from 'react';
 import { AccountButton } from '@/components/layout/AccountButton';
 import {
@@ -11,12 +12,14 @@ import {
 } from '@/components/landing/data/planos';
 import { Button } from '@/components/ui/Button';
 import { useIniciarCheckout } from '@/hooks/useIniciarCheckout';
+import { usePlano } from '@/hooks/usePlano';
 import { cicloParaCheckout, pagamentoHabilitado } from '@/lib/assinatura';
 import { usePageMeta } from '@/lib/usePageMeta';
 
 export function Planos() {
   const [ciclo, setCiclo] = useState<Ciclo>('mensal');
   const checkout = useIniciarCheckout();
+  const plano = usePlano();
   const anual = ciclo === 'anual';
   const precoMensal = anual
     ? PRECO_PRO_ANUAL.mensalComDesconto
@@ -76,21 +79,26 @@ export function Planos() {
           items={planos.gratis.itens}
           price={
             <div className="mt-6">
-            <strong className="text-text tabular font-display text-4xl font-semibold">
-              {formatarPreco(planos.gratis.preco)}
-            </strong>
-            <span className="text-text-3 ml-1 text-sm">
-              {planos.gratis.sufixo}
-            </span>
-              <p data-plan-support className="text-text-3 mt-2 h-5 text-xs leading-5">
+              <strong className="text-text tabular font-display text-4xl font-semibold">
+                {formatarPreco(planos.gratis.preco)}
+              </strong>
+              <span className="text-text-3 ml-1 text-sm">
+                {planos.gratis.sufixo}
+              </span>
+              <p
+                data-plan-support
+                className="text-text-3 mt-2 h-5 text-xs leading-5"
+              >
                 sem cartão
               </p>
             </div>
           }
           action={
-            <div className="bg-control text-text-2 rounded-pill flex min-h-11 items-center justify-center text-sm font-semibold">
-              Seu plano atual
-            </div>
+            plano.isLoading ? null : plano.ehPro ? null : (
+              <div className="bg-control text-text-2 rounded-pill flex min-h-11 items-center justify-center text-sm font-semibold">
+                Seu plano atual
+              </div>
+            )
           }
         />
 
@@ -101,13 +109,16 @@ export function Planos() {
           items={planos.pro.itens}
           price={
             <div className="mt-6">
-            <div className="flex items-end gap-1">
-              <strong className="text-text tabular font-display text-4xl font-semibold">
-                {formatarPreco(precoMensal)}
-              </strong>
-              <span className="text-text-3 pb-1 text-sm">/mês</span>
-            </div>
-              <p data-plan-support className="text-text-3 mt-2 h-5 text-xs leading-5">
+              <div className="flex items-end gap-1">
+                <strong className="text-text tabular font-display text-4xl font-semibold">
+                  {formatarPreco(precoMensal)}
+                </strong>
+                <span className="text-text-3 pb-1 text-sm">/mês</span>
+              </div>
+              <p
+                data-plan-support
+                className="text-text-3 mt-2 h-5 text-xs leading-5"
+              >
                 cancele quando quiser
                 {anual ? (
                   <span className="sr-only">
@@ -116,34 +127,51 @@ export function Planos() {
                     {planos.pro.detalheAnual}
                   </span>
                 ) : null}
-            </p>
+              </p>
             </div>
           }
           action={
-            !pagamentoHabilitado ? (
-            <div className="bg-control text-text-2 rounded-pill flex min-h-11 items-center justify-center px-4 text-center text-sm font-semibold">
-              Assinatura disponível em breve
-            </div>
-          ) : checkout.jaAssinante ? (
-            <div
-              role="status"
-              className="bg-success-subtle border-success-subtle-border text-success-subtle-text rounded-inner border px-4 py-3 text-center text-sm font-semibold"
-            >
-              Você já é assinante Pro.
-            </div>
-          ) : (
-            <>
-              <Button
-                className="w-full"
-                loading={checkout.isLoading}
-                onClick={() => checkout.mutate(cicloParaCheckout(ciclo))}
+            plano.isLoading ? null : plano.ehPro ? (
+              <div className="text-center">
+                <div className="bg-control text-text-2 rounded-pill flex min-h-11 items-center justify-center text-sm font-semibold">
+                  Seu plano atual
+                </div>
+                {plano.assinatura && (
+                  <p className="text-text-3 mt-2.5 text-xs leading-5">
+                    {plano.assinatura.cancelarNoFimDoPeriodo
+                      ? 'Acesso Pro até'
+                      : 'Renova em'}{' '}
+                    {format(
+                      new Date(plano.assinatura.periodoAtualFim),
+                      'dd/MM/yyyy',
+                    )}
+                  </p>
+                )}
+              </div>
+            ) : !pagamentoHabilitado ? (
+              <div className="bg-control text-text-2 rounded-pill flex min-h-11 items-center justify-center px-4 text-center text-sm font-semibold">
+                Assinatura disponível em breve
+              </div>
+            ) : checkout.jaAssinante ? (
+              <div
+                role="status"
+                className="bg-success-subtle border-success-subtle-border text-success-subtle-text rounded-inner border px-4 py-3 text-center text-sm font-semibold"
               >
-                <Crown size={17} aria-hidden="true" /> Assinar Pro
-              </Button>
-              <p className="text-text-3 mt-2.5 text-center text-xs leading-5">
-                Pagamento seguro pelo Stripe. Cancele quando quiser.
-              </p>
-            </>
+                Você já é assinante Pro.
+              </div>
+            ) : (
+              <>
+                <Button
+                  className="w-full"
+                  loading={checkout.isLoading}
+                  onClick={() => checkout.mutate(cicloParaCheckout(ciclo))}
+                >
+                  <Crown size={17} aria-hidden="true" /> Assinar Pro
+                </Button>
+                <p className="text-text-3 mt-2.5 text-center text-xs leading-5">
+                  Pagamento seguro pelo Stripe. Cancele quando quiser.
+                </p>
+              </>
             )
           }
         />
